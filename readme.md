@@ -13,7 +13,7 @@
 Install the dependencies and devDependencies and start the server.
 
 ```sh
-$ git clone https://gitlab.com/Developer-HNAL/websigesa.git
+$ git clone https://gitlab.com/Developer-HNAL/sigesaweb.git websigesa
 $ cd websigesa
 $ cp .env.example .env
 ```

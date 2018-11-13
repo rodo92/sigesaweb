@@ -71,6 +71,10 @@
                     if (response.data.errorlogin) {
                         toastr.warning(response.data.errorlogin,'WebSigesa');
                     }
+                    if (response.data.successLogin) {
+                        toastr.success('Inicio de sesion correcto','WebSigesa');
+                        setTimeout("window.location = '/inicio'",1000);
+                    }
                 }).catch(error => {
                     this.errores = error.response.data.errors;
                 });

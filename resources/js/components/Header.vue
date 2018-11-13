@@ -4,9 +4,9 @@
         <!-- Logo -->
         <a href="/" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>A</b>LT</span>
+            <span class="logo-mini"><b></b>SIG</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Admin</b>LTE</span>
+            <span class="logo-lg"><b>Web</b>Sigesa</span>
         </a>
 
         <!-- Header Navbar -->
@@ -121,39 +121,24 @@
                                 <!-- The user image in the navbar-->
                                 <img src="img-dlte/user2-160x160.jpg" class="user-image" alt="User Image">
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <span class="hidden-xs">Alexander Pierce</span>
+                                <span class="hidden-xs">{{ datos_usuario }}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- The user image in the menu -->
                                 <li class="user-header">
                                     <img src="img-dlte/user2-160x160.jpg" class="img-circle" alt="User Image">
                                     <p>
-                                        Alexander Pierce - Web Developer
-                                        <small>Member since Nov. 2012</small>
+                                        {{ nombre_corto }} - {{ rol_usuario }}
+                                        <small>Registrado en el sistema desde {{ anio_ingreso }}</small>
                                     </p>
-                                </li>
-                                <!-- Menu Body -->
-                                <li class="user-body">
-                                    <div class="row">
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Followers</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Sales</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Friends</a>
-                                        </div>
-                                    </div>
-                                    <!-- /.row -->
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                        <a href="#" class="btn btn-default btn-flat"><i class="fa fa-user"></i>&nbsp;Perfil</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                        <button class="btn btn-default btn-flat" v-on:click="logout_session"><i class="fa fa-sign-out"></i>&nbsp;Salir</button>
                                     </div>
                                 </li>
                             </ul>
@@ -167,3 +152,49 @@
         </nav>
     </header>
 </template>
+<script>
+    // importacion de librerias
+    import axios from 'axios'
+    
+    export default {
+        data() {
+            return {
+                datos_usuario: '',
+                rol_usuario: '',
+                anio_ingreso: '',
+                nombre_corto: '',
+            }
+        },
+        created: function() {
+            this.loadData();
+        },
+        methods: {
+
+            // envio de datos
+            loadData: function() {
+                var url = 'sistema/get_data_session';
+                axios.get(url).then(response => {
+                    if (response.data.error)
+                    {
+                        window.location.href = 'login';
+                    }
+                    this.datos_usuario = response.data.datos_usuario;
+                    this.rol_usuario = response.data.rol_usuario;
+                    this.anio_ingreso = response.data.anio_ingreso;
+                    this.nombre_corto = response.data.nombre_corto;
+                }).catch(error => {
+                    console.log('no hay datos iniciados');
+                });
+            },
+            logout_session: function()
+            {
+                var url = 'login/' + false;
+                axios.delete(url).then(response => {
+                    window.location.href = 'login';
+                }).catch(error => {
+                    console.log('Error de sesion');
+                });
+            }
+        }
+    }
+</script>

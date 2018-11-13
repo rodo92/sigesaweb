@@ -20,7 +20,7 @@
         <!-- Menu -->
         <menulte></menulte>
         
-        @yield('content')
+        @yield('contenido')
 
         
 

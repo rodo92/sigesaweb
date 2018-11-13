@@ -49,8 +49,8 @@ class LoginController extends Controller
             /**
              * Registrar variables de sesión
              */
-            return response()->json(['respuesta' => 'datos correctos']);
-            /*$menu_principal = $Sistema->EmpleadoPermisoMenu_M($datos[0]['IdEmpleado']);
+            //return response()->json(['respuesta' => 'datos correctos']);
+            $menu_principal = $Sistema->EmpleadoPermisoMenu_M($datos[0]['IdEmpleado']);
 
             for ($i=0; $i < count($menu_principal); $i++) { 
                 $submenu_principal[$menu_principal[$i]['IdListGrupo']] = $Sistema->EmpleadoPermisoSubMenu_M($menu_principal[$i]['IdListGrupo'],$datos[0]['IdEmpleado']);
@@ -69,7 +69,7 @@ class LoginController extends Controller
             session( ['id_empleado'         => $datos[0]['IdEmpleado'] ] );
             session( ['anio_ingreso'        => $datos[0]['AnioIngreso'] ] );
             session( ['con_mp'              => true ] );
-            return redirect('inicio');*/
+            return response()->json(['successLogin' => true]);
         }
         else {
             return response()->json(['errorlogin' => 'Los datos ingresados no se encuentran registrados en la base de datos.']);
@@ -84,6 +84,7 @@ class LoginController extends Controller
      */
     public function destroy($id)
     {
-        //
+        session()->flush();
+        return;
     }
 }

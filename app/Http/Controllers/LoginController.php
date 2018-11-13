@@ -4,7 +4,7 @@ namespace WebSigesa\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Validator;
-use Sistema;
+use WebSigesa\Sistema;
 
 class LoginController extends Controller
 {
@@ -41,7 +41,7 @@ class LoginController extends Controller
         $datos = false;
 
         $Sistema = new Sistema();
-        $datos = $Sistema->validar_datos_login($usuario,$contrasenia);
+        $datos = $Sistema->validar_datos_login($request->usuario,md5($request->contrasenia));
         
 
         if ($datos) 
@@ -49,8 +49,8 @@ class LoginController extends Controller
             /**
              * Registrar variables de sesión
              */
-            
-            $menu_principal = $Sistema->EmpleadoPermisoMenu_M($datos[0]['IdEmpleado']);
+            return response()->json(['respuesta' => 'datos correctos']);
+            /*$menu_principal = $Sistema->EmpleadoPermisoMenu_M($datos[0]['IdEmpleado']);
 
             for ($i=0; $i < count($menu_principal); $i++) { 
                 $submenu_principal[$menu_principal[$i]['IdListGrupo']] = $Sistema->EmpleadoPermisoSubMenu_M($menu_principal[$i]['IdListGrupo'],$datos[0]['IdEmpleado']);
@@ -69,7 +69,10 @@ class LoginController extends Controller
             session( ['id_empleado'         => $datos[0]['IdEmpleado'] ] );
             session( ['anio_ingreso'        => $datos[0]['AnioIngreso'] ] );
             session( ['con_mp'              => true ] );
-            return redirect('inicio');
+            return redirect('inicio');*/
+        }
+        else {
+            return response()->json(['errorlogin' => 'Los datos ingresados no se encuentran registrados en la base de datos.']);
         }
     }
 

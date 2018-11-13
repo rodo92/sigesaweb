@@ -9,7 +9,7 @@
 
             <form method="post" v-on:submit.prevent="postdata">
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control" placeholder="Usuario" v-model="usuario">
+                    <input type="text" class="form-control" placeholder="Usuario" v-model="usuario" autofocus="true">
                     <span class="form-control-feedback">
                         <i class="fa fa-user"></i>
                     </span>
@@ -24,10 +24,11 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-8">
-                        <div class="checkbox icheck">
+                        <div class="checkbox">
                             <label>
-                                <input type="checkbox"> Recordar datos
-                            </label>
+                                <input type="checkbox" value="">
+                                Recordar
+                            </label> 
                         </div>
                     </div>
         
@@ -45,6 +46,7 @@
     
     // importacion de librerias
     import axios from 'axios'
+    import toastr from 'toastr'
 
     export default {
         data() {
@@ -66,7 +68,9 @@
                     'usuario': this.usuario,
                     'contrasenia': this.contrasenia
                 }).then(response => {
-                    
+                    if (response.data.errorlogin) {
+                        toastr.warning(response.data.errorlogin,'WebSigesa');
+                    }
                 }).catch(error => {
                     this.errores = error.response.data.errors;
                 });

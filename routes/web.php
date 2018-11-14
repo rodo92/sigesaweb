@@ -29,7 +29,12 @@ Route::get('sistema/get_data_session', 'SistemaController@get_data_session');
  * Farmacia
  */
 Route::get('reportegestion', 'FarmaciaController@reportegestion');
+Route::get('reporalmacen', 'FarmaciaController@reporalmacen');
+Route::get('farmacia/almacenes', 'FarmaciaController@almacenes');
 
-// reporte ICI
+// Reportes Gestion
 Route::post('reporteici/generar_dbf', 'ReporteICIController@generar_dbf');
 Route::get('descargar_dbf_ici/{nombre}', 'ReporteICIController@descargar_dbf');
+
+// Reportes Almaces
+Route::post('farmacia/reporte_traslados', 'ReporteAlmacenController@reporte_traslados');

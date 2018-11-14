@@ -17,6 +17,7 @@ Vue.component('inicioindex', require('./components/Inicio.Index.vue'));
 
 // Farmacia
 Vue.component('reportegestion', require('./components/farmacia/reportegestion.vue'));
+Vue.component('reporalmacen', require('./components/farmacia/reporalmacen.vue'));
 
 const app = new Vue({
     el: '#app'

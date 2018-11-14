@@ -32,7 +32,7 @@
                     </a>
                    <ul class="treeview-menu">
                         <li v-for="items in item.Submenu">
-                            <a href="">
+                            <a v-bind:href="items.Clave">
                                 <i class="fa fa-circle-o"></i>&nbsp;{{ items.Texto }}
                             </a>
                         </li>

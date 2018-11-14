@@ -15,6 +15,9 @@ Vue.component('footerlte', require('./components/Footer.vue'));
 // Inicio
 Vue.component('inicioindex', require('./components/Inicio.Index.vue'));
 
+// Farmacia
+Vue.component('reportegestion', require('./components/farmacia/reportegestion.vue'));
+
 const app = new Vue({
     el: '#app'
 });

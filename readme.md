@@ -40,7 +40,7 @@ $ npm run dev
 $ git config --global user.name 'Su Nombre'
 $ git config --global user.email 'su email'
 $ git config --global core.autocrlf false
-$ git config --global core.safecrlf
+$ git config --global core.safecrlf false
 ```
 
 

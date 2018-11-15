@@ -18,7 +18,7 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="col-xs-2 text-center" style="margin: 1%;" v-for="item in menu">
-                            <button class="btn btn-app btn-lg text-center" style="width: 80%;height: 80%; padding: 5% 12% 5% 12%;" v-on:click="newMenu(item.IdListGrupo)">
+                            <button class="btn btn-app btn-lg text-center" style="width: 60%;height: 60%; padding: 5% 8% 5% 8%;" v-on:click="newMenu(item.IdListGrupo)">
                                 <img v-bind:src="'/svg/IconosWeb/' + item.Icono + '.png'" alt="" class="img-responsive"> <br>{{ item.Texto }}
                             </button>
                         </div>

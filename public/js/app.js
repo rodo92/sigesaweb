@@ -47108,9 +47108,9 @@ var render = function() {
                       {
                         staticClass: "btn btn-app btn-lg text-center",
                         staticStyle: {
-                          width: "80%",
-                          height: "80%",
-                          padding: "5% 12% 5% 12%"
+                          width: "60%",
+                          height: "60%",
+                          padding: "5% 8% 5% 8%"
                         },
                         on: {
                           click: function($event) {

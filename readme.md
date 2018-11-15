@@ -34,6 +34,7 @@ Instalamos las dependencias y generamos el app key:
 $ composer update
 $ php artisan key:generate
 $ npm install
+$ npm run dev
 ```
 
 

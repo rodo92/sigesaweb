@@ -17,7 +17,7 @@
 
             <!-- TRASLADOS -->
             <div id="traslados">
-                <div class="box box-primary color-palette-box "><!-- collapsed-box -->
+                <div class="box box-primary color-palette-box collapsed-box"><!-- collapsed-box -->
                     <div class="box-header with-border">
                         <h3 class="box-title">Reporte de Traslados</h3>
                         <div class="box-tools pull-right">
@@ -63,7 +63,7 @@
                                     <button class="btn btn-primary" v-on:click.prevent="postData">
                                         <i class="fa fa-save"></i>
                                     </button>&nbsp;
-                                    <button class="btn btn-success" id="btn-generar-excel">
+                                    <button class="btn btn-success" v-on:click.prevent="excelExport">
                                         <i class="fa fa-file-excel-o"></i>
                                     </button>&nbsp;
                                     <a class="btn btn-danger" id="btn-generar">
@@ -71,6 +71,38 @@
                                     </a>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
+                                    <label v-if="errores.inicio" class="text-danger">{{ errores.inicio[0] }}</label>
+                                </td>
+                                <td>
+                                    <label v-if="errores.fin" class="text-danger">{{ errores.fin[0] }}</label>
+                                </td>
+                                <td>
+                                    <label v-if="errores.almacenid" class="text-danger">{{ errores.almacenid[0] }}</label>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <hr>
+                        <table class="table table-bordered table-striped" id="tabla_traslados" style="display: none;width: 100%;">
+                            <thead>
+                            <tr class="bg-gray">
+                                <th>FECHA</th>
+                                <th>N°REGISTRO</th>
+                                <th>ORIGEN</th>
+                                <th>DESTINO</th>
+                                <th>N°DOCUMENTO</th>
+                                <th>ESTADO</th>
+                                <th>SISMED</th>
+                                <th>DESCRIPCION</th>
+                                <th>LOTE</th>
+                                <th>F.V.</th>
+                                <th>R.S.</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -86,6 +118,7 @@
     import axios from 'axios'
     import datepicker from 'bootstrap-datepicker'
     import toastr from 'toastr'
+    import DataTable from 'datatables.net-bs'
 
     export default {
         data() {
@@ -114,16 +147,62 @@
 
             // envio de Datos
             postData: function() {
+                var alerta_espera = toastr.info('Espere un momento por favor','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
                 var url = 'farmacia/reporte_traslados';
                 axios.post(url, {
-                    'inicio': this.inicio,
-                    'fin': this.fin,
-                    'almacenid': this.almacenid
+                    'inicio'    : this.inicio,
+                    'fin'       : this.fin,
+                    'almacenid' : this.almacenid
                 }).then(reponse => {
                     console.log(reponse.data);
+                    $('#tabla_traslados').DataTable({
+                        language: {
+                            search: 'Buscar:',
+                            paginate: {
+                                first: "Primero",
+                                previous: "Atr&aacute;s",
+                                next: "Adelante",
+                                last: "&Uacute;ltimo"
+                            },
+                            "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
+                            "lengthMenu": "Mostrar _MENU_ entradas",
+                            "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
+                        },
+                        "lengthMenu": [5, 10, 25, 50, 75, 100],
+                        data: reponse.data.data,
+                        columns: [
+                            {data: 'FECHA'},
+                            {data: 'NRO REGISTRO'},
+                            {data: 'ORIGEN'},
+                            {data: 'DESTINO'},
+                            {data: 'NRO DOCUMENTO'},
+                            {data: 'ESTADO'},
+                            {data: 'SISMED'},
+                            {data: 'DESCRIPCION'},
+                            {data: 'LOTE'},
+                            {data: 'FV'},
+                            {data: 'RS'}
+                        ]
+                    });
+                    toastr.clear();
+                    $('#tabla_traslados').show();
                 }).catch(error => {
-                    console.log(error.reponse.data.errors);
+                    this.errores = error.response.data.errors;
                 }); 
+            },
+            excelExport: function() {
+                var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
+                var fechainicio = this.inicio.split("/").reverse().join("-");
+                var fechafin = this.fin.split("/").reverse().join("-");
+                var url = 'farmacia/reporte_traslados_excel/' + fechainicio + '/' + fechafin + '/' + this.almacenid;
+                window.open(url);
+                toastr.clear();
             }
         },
         mounted() {
@@ -142,6 +221,8 @@
             }).on(
             "changeDate", () => {this.fin = $('#fecha_fin').val()}
             );
+
+
         }
     }    
 </script>

@@ -1,7 +1,15 @@
+// Bootstrap
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+// Font Awesome 
+@import '~font-awesome/scss/font-awesome';
+
 // Admin LTE 
 @import '~admin-lte/dist/css/AdminLTE.css'; 
-@import '~admin-lte/dist/css/skins/_all-skins.css';
+@import '~admin-lte/dist/css/skins/_all-skins.min.css';
 
+// Bootstrap Datepicker
+@import "~datatables.net-bs/css/dataTables.bootstrap.css";
 
 // Toastr
 @import "~toastr/build/toastr.css";

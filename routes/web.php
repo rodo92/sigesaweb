@@ -38,3 +38,4 @@ Route::get('descargar_dbf_ici/{nombre}', 'ReporteICIController@descargar_dbf');
 
 // Reportes Almaces
 Route::post('farmacia/reporte_traslados', 'ReporteAlmacenController@reporte_traslados');
+Route::get('farmacia/reporte_traslados_excel/{inicio}/{fin}/{idalmacen}', 'ReporteAlmacenController@reporte_traslados_excel');

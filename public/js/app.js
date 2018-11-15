@@ -48162,6 +48162,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_datatables_net_bs__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_datatables_net_bs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_datatables_net_bs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_datatables_net__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_datatables_net___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_datatables_net__);
 //
 //
 //
@@ -48278,6 +48280,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -48320,13 +48323,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 timeOut: 0,
                 extendedTimeOut: 0
             });
+
             var url = 'farmacia/reporte_traslados';
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(url, {
                 'inicio': this.inicio,
                 'fin': this.fin,
                 'almacenid': this.almacenid
             }).then(function (reponse) {
-                console.log(reponse.data);
+                $('#tabla_traslados').dataTable().fnDestroy();
                 $('#tabla_traslados').DataTable({
                     language: {
                         search: 'Buscar:',

@@ -119,6 +119,7 @@
     import datepicker from 'bootstrap-datepicker'
     import toastr from 'toastr'
     import DataTable from 'datatables.net-bs'
+    import dataTable from 'datatables.net'
 
     export default {
         data() {
@@ -151,13 +152,14 @@
                     timeOut: 0,
                     extendedTimeOut: 0
                 });
+                
                 var url = 'farmacia/reporte_traslados';
                 axios.post(url, {
                     'inicio'    : this.inicio,
                     'fin'       : this.fin,
                     'almacenid' : this.almacenid
                 }).then(reponse => {
-                    console.log(reponse.data);
+                    $('#tabla_traslados').dataTable().fnDestroy();
                     $('#tabla_traslados').DataTable({
                         language: {
                             search: 'Buscar:',

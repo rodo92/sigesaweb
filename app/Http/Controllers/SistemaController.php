@@ -3,6 +3,7 @@
 namespace WebSigesa\Http\Controllers;
 
 use Illuminate\Http\Request;
+use WebSigesa\Sistema;
 
 class SistemaController extends Controller
 {
@@ -53,5 +54,13 @@ class SistemaController extends Controller
     	return response()->json([
     		'error' => 'No se han creado las variables de sesion.'
     	]);
+    }
+
+    public function proveedores()
+    {
+    	$Sistema = new Sistema();
+    	$proveedores = $Sistema->Mostrar_Provedores();
+
+    	return response()->json(['data' => $proveedores]);
     }
 }

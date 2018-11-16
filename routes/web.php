@@ -24,6 +24,7 @@ Route::get('inicio', 'InicioController@index');
 Route::get('menu/{idlistgrupo}', 'InicioController@menu');
 Route::get('restaurar', 'InicioController@restaurar');
 Route::get('sistema/get_data_session', 'SistemaController@get_data_session');
+Route::get('sistema/proveedores', 'SistemaController@proveedores');
 				
 /**
  * Farmacia

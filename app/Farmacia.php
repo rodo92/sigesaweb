@@ -41,4 +41,11 @@ class Farmacia extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, $idProveedor)
+    {
+        $result = DB::select('exec SIGESA_FARMACIA_INGRESOS_ALMACEN ?,?,?', [$fechainicio, $fechafin, $idProveedor]);
+
+        return json_decode(json_encode($result), true);
+    }
 }

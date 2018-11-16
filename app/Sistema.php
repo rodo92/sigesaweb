@@ -37,4 +37,11 @@ class Sistema extends Model
         $result = DB::select('exec RolesItemsSeleccionarItemsPorUsuarioYGrupo ?,?',[$IdListGrupo,$IdEmpleado]);   
         return json_decode(json_encode($result), true);
     }
+
+    public function Mostrar_Provedores()
+    {
+        $result = DB::select('exec SIGESA_LISTAR_PROVEEDORES');
+
+        return json_decode(json_encode($result), true);
+    }
 }

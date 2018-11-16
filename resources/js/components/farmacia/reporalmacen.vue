@@ -145,7 +145,7 @@
                                 <td width="25%" style="padding-right: 5px;">
                                     <label for="">Laboratorio:</label>
                                     <div class="input-group">
-                                        <input type="text" name="" id="" class="form-control">
+                                        <input type="text" name="" id="id_proveedor" class="form-control" data-provide="typeahead" autocomplete = "off">
                                     </div>
                                 </td>
                                 <td width="30%" style="padding-right: 5px;">
@@ -191,6 +191,7 @@
     import toastr from 'toastr'
     import DataTable from 'datatables.net-bs'
     import dataTable from 'datatables.net'
+    import typeahead from 'bootstrap-3-typeahead'
 
     export default {
         data() {
@@ -204,16 +205,31 @@
         },
         created: function() {
             this.loadData();
+            this.loadProveedores();
         },
         methods: {
 
             // carga de datos
             loadData: function() {
-                var url = 'farmacia/almacenes';
+                var url = 'farmacia/almacenes';                
+                // cargando almacenes
                 axios.get(url).then(response => {                    
                     this.almacenes = response.data.data;
                 }).catch(error => {
                     console.log('no hay datos de almacenes');
+                });                
+            },
+
+            loadProveedores: function() {
+                var url = 'sistema/proveedores';
+                axios.get(url).then(response => {                    
+                    $('#id_proveedor').typeahead({
+                        source: [ response.data ]
+                    }, 'json');
+                    console.log(response.data);
+                }).catch(error => {
+                    console.log(url);
+                    console.log('no hay datos de proveedores');
                 });
             },
 

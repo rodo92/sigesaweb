@@ -58,9 +58,17 @@ class SistemaController extends Controller
 
     public function proveedores()
     {
-    	$Sistema = new Sistema();
+    	$data = [];
+        $Sistema = new Sistema();
     	$proveedores = $Sistema->Mostrar_Provedores();
 
-    	return response()->json(['data' => $proveedores]);
+        for ($i=0; $i < count($proveedores); $i++) { 
+            array_push($data, array(
+                //'id'    => $proveedores[$i]['IDPROVEEDOR'],
+                'name'  => $proveedores[$i]['RAZONSOCIAL']
+            ));
+        }
+        //array_values($proveedores);
+    	return response()->json($data);
     }
 }

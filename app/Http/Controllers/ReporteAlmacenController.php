@@ -67,8 +67,10 @@ class ReporteAlmacenController extends Controller
 
     public function reporte_traslados_excel($fechainicio, $fechafin, $almacenid)
     {
+        $fechainicio = $fechainicio . ' 00:00:00.000';
+        $fechafin = $fechafin . ' 23:59:59.000';
         $farmacia = new Farmacia();
-        $data = $farmacia->Reporte_Almacen_Traslado($fechainicio . ' 00:00:00.000', $fechafin' 23:59:59.000', $almacenid);
+        $data = $farmacia->Reporte_Almacen_Traslado($fechainicio, $fechafin, $almacenid);
 
         $styleArray = [
             'fill' => [

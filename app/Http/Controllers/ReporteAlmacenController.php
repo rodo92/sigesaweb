@@ -37,6 +37,34 @@ class ReporteAlmacenController extends Controller
         return response()->json(['data' => $data]);
     }
 
+    public function reporte_ingresos_almacen(Request $request)
+    {
+        $messages = [
+            'inicio.required'       => 'Ingrese una fecha de inicio.',
+            'fin.required'          => 'Ingrese una fecha fin.',
+            'idProveedor.required'  => 'Seleccione un laboratorio.'
+        ];
+
+        $rules = [
+            'inicio'        => 'required',
+            'fin'           => 'required',
+            'idProveedor'   => 'required'
+        ];
+
+        $this->validate($request,$rules,$messages);
+        
+        list($dia, $mes, $anio) = explode("/", $request->inicio);
+        $fechainicio = $anio."-".$mes."-".$dia.' 00:00:00.000';
+
+        list($dia, $mes, $anio) = explode("/", $request->fin);
+        $fechafin = $anio."-".$mes."-".$dia.' 23:59:59.000';
+
+        $farmacia = new Farmacia();
+        $data = $farmacia->Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, $request->idProveedor);
+
+        return response()->json(['data' => $data]);
+    }
+
     public function reporte_traslados_excel($fechainicio, $fechafin, $almacenid)
     {
         $farmacia = new Farmacia();

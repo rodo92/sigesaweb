@@ -111,7 +111,75 @@
                 </div>
             </div>
             <!-- fin de traslados -->
-
+            
+            <div id="ingreso">
+                <div class="box box-primary color-palette-box collapsed-box"><!-- collapsed-box -->
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Reporte de Ingresos de Almacen</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td width="15%" style="padding-right: 5px;">
+                                    <label for="">Fecha Inicio:</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right">
+                                    </div>
+                                </td>
+                                <td width="15%" style="padding-right: 5px;">
+                                    <label for="">Fecha Fin:</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right">
+                                    </div>
+                                </td>
+                                <td width="25%" style="padding-right: 5px;">
+                                    <label for="">Laboratorio:</label>
+                                    <div class="input-group">
+                                        <input type="text" name="" id="" class="form-control">
+                                    </div>
+                                </td>
+                                <td width="30%" style="padding-right: 5px;">
+                                   
+                                </td>
+                                <td width="15%" class="text-center">
+                                    <button class="btn btn-primary">
+                                        <i class="fa fa-save"></i>
+                                    </button>&nbsp;
+                                    <button class="btn btn-success">
+                                        <i class="fa fa-file-excel-o"></i>
+                                    </button>&nbsp;
+                                    <a class="btn btn-danger">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="text-danger"></label>
+                                </td>
+                                <td>
+                                    <label class="text-danger"></label>
+                                </td>
+                                <td>
+                                    <label class="text-danger"></label>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
         </section>
     </div>

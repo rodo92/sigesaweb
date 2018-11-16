@@ -63586,6 +63586,74 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -64112,7 +64180,9 @@ var render = function() {
             ])
           ]
         )
-      ])
+      ]),
+      _vm._v(" "),
+      _vm._m(5)
     ])
   ])
 }
@@ -64219,6 +64289,142 @@ var staticRenderFns = [
         _c("tbody")
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { attrs: { id: "ingreso" } }, [
+      _c(
+        "div",
+        { staticClass: "box box-primary color-palette-box collapsed-box" },
+        [
+          _c("div", { staticClass: "box-header with-border" }, [
+            _c("h3", { staticClass: "box-title" }, [
+              _vm._v("Reporte de Ingresos de Almacen")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "box-tools pull-right" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-box-tool",
+                  attrs: { type: "button", "data-widget": "collapse" }
+                },
+                [_c("i", { staticClass: "fa fa-plus" })]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "box-body" }, [
+            _c("table", { staticStyle: { width: "100%" } }, [
+              _c("tr", [
+                _c(
+                  "td",
+                  {
+                    staticStyle: { "padding-right": "5px" },
+                    attrs: { width: "15%" }
+                  },
+                  [
+                    _c("label", { attrs: { for: "" } }, [
+                      _vm._v("Fecha Inicio:")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "input-group date" }, [
+                      _c("div", { staticClass: "input-group-addon" }, [
+                        _c("i", { staticClass: "fa fa-calendar" })
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control pull-right",
+                        attrs: { type: "text" }
+                      })
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  {
+                    staticStyle: { "padding-right": "5px" },
+                    attrs: { width: "15%" }
+                  },
+                  [
+                    _c("label", { attrs: { for: "" } }, [_vm._v("Fecha Fin:")]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "input-group date" }, [
+                      _c("div", { staticClass: "input-group-addon" }, [
+                        _c("i", { staticClass: "fa fa-calendar" })
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control pull-right",
+                        attrs: { type: "text" }
+                      })
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  {
+                    staticStyle: { "padding-right": "5px" },
+                    attrs: { width: "25%" }
+                  },
+                  [
+                    _c("label", { attrs: { for: "" } }, [
+                      _vm._v("Laboratorio:")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "input-group" }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "text", name: "", id: "" }
+                      })
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("td", {
+                  staticStyle: { "padding-right": "5px" },
+                  attrs: { width: "30%" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  { staticClass: "text-center", attrs: { width: "15%" } },
+                  [
+                    _c("button", { staticClass: "btn btn-primary" }, [
+                      _c("i", { staticClass: "fa fa-save" })
+                    ]),
+                    _vm._v(" \n                                "),
+                    _c("button", { staticClass: "btn btn-success" }, [
+                      _c("i", { staticClass: "fa fa-file-excel-o" })
+                    ]),
+                    _vm._v(" \n                                "),
+                    _c("a", { staticClass: "btn btn-danger" }, [
+                      _c("i", { staticClass: "fa fa-file-pdf-o" })
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("td", [_c("label", { staticClass: "text-danger" })]),
+                _vm._v(" "),
+                _c("td", [_c("label", { staticClass: "text-danger" })]),
+                _vm._v(" "),
+                _c("td", [_c("label", { staticClass: "text-danger" })]),
+                _vm._v(" "),
+                _c("td"),
+                _vm._v(" "),
+                _c("td")
+              ])
+            ])
+          ])
+        ]
+      )
+    ])
   }
 ]
 render._withStripped = true

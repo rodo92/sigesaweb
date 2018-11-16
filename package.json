@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "admin-lte": "^2.4.8",
+        "bootstrap-3-typeahead": "^4.0.2",
         "bootstrap-datepicker": "^1.8.0",
         "datatables.net-bs": "^1.10.19",
         "font-awesome": "^4.7.0",

@@ -19,7 +19,7 @@
             <div id="traslados">
                 <div class="box box-primary color-palette-box collapsed-box"><!-- collapsed-box -->
                     <div class="box-header with-border">
-                        <h3 class="box-title">Reporte de Traslados</h3>
+                        <h3 class="box-title">Reporte de Traslados entre Unidades Ejecutoras</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                             </button>
@@ -50,6 +50,8 @@
                                     <label for="">Almacen:</label>
                                     <div class="input-group">
                                         <select name="" id="id_almacen" class="form-control" v-model="almacenid">
+                                            <option value="0">TODOS</option>}
+                                            option
                                             <option v-for="almacen in almacenes" :value="almacen.idAlmacen">
                                                 {{ almacen.descripcion }}
                                             </option>
@@ -66,7 +68,7 @@
                                     <button class="btn btn-success" v-on:click.prevent="excelExport">
                                         <i class="fa fa-file-excel-o"></i>
                                     </button>&nbsp;
-                                    <a class="btn btn-danger" id="btn-generar">
+                                    <a class="btn btn-danger" v-on:click.prevent="pdfExport">
                                         <i class="fa fa-file-pdf-o"></i>
                                     </a>
                                 </td>
@@ -96,6 +98,7 @@
                                 <th>N°DOCUMENTO</th>
                                 <th>ESTADO</th>
                                 <th>SISMED</th>
+                                <th>CANTIDAD</th>
                                 <th>DESCRIPCION</th>
                                 <th>LOTE</th>
                                 <th>F.V.</th>
@@ -183,6 +186,7 @@
                             {data: 'NRO DOCUMENTO'},
                             {data: 'ESTADO'},
                             {data: 'SISMED'},
+                            {data: 'CANTIDAD'},
                             {data: 'DESCRIPCION'},
                             {data: 'LOTE'},
                             {data: 'FV'},
@@ -192,6 +196,7 @@
                     toastr.clear();
                     $('#tabla_traslados').show();
                 }).catch(error => {
+                    toastr.clear();
                     this.errores = error.response.data.errors;
                 }); 
             },
@@ -205,6 +210,11 @@
                 var url = 'farmacia/reporte_traslados_excel/' + fechainicio + '/' + fechafin + '/' + this.almacenid;
                 window.open(url);
                 toastr.clear();
+            },
+            pdfExport: function()
+            {
+                toastr.clear();
+                toastr.info('Funcionalidad en fase de desarrollo. Gracias por la comprensión.', 'WebSigesa');
             }
         },
         mounted() {

@@ -145,14 +145,14 @@
                                 <td width="40%" style="padding-right: 5px;">
                                     <label for="">Laboratorio:</label>
                                     <div class="input-group" style="width: 100%;">
-                                        <input type="text" name="" id="id_proveedor" class="form-control" data-provide="typeahead" autocomplete = "off" >
+                                        <input type="text" name="" id="id_proveedor" class="form-control" data-provide="typeahead" autocomplete = "off" :disabled="habilitado">
                                     </div>
                                 </td>
                                 <td width="15%" style="padding-right: 5px;">
                                     <br>
                                     <div class="checkbox" style="margin-left: 2%;">
                                         <label>
-                                            <input type="checkbox"> Todos
+                                            <input type="checkbox" v-model="habilitado"> Todos
                                         </label>
                                     </div>
                                 </td>
@@ -208,6 +208,7 @@
                 ia_fin: '',
                 almacenid: '',
                 errores: '',
+                habilitado: false,
             }
         },
         created: function() {
@@ -232,7 +233,9 @@
                 axios.get(url).then(response => {  
                     var data = response.data;
                     var proveedores = [];
+                    var id_proveedores = {};
                     $.each(data, function(i, object) {
+                        id_proveedores[object.RAZONSOCIAL] = object.IDPROVEEDOR;
                         proveedores.push(object.RAZONSOCIAL);
                     });
 

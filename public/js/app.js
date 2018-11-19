@@ -13664,16 +13664,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 			today: "Today",
 			clear: "Clear",
 			titleFormat: "MM yyyy"
-		},
-		es: {
-			days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-			daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
-			daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-			months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-			monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-			today: "Hoy",
-			clear: "Clear",
-			titleFormat: "MM yyyy"
 		}
 	};
 
@@ -62534,7 +62524,7 @@ var content = __webpack_require__(60);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(62)("1e186c50", content, false, {});
+var update = __webpack_require__(62)("ff333990", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -63678,7 +63668,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             ia_inicio: '',
             ia_fin: '',
             almacenid: '',
-            errores: ''
+            errores: '',
+            habilitado: false
         };
     },
 
@@ -63706,7 +63697,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url).then(function (response) {
                 var data = response.data;
                 var proveedores = [];
+                var id_proveedores = {};
                 $.each(data, function (i, object) {
+                    id_proveedores[object.RAZONSOCIAL] = object.IDPROVEEDOR;
                     proveedores.push(object.RAZONSOCIAL);
                 });
 
@@ -64878,14 +64871,108 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(8),
+                  _c(
+                    "td",
+                    {
+                      staticStyle: { "padding-right": "5px" },
+                      attrs: { width: "40%" }
+                    },
+                    [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Laboratorio:")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "input-group",
+                          staticStyle: { width: "100%" }
+                        },
+                        [
+                          _c("input", {
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "text",
+                              name: "",
+                              id: "id_proveedor",
+                              "data-provide": "typeahead",
+                              autocomplete: "off",
+                              disabled: _vm.habilitado
+                            }
+                          })
+                        ]
+                      )
+                    ]
+                  ),
                   _vm._v(" "),
-                  _vm._m(9),
+                  _c(
+                    "td",
+                    {
+                      staticStyle: { "padding-right": "5px" },
+                      attrs: { width: "15%" }
+                    },
+                    [
+                      _c("br"),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "checkbox",
+                          staticStyle: { "margin-left": "2%" }
+                        },
+                        [
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.habilitado,
+                                  expression: "habilitado"
+                                }
+                              ],
+                              attrs: { type: "checkbox" },
+                              domProps: {
+                                checked: Array.isArray(_vm.habilitado)
+                                  ? _vm._i(_vm.habilitado, null) > -1
+                                  : _vm.habilitado
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.habilitado,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = null,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.habilitado = $$a.concat([$$v]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.habilitado = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.habilitado = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _vm._v(
+                              " Todos\n                                    "
+                            )
+                          ])
+                        ]
+                      )
+                    ]
+                  ),
                   _vm._v(" "),
-                  _vm._m(10)
+                  _vm._m(8)
                 ]),
                 _vm._v(" "),
-                _vm._m(11)
+                _vm._m(9)
               ])
             ])
           ]
@@ -65034,58 +65121,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "input-group-addon" }, [
       _c("i", { staticClass: "fa fa-calendar" })
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "td",
-      { staticStyle: { "padding-right": "5px" }, attrs: { width: "40%" } },
-      [
-        _c("label", { attrs: { for: "" } }, [_vm._v("Laboratorio:")]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "input-group", staticStyle: { width: "100%" } },
-          [
-            _c("input", {
-              staticClass: "form-control",
-              attrs: {
-                type: "text",
-                name: "",
-                id: "id_proveedor",
-                "data-provide": "typeahead",
-                autocomplete: "off"
-              }
-            })
-          ]
-        )
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "td",
-      { staticStyle: { "padding-right": "5px" }, attrs: { width: "15%" } },
-      [
-        _c("br"),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "checkbox", staticStyle: { "margin-left": "2%" } },
-          [
-            _c("label", [
-              _c("input", { attrs: { type: "checkbox" } }),
-              _vm._v(" Todos\n                                    ")
-            ])
-          ]
-        )
-      ]
-    )
   },
   function() {
     var _vm = this

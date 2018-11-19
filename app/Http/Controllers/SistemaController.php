@@ -63,10 +63,16 @@ class SistemaController extends Controller
     	$proveedores = $Sistema->Mostrar_Provedores();
 
         for ($i=0; $i < count($proveedores); $i++) { 
-            array_push($data, array(
+            //array_push($data, array(
                 //'id'    => $proveedores[$i]['IDPROVEEDOR'],
-                'name'  => $proveedores[$i]['RAZONSOCIAL']
-            ));
+                //'name'  => $proveedores[$i]['RAZONSOCIAL']
+                //array_push($data,$proveedores[$i]['RAZONSOCIAL']);
+            //));
+            $data[] = array(
+                'IDPROVEEDOR'   => $proveedores[$i]['IDPROVEEDOR'],
+                'RUC'           => $proveedores[$i]['RUC'],
+                'RAZONSOCIAL'   => $proveedores[$i]['RAZONSOCIAL']
+            );
         }
         //array_values($proveedores);
     	return response()->json($data);

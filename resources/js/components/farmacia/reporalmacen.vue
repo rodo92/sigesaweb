@@ -130,7 +130,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="text" class="form-control pull-right">
+                                        <input type="text" class="form-control pull-right" id="ia_fecha_inicio" :value="ia_inicio">
                                     </div>
                                 </td>
                                 <td width="15%" style="padding-right: 5px;">
@@ -139,17 +139,22 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="text" class="form-control pull-right">
+                                        <input type="text" class="form-control pull-right" id="ia_fecha_fin" :value="ia_fin">
                                     </div>
                                 </td>
-                                <td width="25%" style="padding-right: 5px;">
+                                <td width="40%" style="padding-right: 5px;">
                                     <label for="">Laboratorio:</label>
-                                    <div class="input-group">
-                                        <input type="text" name="" id="id_proveedor" class="form-control" data-provide="typeahead" autocomplete = "off">
+                                    <div class="input-group" style="width: 100%;">
+                                        <input type="text" name="" id="id_proveedor" class="form-control" data-provide="typeahead" autocomplete = "off" >
                                     </div>
                                 </td>
-                                <td width="30%" style="padding-right: 5px;">
-                                   
+                                <td width="15%" style="padding-right: 5px;">
+                                    <br>
+                                    <div class="checkbox" style="margin-left: 2%;">
+                                        <label>
+                                            <input type="checkbox"> Todos
+                                        </label>
+                                    </div>
                                 </td>
                                 <td width="15%" class="text-center">
                                     <button class="btn btn-primary">
@@ -199,6 +204,8 @@
                 almacenes: [],
                 inicio: '',
                 fin: '',
+                ia_inicio: '',
+                ia_fin: '',
                 almacenid: '',
                 errores: '',
             }
@@ -222,11 +229,18 @@
 
             loadProveedores: function() {
                 var url = 'sistema/proveedores';
-                axios.get(url).then(response => {                    
-                    $('#id_proveedor').typeahead({
-                        source: [ response.data ]
-                    }, 'json');
-                    console.log(response.data);
+                axios.get(url).then(response => {  
+                    var data = response.data;
+                    var proveedores = [];
+                    $.each(data, function(i, object) {
+                        proveedores.push(object.RAZONSOCIAL);
+                    });
+
+                    $("#id_proveedor").typeahead({
+                        source: proveedores,
+                        minLength: 3
+                    });
+                    
                 }).catch(error => {
                     console.log(url);
                     console.log('no hay datos de proveedores');
@@ -318,7 +332,23 @@
             "changeDate", () => {this.fin = $('#fecha_fin').val()}
             );
 
+            $('#ia_fecha_inicio').datepicker({
+                autoclose: true,
+                format: 'dd/mm/yyyy',
+                language: 'es',
+                orientation: 'bottom'             
+            }).on(
+            "changeDate", () => {this.ia_inicio = $('#ia_fecha_inicio').val()}
+            );
 
+            $('#ia_fecha_fin').datepicker({
+                autoclose: true,
+                format: 'dd/mm/yyyy',
+                language: 'es',
+                orientation: 'bottom'             
+            }).on(
+            "changeDate", () => {this.ia_fin = $('#ia_fecha_fin').val()}
+            );
         }
     }    
 </script>

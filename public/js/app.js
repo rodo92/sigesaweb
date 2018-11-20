@@ -13664,6 +13664,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 			today: "Today",
 			clear: "Clear",
 			titleFormat: "MM yyyy"
+		},
+		es: {
+			days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+			daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+			daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+			months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+			monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+			today: "Hoy",
+			clear: "Clear",
+			titleFormat: "MM yyyy"
 		}
 	};
 
@@ -62524,7 +62534,7 @@ var content = __webpack_require__(60);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(62)("ff333990", content, false, {});
+var update = __webpack_require__(62)("1e186c50", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -63651,6 +63661,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -63775,6 +63802,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         postDataIA: function postDataIA() {
             var _this3 = this;
 
+            var alerta_espera = __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.info('Espere un momento por favor', 'WebSigesa', {
+                timeOut: 0,
+                extendedTimeOut: 0
+            });
             var nombre_temp = $("#id_proveedor").val();
             var url = 'farmacia/reporte_ingresos_almacen';
             var ruc = '';
@@ -63789,7 +63820,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 'finia': this.ia_fin,
                 'idProveedor': ruc
             }).then(function (response) {
-                console.log(response.data);
+                $('#tabla_ingresos_almacen').dataTable().fnDestroy();
+                $('#tabla_ingresos_almacen').DataTable({
+                    language: {
+                        search: 'Buscar:',
+                        paginate: {
+                            first: "Primero",
+                            previous: "Atr&aacute;s",
+                            next: "Adelante",
+                            last: "&Uacute;ltimo"
+                        },
+                        "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
+                        "lengthMenu": "Mostrar _MENU_ entradas",
+                        "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
+                    },
+                    "lengthMenu": [5, 10, 25, 50, 75, 100],
+                    data: response.data.data,
+                    columns: [{ data: 'FECHA' }, { data: 'ORDEN DE COMPRA' }, { data: 'LABORATORIO' }, { data: 'NRO DE ENTREGA' }, { data: 'LICITACION' }, { data: 'CODIGO SISMED' }, { data: 'DESCRIPCIÓN DE PRODUCTO' }, { data: 'CANTIDAD' }, { data: 'OBSERVACIONES' }]
+                });
+                __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.clear();
+                $('#tabla_ingresos_almacen').show();
+                //console.log(response.data.data);
+                __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.clear();
             }).catch(function (error) {
                 _this3.errores = error.response.data.errors;
             });
@@ -65065,7 +65117,11 @@ var render = function() {
                   _vm._v(" "),
                   _c("td")
                 ])
-              ])
+              ]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _vm._m(10)
             ])
           ]
         )
@@ -65229,6 +65285,44 @@ var staticRenderFns = [
     return _c("a", { staticClass: "btn btn-danger" }, [
       _c("i", { staticClass: "fa fa-file-pdf-o" })
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "table",
+      {
+        staticClass: "table table-bordered table-striped",
+        staticStyle: { display: "none", width: "100%" },
+        attrs: { id: "tabla_ingresos_almacen" }
+      },
+      [
+        _c("thead", [
+          _c("tr", { staticClass: "bg-gray" }, [
+            _c("th", [_vm._v("FECHA")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("ORDEN")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("LABORATORIO")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("N°ENTREGA")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("LICITACION")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("COD. SISMED")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("DESCRIPCION")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("CANT")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("OBSERVACIONES")])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("tbody")
+      ]
+    )
   }
 ]
 render._withStripped = true

@@ -182,6 +182,23 @@
                                 <td></td>
                             </tr>
                         </table>
+                        <hr>
+                        <table class="table table-bordered table-striped" id="tabla_ingresos_almacen" style="display: none;width: 100%;">
+                            <thead>
+                            <tr class="bg-gray">
+                                <th>FECHA</th>
+                                <th>ORDEN</th>
+                                <th>LABORATORIO</th>
+                                <th>N°ENTREGA</th>
+                                <th>LICITACION</th>
+                                <th>COD. SISMED</th>
+                                <th>DESCRIPCION</th>
+                                <th>CANT</th>
+                                <th>OBSERVACIONES</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -322,6 +339,10 @@
 
             // ingresos a almacen
             postDataIA: function() {
+                var alerta_espera = toastr.info('Espere un momento por favor','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
                 var nombre_temp = $("#id_proveedor").val();
                 var url = 'farmacia/reporte_ingresos_almacen';
                 var ruc = '';
@@ -337,7 +358,38 @@
                     'finia': this.ia_fin,
                     'idProveedor': ruc
                 }).then(response => {
-                    console.log(response.data);
+                    $('#tabla_ingresos_almacen').dataTable().fnDestroy();
+                    $('#tabla_ingresos_almacen').DataTable({
+                        language: {
+                            search: 'Buscar:',
+                            paginate: {
+                                first: "Primero",
+                                previous: "Atr&aacute;s",
+                                next: "Adelante",
+                                last: "&Uacute;ltimo"
+                            },
+                            "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
+                            "lengthMenu": "Mostrar _MENU_ entradas",
+                            "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
+                        },
+                        "lengthMenu": [5, 10, 25, 50, 75, 100],
+                        data: response.data.data,
+                        columns: [
+                            {data: 'FECHA'},
+                            {data: 'ORDEN DE COMPRA'},
+                            {data: 'LABORATORIO'},
+                            {data: 'NRO DE ENTREGA'},
+                            {data: 'LICITACION'},
+                            {data: 'CODIGO SISMED'},
+                            {data: 'DESCRIPCIÓN DE PRODUCTO'},
+                            {data: 'CANTIDAD'},
+                            {data: 'OBSERVACIONES'}
+                        ]
+                    });
+                    toastr.clear();
+                    $('#tabla_ingresos_almacen').show();
+                    //console.log(response.data.data);
+                    toastr.clear();
                 }).catch(error => {
                     this.errores = error.response.data.errors;
                 });

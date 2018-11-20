@@ -82,6 +82,112 @@ class ReporteAlmacenController extends Controller
         return response()->json(['data' => $data]);
     }
 
+    public function reporte_ingresos_almacen_excel($fechainicio, $fechafin, $ruc)
+    {
+        $fechainicio = $fechainicio . ' 00:00:00.000';
+        $fechafin = $fechafin . ' 23:59:59.000';
+
+        $farmacia = new Farmacia();
+
+        if (trim($ruc) == 0) {
+            $data = $farmacia->Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, '0');
+            
+        }
+
+        else {
+            $Sistema = new Sistema();
+            $proveedores = $Sistema->Mostrar_Provedores();
+            for ($i=0; $i < count($proveedores); $i++) { 
+                if ($proveedores[$i]['RUC'] == trim($ruc)) {
+                    $id_proveedor = $proveedores[$i]['IDPROVEEDOR'];
+                }
+            }
+            $data = $farmacia->Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, $id_proveedor);
+            
+        }
+
+        $styleArray = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['argb' => 'FFE8E5E5'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'allborders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $styleCell = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $spreadsheet = new Spreadsheet();  /*----Spreadsheet object-----*/
+        $Excel_writer = new Xls($spreadsheet);  /*----- Excel (Xls) Object*/
+        $spreadsheet->setActiveSheetIndex(0);
+        $activeSheet = $spreadsheet->getActiveSheet();
+
+        $activeSheet->setTitle("Reporte de Traslados");
+
+        $activeSheet->getStyle('A1:L1')->applyFromArray($styleArray);
+
+        //Cabeceras de excel
+        $activeSheet->setCellValue('A1', 'FECHA')->getStyle('A1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('B1', 'ORDEN DE COMPRA')->getStyle('B1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('C1', 'LABORATORIO')->getStyle('C1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('D1', 'N°ENTREGA')->getStyle('D1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E1', 'LICITACION')->getStyle('E1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F1', 'CODIGO SISMED')->getStyle('F1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G1', 'DESCRIPCION')->getStyle('G1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('H1', 'CANTIDAD')->getStyle('H1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I1', 'OBSERVACIONES')->getStyle('H1')->getFont()->setBold(true);
+
+        // Filtro
+        $activeSheet->setAutoFilter("A1:I1");
+
+        //Ingresando datos
+        $j = 2;
+        for ($i = 0; $i < count($data); $i++) {
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['FECHA']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$j, $data[$i]['ORDEN DE COMPRA']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$j, $data[$i]['LABORATORIO']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$j, $data[$i]['NRO DE ENTREGA']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('E'.$j, $data[$i]['LICITACION']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$j, $data[$i]['CODIGO SISMED']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$j, $data[$i]['DESCRIPCIÓN DE PRODUCTO']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, $data[$i]['CANTIDAD']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, $data[$i]['OBSERVACIONE']);
+
+            $activeSheet->getStyle("A".$j.":L".$j)->applyFromArray($styleCell);
+            $j++;
+        }
+
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('A')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('B')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('C')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('D')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('E')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('F')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('G')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('H')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('I')->setAutoSize(true);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ReportedeIngresos.xls"'); /*-- $filename is  xsl filename ---*/
+        header('Cache-Control: max-age=0');
+        return $Excel_writer->save("php://output");
+    }
+
     public function reporte_traslados_excel($fechainicio, $fechafin, $almacenid)
     {
         $fechainicio = $fechainicio . ' 00:00:00.000';

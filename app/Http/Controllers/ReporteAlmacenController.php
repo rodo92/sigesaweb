@@ -4,6 +4,7 @@ namespace WebSigesa\Http\Controllers;
 
 use Illuminate\Http\Request;
 use WebSigesa\Farmacia;
+use WebSigesa\Sistema;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
@@ -40,28 +41,44 @@ class ReporteAlmacenController extends Controller
     public function reporte_ingresos_almacen(Request $request)
     {
         $messages = [
-            'inicio.required'       => 'Ingrese una fecha de inicio.',
-            'fin.required'          => 'Ingrese una fecha fin.',
+            'inicioia.required'       => 'Ingrese una fecha de inicio.',
+            'finia.required'          => 'Ingrese una fecha fin.',
             'idProveedor.required'  => 'Seleccione un laboratorio.'
         ];
 
         $rules = [
-            'inicio'        => 'required',
-            'fin'           => 'required',
+            'inicioia'        => 'required',
+            'finia'           => 'required',
             'idProveedor'   => 'required'
         ];
 
         $this->validate($request,$rules,$messages);
         
-        list($dia, $mes, $anio) = explode("/", $request->inicio);
+        list($dia, $mes, $anio) = explode("/", $request->inicioia);
         $fechainicio = $anio."-".$mes."-".$dia.' 00:00:00.000';
 
-        list($dia, $mes, $anio) = explode("/", $request->fin);
+        list($dia, $mes, $anio) = explode("/", $request->finia);
         $fechafin = $anio."-".$mes."-".$dia.' 23:59:59.000';
 
-        $farmacia = new Farmacia();
-        $data = $farmacia->Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, $request->idProveedor);
+        $Sistema = new Sistema();
+        $proveedores = $Sistema->Mostrar_Provedores();
 
+        $farmacia = new Farmacia();
+
+        if (trim($request->idProveedor) == 0) {
+            $data = $farmacia->Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, '0');
+            
+        }
+
+        else {
+            for ($i=0; $i < count($proveedores); $i++) { 
+                if ($proveedores[$i]['RUC'] == trim($request->idProveedor)) {
+                    $id_proveedor = $proveedores[$i]['IDPROVEEDOR'];
+                }
+            }
+            $data = $farmacia->Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, $id_proveedor);
+            
+        }
         return response()->json(['data' => $data]);
     }
 

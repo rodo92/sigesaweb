@@ -145,7 +145,7 @@
                                 <td width="40%" style="padding-right: 5px;">
                                     <label for="">Laboratorio:</label>
                                     <div class="input-group" style="width: 100%;">
-                                        <input type="text" name="" id="id_proveedor" class="form-control" data-provide="typeahead" autocomplete = "off" :disabled="habilitado">
+                                        <input type="text" v-model="nombre_proveedor" id="id_proveedor" class="form-control" data-provide="typeahead" autocomplete = "off" :disabled="habilitado">
                                     </div>
                                 </td>
                                 <td width="15%" style="padding-right: 5px;">
@@ -157,7 +157,7 @@
                                     </div>
                                 </td>
                                 <td width="15%" class="text-center">
-                                    <button class="btn btn-primary">
+                                    <button class="btn btn-primary" v-on:click.prevent="postDataIA">
                                         <i class="fa fa-save"></i>
                                     </button>&nbsp;
                                     <button class="btn btn-success">
@@ -170,13 +170,13 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label class="text-danger"></label>
+                                    <label v-if="errores.inicioia" class="text-danger">{{ errores.inicioia[0] }}</label>
                                 </td>
                                 <td>
-                                    <label class="text-danger"></label>
+                                   <label v-if="errores.finia" class="text-danger">{{ errores.finia[0] }}</label>
                                 </td>
                                 <td>
-                                    <label class="text-danger"></label>
+                                    <label v-if="errores.idProveedor" class="text-danger">{{ errores.idProveedor[0] }}</label>
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -209,6 +209,8 @@
                 almacenid: '',
                 errores: '',
                 habilitado: false,
+                nombre_proveedor: '',
+                id_proveedores: {},
             }
         },
         created: function() {
@@ -233,10 +235,10 @@
                 axios.get(url).then(response => {  
                     var data = response.data;
                     var proveedores = [];
-                    var id_proveedores = {};
+                    
                     $.each(data, function(i, object) {
-                        id_proveedores[object.RAZONSOCIAL] = object.IDPROVEEDOR;
-                        proveedores.push(object.RAZONSOCIAL);
+                        //this.id_proveedores[object.RAZONSOCIAL] = object.IDPROVEEDOR;
+                        proveedores.push(object.RUC + ' | ' + object.RAZONSOCIAL);
                     });
 
                     $("#id_proveedor").typeahead({
@@ -250,7 +252,7 @@
                 });
             },
 
-            // envio de Datos
+            // envio de Datos para traslados de unidades ejecutoras
             postData: function() {
                 var alerta_espera = toastr.info('Espere un momento por favor','WebSigesa', { 
                     timeOut: 0,
@@ -316,6 +318,29 @@
             {
                 toastr.clear();
                 toastr.info('Funcionalidad en fase de desarrollo. Gracias por la comprensión.', 'WebSigesa');
+            },
+
+            // ingresos a almacen
+            postDataIA: function() {
+                var nombre_temp = $("#id_proveedor").val();
+                var url = 'farmacia/reporte_ingresos_almacen';
+                var ruc = '';
+                if (this.habilitado) {
+                    ruc = '0';
+                }
+                else {
+                    ruc = nombre_temp.substring(0,11);
+                }
+
+                axios.post(url, {
+                    'inicioia': this.ia_inicio,
+                    'finia': this.ia_fin,
+                    'idProveedor': ruc
+                }).then(response => {
+                    console.log(response.data);
+                }).catch(error => {
+                    this.errores = error.response.data.errors;
+                });
             }
         },
         mounted() {

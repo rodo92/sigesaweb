@@ -63669,7 +63669,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             ia_fin: '',
             almacenid: '',
             errores: '',
-            habilitado: false
+            habilitado: false,
+            nombre_proveedor: '',
+            id_proveedores: {}
         };
     },
 
@@ -63697,10 +63699,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url).then(function (response) {
                 var data = response.data;
                 var proveedores = [];
-                var id_proveedores = {};
+
                 $.each(data, function (i, object) {
-                    id_proveedores[object.RAZONSOCIAL] = object.IDPROVEEDOR;
-                    proveedores.push(object.RAZONSOCIAL);
+                    //this.id_proveedores[object.RAZONSOCIAL] = object.IDPROVEEDOR;
+                    proveedores.push(object.RUC + ' | ' + object.RAZONSOCIAL);
                 });
 
                 $("#id_proveedor").typeahead({
@@ -63713,7 +63715,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
 
-        // envio de Datos
+        // envio de Datos para traslados de unidades ejecutoras
         postData: function postData() {
             var _this2 = this;
 
@@ -63767,17 +63769,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         pdfExport: function pdfExport() {
             __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.clear();
             __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.info('Funcionalidad en fase de desarrollo. Gracias por la comprensión.', 'WebSigesa');
+        },
+
+        // ingresos a almacen
+        postDataIA: function postDataIA() {
+            var _this3 = this;
+
+            var nombre_temp = $("#id_proveedor").val();
+            var url = 'farmacia/reporte_ingresos_almacen';
+            var ruc = '';
+            if (this.habilitado) {
+                ruc = '0';
+            } else {
+                ruc = nombre_temp.substring(0, 11);
+            }
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(url, {
+                'inicioia': this.ia_inicio,
+                'finia': this.ia_fin,
+                'idProveedor': ruc
+            }).then(function (response) {
+                console.log(response.data);
+            }).catch(function (error) {
+                _this3.errores = error.response.data.errors;
+            });
         }
     },
     mounted: function mounted() {
-        var _this3 = this;
+        var _this4 = this;
 
         $('#fecha_inicio').datepicker({
             autoclose: true,
             format: 'dd/mm/yyyy',
             language: 'es'
         }).on("changeDate", function () {
-            _this3.inicio = $('#fecha_inicio').val();
+            _this4.inicio = $('#fecha_inicio').val();
         });
 
         $('#fecha_fin').datepicker({
@@ -63785,7 +63811,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             format: 'dd/mm/yyyy',
             language: 'es'
         }).on("changeDate", function () {
-            _this3.fin = $('#fecha_fin').val();
+            _this4.fin = $('#fecha_fin').val();
         });
 
         $('#ia_fecha_inicio').datepicker({
@@ -63794,7 +63820,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             language: 'es',
             orientation: 'bottom'
         }).on("changeDate", function () {
-            _this3.ia_inicio = $('#ia_fecha_inicio').val();
+            _this4.ia_inicio = $('#ia_fecha_inicio').val();
         });
 
         $('#ia_fecha_fin').datepicker({
@@ -63803,7 +63829,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             language: 'es',
             orientation: 'bottom'
         }).on("changeDate", function () {
-            _this3.ia_fin = $('#ia_fecha_fin').val();
+            _this4.ia_fin = $('#ia_fecha_fin').val();
         });
     }
 });
@@ -64890,14 +64916,30 @@ var render = function() {
                         },
                         [
                           _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.nombre_proveedor,
+                                expression: "nombre_proveedor"
+                              }
+                            ],
                             staticClass: "form-control",
                             attrs: {
                               type: "text",
-                              name: "",
                               id: "id_proveedor",
                               "data-provide": "typeahead",
                               autocomplete: "off",
                               disabled: _vm.habilitado
+                            },
+                            domProps: { value: _vm.nombre_proveedor },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.nombre_proveedor = $event.target.value
+                              }
                             }
                           })
                         ]
@@ -64969,10 +65011,60 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(8)
+                  _c(
+                    "td",
+                    { staticClass: "text-center", attrs: { width: "15%" } },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.postDataIA($event)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fa fa-save" })]
+                      ),
+                      _vm._v(" \n                                "),
+                      _vm._m(8),
+                      _vm._v(" \n                                "),
+                      _vm._m(9)
+                    ]
+                  )
                 ]),
                 _vm._v(" "),
-                _vm._m(9)
+                _c("tr", [
+                  _c("td", [
+                    _vm.errores.inicioia
+                      ? _c("label", { staticClass: "text-danger" }, [
+                          _vm._v(_vm._s(_vm.errores.inicioia[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm.errores.finia
+                      ? _c("label", { staticClass: "text-danger" }, [
+                          _vm._v(_vm._s(_vm.errores.finia[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm.errores.idProveedor
+                      ? _c("label", { staticClass: "text-danger" }, [
+                          _vm._v(_vm._s(_vm.errores.idProveedor[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("td"),
+                  _vm._v(" "),
+                  _c("td")
+                ])
               ])
             ])
           ]
@@ -65126,34 +65218,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "text-center", attrs: { width: "15%" } }, [
-      _c("button", { staticClass: "btn btn-primary" }, [
-        _c("i", { staticClass: "fa fa-save" })
-      ]),
-      _vm._v(" \n                                "),
-      _c("button", { staticClass: "btn btn-success" }, [
-        _c("i", { staticClass: "fa fa-file-excel-o" })
-      ]),
-      _vm._v(" \n                                "),
-      _c("a", { staticClass: "btn btn-danger" }, [
-        _c("i", { staticClass: "fa fa-file-pdf-o" })
-      ])
+    return _c("button", { staticClass: "btn btn-success" }, [
+      _c("i", { staticClass: "fa fa-file-excel-o" })
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("td", [_c("label", { staticClass: "text-danger" })]),
-      _vm._v(" "),
-      _c("td", [_c("label", { staticClass: "text-danger" })]),
-      _vm._v(" "),
-      _c("td", [_c("label", { staticClass: "text-danger" })]),
-      _vm._v(" "),
-      _c("td"),
-      _vm._v(" "),
-      _c("td")
+    return _c("a", { staticClass: "btn btn-danger" }, [
+      _c("i", { staticClass: "fa fa-file-pdf-o" })
     ])
   }
 ]

@@ -91,7 +91,7 @@ class ReporteAlmacenController extends Controller
 
         if (trim($ruc) == 0) {
             $data = $farmacia->Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, '0');
-            echo 'soy o';exit;
+            //echo 'soy o';exit;
         }
 
         else {

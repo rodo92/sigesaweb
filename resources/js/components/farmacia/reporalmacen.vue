@@ -160,7 +160,7 @@
                                     <button class="btn btn-primary" v-on:click.prevent="postDataIA">
                                         <i class="fa fa-save"></i>
                                     </button>&nbsp;
-                                    <button class="btn btn-success">
+                                    <button class="btn btn-success" v-on:click.prevent="excelExportIA">
                                         <i class="fa fa-file-excel-o"></i>
                                     </button>&nbsp;
                                     <a class="btn btn-danger">
@@ -393,6 +393,25 @@
                 }).catch(error => {
                     this.errores = error.response.data.errors;
                 });
+            },
+            excelExportIA: function() {
+                var nombre_temp = $("#id_proveedor").val();
+                var ruc = '';
+                if (this.habilitado) {
+                    ruc = '0';
+                }
+                else {
+                    ruc = nombre_temp.substring(0,11);
+                }
+                var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
+                var fechainicio = this.ia_inicio.split("/").reverse().join("-");
+                var fechafin = this.ia_fin.split("/").reverse().join("-");
+                var url = 'farmacia/reporte_ingresos_almacen_excel/' + fechainicio + '/' + fechafin + '/' + ruc;
+                window.open(url);
+                toastr.clear();
             }
         },
         mounted() {

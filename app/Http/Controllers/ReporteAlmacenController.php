@@ -91,10 +91,11 @@ class ReporteAlmacenController extends Controller
 
         if (trim($ruc) == 0) {
             $data = $farmacia->Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, '0');
-            
+            echo 'soy o';exit;
         }
 
         else {
+
             $Sistema = new Sistema();
             $proveedores = $Sistema->Mostrar_Provedores();
             for ($i=0; $i < count($proveedores); $i++) { 
@@ -103,7 +104,7 @@ class ReporteAlmacenController extends Controller
                 }
             }
             $data = $farmacia->Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, $id_proveedor);
-            
+            //echo '<pre>';print_r($data);exit();
         }
 
         $styleArray = [
@@ -137,9 +138,9 @@ class ReporteAlmacenController extends Controller
         $spreadsheet->setActiveSheetIndex(0);
         $activeSheet = $spreadsheet->getActiveSheet();
 
-        $activeSheet->setTitle("Reporte de Traslados");
+        $activeSheet->setTitle("Reporte de Ingresos de Almacen");
 
-        $activeSheet->getStyle('A1:L1')->applyFromArray($styleArray);
+        $activeSheet->getStyle('A1:I1')->applyFromArray($styleArray);
 
         //Cabeceras de excel
         $activeSheet->setCellValue('A1', 'FECHA')->getStyle('A1')->getFont()->setBold(true);
@@ -150,7 +151,7 @@ class ReporteAlmacenController extends Controller
         $activeSheet->setCellValue('F1', 'CODIGO SISMED')->getStyle('F1')->getFont()->setBold(true);
         $activeSheet->setCellValue('G1', 'DESCRIPCION')->getStyle('G1')->getFont()->setBold(true);
         $activeSheet->setCellValue('H1', 'CANTIDAD')->getStyle('H1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('I1', 'OBSERVACIONES')->getStyle('H1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I1', 'OBSERVACIONES')->getStyle('I1')->getFont()->setBold(true);
 
         // Filtro
         $activeSheet->setAutoFilter("A1:I1");
@@ -166,9 +167,9 @@ class ReporteAlmacenController extends Controller
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$j, $data[$i]['CODIGO SISMED']);
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$j, $data[$i]['DESCRIPCIÓN DE PRODUCTO']);
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, $data[$i]['CANTIDAD']);
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, $data[$i]['OBSERVACIONE']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, $data[$i]['OBSERVACIONES']);
 
-            $activeSheet->getStyle("A".$j.":L".$j)->applyFromArray($styleCell);
+            $activeSheet->getStyle("A".$j.":I".$j)->applyFromArray($styleCell);
             $j++;
         }
 
@@ -239,7 +240,7 @@ class ReporteAlmacenController extends Controller
         $activeSheet->setCellValue('F1', 'ESTADO')->getStyle('F1')->getFont()->setBold(true);
         $activeSheet->setCellValue('G1', 'SISMED')->getStyle('G1')->getFont()->setBold(true);
         $activeSheet->setCellValue('H1', 'DESCRIPCION')->getStyle('H1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('I1', 'CANTIDAD')->getStyle('H1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I1', 'CANTIDAD')->getStyle('I1')->getFont()->setBold(true);
         $activeSheet->setCellValue('J1', 'LOTE')->getStyle('I1')->getFont()->setBold(true);
         $activeSheet->setCellValue('K1', 'FV')->getStyle('J1')->getFont()->setBold(true);
         $activeSheet->setCellValue('L1', 'RS')->getStyle('K1')->getFont()->setBold(true);

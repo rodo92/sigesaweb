@@ -63845,6 +63845,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (error) {
                 _this3.errores = error.response.data.errors;
             });
+        },
+        excelExportIA: function excelExportIA() {
+            var nombre_temp = $("#id_proveedor").val();
+            var ruc = '';
+            if (this.habilitado) {
+                ruc = '0';
+            } else {
+                ruc = nombre_temp.substring(0, 11);
+            }
+            var alerta_espera = __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.info('Espere un momento mientras se genera el archivo', 'WebSigesa', {
+                timeOut: 0,
+                extendedTimeOut: 0
+            });
+            var fechainicio = this.ia_inicio.split("/").reverse().join("-");
+            var fechafin = this.ia_fin.split("/").reverse().join("-");
+            var url = 'farmacia/reporte_ingresos_almacen_excel/' + fechainicio + '/' + fechafin + '/' + ruc;
+            window.open(url);
+            __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.clear();
         }
     },
     mounted: function mounted() {
@@ -65081,9 +65099,21 @@ var render = function() {
                         [_c("i", { staticClass: "fa fa-save" })]
                       ),
                       _vm._v(" \n                                "),
-                      _vm._m(8),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.excelExportIA($event)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fa fa-file-excel-o" })]
+                      ),
                       _vm._v(" \n                                "),
-                      _vm._m(9)
+                      _vm._m(8)
                     ]
                   )
                 ]),
@@ -65121,7 +65151,7 @@ var render = function() {
               _vm._v(" "),
               _c("hr"),
               _vm._v(" "),
-              _vm._m(10)
+              _vm._m(9)
             ])
           ]
         )
@@ -65268,14 +65298,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "input-group-addon" }, [
       _c("i", { staticClass: "fa fa-calendar" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-success" }, [
-      _c("i", { staticClass: "fa fa-file-excel-o" })
     ])
   },
   function() {

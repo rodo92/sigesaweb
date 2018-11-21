@@ -14,9 +14,8 @@
 
     <!-- Cuerpo del contenido -->
         <section class="content container-fluid">
-            <div class="box box-primary color-palette-box" id="cabecera_factura">
+            <div class="box box-default color-palette-box" id="cabecera_factura">
                 <div class="box-header with-border">
-                    <h3 class="box-title"></h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                         </button>
@@ -51,7 +50,7 @@
                                     </td>
                                     <td width="20%" >
                                         <div class="radio">
-                                            <button class="btn btn-success" v-on:click.prevent="btn_af">APERTURA<br>DE CAJA</button>
+                                            <button class="btn btn-primary" v-on:click.prevent="btn_af"><i class="fa fa-print"></i> APERTURA<br>DE CAJA</button>
                                         </div>  
                                     </td>
                                 </tr>
@@ -61,7 +60,7 @@
                 </div>
             </div>
 
-            <div class="box box-primary" id="cuerpo_factura" style="display: none;">
+            <div class="box box-default" id="cuerpo_factura" style="display: none;">
                 <div class="box-body">
                     <div class="row">
                         <div class="col-xs-6">
@@ -76,31 +75,31 @@
                                         <label for="">Raz&oacute;n Social:</label>
                                         {{ razonsocial }}
                                     </td>                    
-                                    <td></td>
+                                    
                                     <td>
                                         <label>Direcci&oacute;n :</label>
-                                        
+                                        {{ direccion }}
                                     </td>
-                                    <td></td>
+                                   
                                 </tr>
                                 <tr>
                                     <td>
                                         <label for="">R.U.C. :</label>
                                         {{ rucv }}
                                     </td>
-                                    <td></td>
+                                    
                                     <td>
                                         <label>Fecha de Emisi&oacute;n: </label>
                                         {{ new Date().getDate() + "/" + (new Date().getMonth() +1) + "/" + new Date().getFullYear() }}
                                     </td>
-                                    <td></td>
+                                    
                                 </tr>
                             </table>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <button type="" class="btn btn-info"><i class="fa fa-plus"></i> AGREGAR PRODUCTOS</button>
-                            <button type="" class="btn btn-success"><i class="fa fa-print"></i> GENERAR</button>
-                            <button type="" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR CAJA</button>
+                            <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
+                            <button type="" class="btn btn-success"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
+                            <button type="" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
                         </div>
                     </div>
                     <hr>
@@ -118,17 +117,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>25280</td>
-                                        <td>Alargamiento o acortamiento de tendones</td>
-                                        <td>1</td>
-                                        <td>250</td>
-                                        <td>250</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-default"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                            <button class="btn btn-sm btn-default"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
                                     <tr>
                                         <td></td>
                                         <td></td>
@@ -166,6 +154,49 @@
                 </div>
             </div>
         </section>
+
+        <!-- busqueda de poductas -->
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="modal_ingresos_productos">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Buscar medicamentos, servicios, insumos ...</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <input type="text" class="form-control" placeholder="NOMBRE O CODIGO">
+                            </div>
+                            <div class="col-xs-4">
+                                <button class="btn btn-default"><i class="fa fa-search"></i> BUSCAR</button>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 2%;">
+                            <div class="col-xs-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="bg-warning">
+                                            <th>CODIGO</th>
+                                            <th>DESCRIPCION</th>
+                                            <th class="text-center">CANTIDAD</th>
+                                            <th class="text-center">PRECIO</th>
+                                            <th class="text-center">AGREGAR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>  
     </div>
 </template>
 
@@ -181,6 +212,7 @@
                 ruc: '',
                 rucv: '',
                 razonsocial: '',
+                direccion:''
             }
         },
         created: function() {
@@ -209,17 +241,23 @@
             btn_af: function() {
                 $('#cabecera_factura').addClass('collapsed-box');
                 $('#cuerpo_factura').show();
+                $('#ruc_bus').focus();
             },
             buscar_proveedor: function() {
                 var url = 'sistema/proveedor/' + this.ruc;
                 axios.get(url).then(response => {
+                    this.ruc = '';
                     var datos = response.data;
                     this.razonsocial = datos.RAZONSOCIAL;
                     this.rucv = datos.RUC;
-                    $('#ruc_bus').val('');
+                    this.direccion = datos.DIRECCION;
+                    $('#btn_buscar_productos').focus();
                 }).catch(error => {
                     console.log(error.response.data);
                 });
+            },
+            ver_modal: function() {
+                $('#modal_ingresos_productos').modal('show');
             }
         }
     }

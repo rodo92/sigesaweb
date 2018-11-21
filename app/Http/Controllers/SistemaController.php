@@ -89,7 +89,8 @@ class SistemaController extends Controller
                     $data = array(
                     'IDPROVEEDOR'   => $proveedores[$i]['IDPROVEEDOR'],
                     'RUC'           => $proveedores[$i]['RUC'],
-                    'RAZONSOCIAL'   => $proveedores[$i]['RAZONSOCIAL']
+                    'RAZONSOCIAL'   => $proveedores[$i]['RAZONSOCIAL'],
+                    'DIRECCION'     => $proveedores[$i]['DIRECCION']
                 );
             }
             

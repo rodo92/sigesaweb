@@ -62456,7 +62456,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("ol", { staticClass: "breadcrumb" }, [
       _c("li", [
-        _c("a", { attrs: { href: "" } }, [
+        _c("a", { attrs: { href: "restaurar" } }, [
           _c("i", { staticClass: "fa fa-dashboard" }),
           _vm._v(" Inicio")
         ])
@@ -65421,7 +65421,7 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "box box-primary color-palette-box",
+          staticClass: "box box-default color-palette-box",
           attrs: { id: "cabecera_factura" }
         },
         [
@@ -65516,7 +65516,7 @@ var render = function() {
                           _c(
                             "button",
                             {
-                              staticClass: "btn btn-success",
+                              staticClass: "btn btn-primary",
                               on: {
                                 click: function($event) {
                                   $event.preventDefault()
@@ -65524,7 +65524,12 @@ var render = function() {
                                 }
                               }
                             },
-                            [_vm._v("APERTURA"), _c("br"), _vm._v("DE CAJA")]
+                            [
+                              _c("i", { staticClass: "fa fa-print" }),
+                              _vm._v(" APERTURA"),
+                              _c("br"),
+                              _vm._v("DE CAJA")
+                            ]
                           )
                         ])
                       ])
@@ -65540,7 +65545,7 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "box box-primary",
+          staticClass: "box box-default",
           staticStyle: { display: "none" },
           attrs: { id: "cuerpo_factura" }
         },
@@ -65600,11 +65605,14 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _c("td"),
-                    _vm._v(" "),
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _c("td")
+                    _c("td", [
+                      _c("label", [_vm._v("Dirección :")]),
+                      _vm._v(
+                        "\n                                    " +
+                          _vm._s(_vm.direccion) +
+                          "\n                                "
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
                   _c("tr", [
@@ -65616,8 +65624,6 @@ var render = function() {
                           "\n                                "
                       )
                     ]),
-                    _vm._v(" "),
-                    _c("td"),
                     _vm._v(" "),
                     _c("td", [
                       _c("label", [_vm._v("Fecha de Emisión: ")]),
@@ -65632,14 +65638,36 @@ var render = function() {
                           ) +
                           "\n                                "
                       )
-                    ]),
-                    _vm._v(" "),
-                    _c("td")
+                    ])
                   ])
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(3)
+              _c("div", { staticClass: "col-xs-6 text-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-info",
+                    attrs: { type: "", id: "btn_buscar_productos" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.ver_modal($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "fa fa-search" }),
+                    _vm._v(" AGREGAR"),
+                    _c("br"),
+                    _vm._v("PRODUCTOS")
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(2),
+                _vm._v(" "),
+                _vm._m(3)
+              ])
             ]),
             _vm._v(" "),
             _c("hr"),
@@ -65650,7 +65678,9 @@ var render = function() {
           ])
         ]
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _vm._m(6)
   ])
 }
 var staticRenderFns = [
@@ -65681,8 +65711,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "box-header with-border" }, [
-      _c("h3", { staticClass: "box-title" }),
-      _vm._v(" "),
       _c("div", { staticClass: "box-tools pull-right" }, [
         _c(
           "button",
@@ -65699,28 +65727,31 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", [_c("label", [_vm._v("Dirección :")])])
+    return _c(
+      "button",
+      { staticClass: "btn btn-success", attrs: { type: "" } },
+      [
+        _c("i", { staticClass: "fa fa-save" }),
+        _vm._v(" GENERAR"),
+        _c("br"),
+        _vm._v("FACTURA")
+      ]
+    )
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-xs-6 text-right" }, [
-      _c("button", { staticClass: "btn btn-info", attrs: { type: "" } }, [
-        _c("i", { staticClass: "fa fa-plus" }),
-        _vm._v(" AGREGAR PRODUCTOS")
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-success", attrs: { type: "" } }, [
-        _c("i", { staticClass: "fa fa-print" }),
-        _vm._v(" GENERAR")
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-warning", attrs: { type: "" } }, [
+    return _c(
+      "button",
+      { staticClass: "btn btn-warning", attrs: { type: "" } },
+      [
         _c("i", { staticClass: "fa fa-close" }),
-        _vm._v(" CERRAR CAJA")
-      ])
-    ])
+        _vm._v(" CERRAR"),
+        _c("br"),
+        _vm._v("CAJA")
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -65746,34 +65777,6 @@ var staticRenderFns = [
           ]),
           _vm._v(" "),
           _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v("25280")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Alargamiento o acortamiento de tendones")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("1")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("250")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("250")]),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-center" }, [
-                _c("button", { staticClass: "btn btn-sm btn-default" }, [
-                  _c("i", {
-                    staticClass: "fa fa-pencil",
-                    attrs: { "aria-hidden": "true" }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("button", { staticClass: "btn btn-sm btn-default" }, [
-                  _c("i", {
-                    staticClass: "fa fa-trash-o",
-                    attrs: { "aria-hidden": "true" }
-                  })
-                ])
-              ])
-            ]),
-            _vm._v(" "),
             _c("tr", [
               _c("td"),
               _vm._v(" "),
@@ -65846,6 +65849,116 @@ var staticRenderFns = [
         })
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "myLargeModalLabel",
+          id: "modal_ingresos_productos"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("h4", { staticClass: "modal-title" }, [
+                  _vm._v("Buscar medicamentos, servicios, insumos ...")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-xs-8" }, [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { type: "text", placeholder: "NOMBRE O CODIGO" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-xs-4" }, [
+                    _c("button", { staticClass: "btn btn-default" }, [
+                      _c("i", { staticClass: "fa fa-search" }),
+                      _vm._v(" BUSCAR")
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "row", staticStyle: { "margin-top": "2%" } },
+                  [
+                    _c("div", { staticClass: "col-xs-12" }, [
+                      _c("table", { staticClass: "table table-bordered" }, [
+                        _c("thead", [
+                          _c("tr", { staticClass: "bg-warning" }, [
+                            _c("th", [_vm._v("CODIGO")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("DESCRIPCION")]),
+                            _vm._v(" "),
+                            _c("th", { staticClass: "text-center" }, [
+                              _vm._v("CANTIDAD")
+                            ]),
+                            _vm._v(" "),
+                            _c("th", { staticClass: "text-center" }, [
+                              _vm._v("PRECIO")
+                            ]),
+                            _vm._v(" "),
+                            _c("th", { staticClass: "text-center" }, [
+                              _vm._v("AGREGAR")
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("tbody")
+                      ])
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-default",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("CERRAR")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -66062,6 +66175,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -66072,7 +66216,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             tipo_documento: [],
             ruc: '',
             rucv: '',
-            razonsocial: ''
+            razonsocial: '',
+            direccion: ''
         };
     },
 
@@ -66104,19 +66249,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         btn_af: function btn_af() {
             $('#cabecera_factura').addClass('collapsed-box');
             $('#cuerpo_factura').show();
+            $('#ruc_bus').focus();
         },
         buscar_proveedor: function buscar_proveedor() {
             var _this2 = this;
 
             var url = 'sistema/proveedor/' + this.ruc;
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url).then(function (response) {
+                _this2.ruc = '';
                 var datos = response.data;
                 _this2.razonsocial = datos.RAZONSOCIAL;
                 _this2.rucv = datos.RUC;
-                $('#ruc_bus').val('');
+                _this2.direccion = datos.DIRECCION;
+                $('#btn_buscar_productos').focus();
             }).catch(function (error) {
                 console.log(error.response.data);
             });
+        },
+        ver_modal: function ver_modal() {
+            $('#modal_ingresos_productos').modal('show');
         }
     }
 });

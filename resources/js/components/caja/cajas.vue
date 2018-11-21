@@ -14,54 +14,39 @@
 
     <!-- Cuerpo del contenido -->
         <section class="content container-fluid">
-            <div class="box box-default color-palette-box" id="cabecera_factura">
-                <div class="box-header with-border">
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <table style="width: 70%; text-align: left;">
-                                <tr>
-                                    <td width="30%" style="padding-right: 1%;">
-                                        <div class="form-group">
-                                            <label>Seleccione un caja</label>
-                                            <select class="form-control">
-                                                <option value=""></option>
-                                                <option v-for="caja in cajas" :value="caja.IdCaja">
-                                                    {{ caja.Descripcion }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td width="30%" style="padding-right: 1%;">
-                                        <div class="form-group">
-                                            <label>Tipo de Documento</label>
-                                            <select class="form-control">
-                                                <option value=""></option>
-                                                <option v-for="tipdoc in tipo_documento" :value="tipdoc.IdTipoComprobante">
-                                                    {{ tipdoc.Descripcion }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td width="20%" >
-                                        <div class="radio">
-                                            <button class="btn btn-primary" v-on:click.prevent="btn_af"><i class="fa fa-print"></i> APERTURA<br>DE CAJA</button>
-                                        </div>  
-                                    </td>
-                                </tr>
-                            </table>
+            <div class="row" id="cabecera_factura" style="margin-top: 10%;">
+                <div class="col-xs-4 col-xs-offset-4">
+                    <div class="box box-default color-palette-box" >
+                        <div class="box-body" style="padding: 10%;">
+                            <div class="form-group">
+                                <label>Seleccione un caja</label>
+                                <select class="form-control" v-model="idCaja">
+                                    <option value=""></option>
+                                    <option v-for="caja in cajas" :value="caja.IdCaja" >
+                                        {{ caja.Descripcion }}
+                                    </option>
+                                </select>
+                                <label v-if="errores.idcaja" class="text-danger">{{ errores.idcaja[0] }}</label>
+                            </div>
+                             <div class="form-group">
+                                <label>Tipo de Documento</label>
+                                <select class="form-control" v-model="idTIpoDocumento">
+                                    <option value=""></option>
+                                    <option v-for="tipdoc in tipo_documento" :value="tipdoc.IdTipoComprobante">
+                                        {{ tipdoc.Descripcion }}
+                                    </option>
+                                </select>
+                                <label v-if="errores.tipodocumento" class="text-danger">{{ errores.tipodocumento[0] }}</label>
+                            </div>
+                            <br>
+                            <button class="btn btn-primary btn-block" v-on:click.prevent="btn_ac"><i class="fa fa-print"></i> APERTURA DE CAJA</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="box box-default" id="cuerpo_factura" style="display: none;">
-                <div class="box-body">
+                <div class="box-body" style="padding: 3%;">
                     <div class="row">
                         <div class="col-xs-6">
                             <table style="width: 100%">
@@ -202,7 +187,7 @@
 
 <script>
     import axios from 'axios'
-
+    import toastr from 'toastr'
 
     export default {
         data() {
@@ -212,7 +197,10 @@
                 ruc: '',
                 rucv: '',
                 razonsocial: '',
-                direccion:''
+                direccion:'',
+                idCaja: '',
+                idTIpoDocumento: '',
+                errores: '',
             }
         },
         created: function() {
@@ -238,10 +226,20 @@
                 });                
             },
 
-            btn_af: function() {
-                $('#cabecera_factura').addClass('collapsed-box');
-                $('#cuerpo_factura').show();
-                $('#ruc_bus').focus();
+            btn_ac: function() {
+                
+                var url = 'cajas/aperturar_caja';
+                axios.post(url, {
+                    'idcaja' : this.idCaja,
+                    'tipodocumento' : this.idTIpoDocumento
+                }).then(response => {
+                    toastr.success(response.data.data);
+                    $('#cabecera_factura').hide();
+                    $('#cuerpo_factura').fadeIn(400);
+                    $('#ruc_bus').focus();
+                }).catch(error => {
+                    this.errores = error.response.data.errors;
+                });
             },
             buscar_proveedor: function() {
                 var url = 'sistema/proveedor/' + this.ruc;

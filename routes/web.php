@@ -51,3 +51,4 @@ Route::get('farmacia/reporte_ingresos_almacen_excel/{inicio}/{fin}/{ruc}', 'Repo
 Route::get('Cajas','CajaController@cajas');
 Route::get('cajas/listar', 'CajaController@listar_cajas');
 Route::get('cajas/listar_tipo_documento', 'CajaController@listar_caja_tipo_documento');
+Route::post('cajas/aperturar_caja', 'CajaController@aperturar_caja');

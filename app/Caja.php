@@ -20,4 +20,11 @@ class Caja extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Apertura_Caja($FechaApertura,$EstadoLote,$IdCaja,$IdTurno,$TotalCobrado,$IdCajero)
+    {
+    	$result = DB::raw('exec SIGESA_Apertura_Caja ?,?,?,?,?,?', [$FechaApertura,$EstadoLote,$IdCaja,$IdTurno,$TotalCobrado,$IdCajero]);
+
+    	return json_decode(json_encode($result), true);
+    }
 }

@@ -64799,7 +64799,7 @@ var render = function() {
                               _vm._v("TODOS")
                             ]),
                             _vm._v(
-                              "}\n                                        option\n                                        "
+                              "\n                                        option\n                                        "
                             ),
                             _vm._l(_vm.almacenes, function(almacen) {
                               return _c(
@@ -65366,7 +65366,7 @@ if (false) {
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(94)
 /* template */
 var __vue_template__ = __webpack_require__(72)
 /* template functional */
@@ -65414,116 +65414,436 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("section", { staticClass: "content container-fluid" }, [
+      _c(
+        "div",
+        {
+          staticClass: "box box-primary color-palette-box",
+          attrs: { id: "cabecera_factura" }
+        },
+        [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "box-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-xs-12" }, [
+                _c(
+                  "table",
+                  { staticStyle: { width: "70%", "text-align": "left" } },
+                  [
+                    _c("tr", [
+                      _c(
+                        "td",
+                        {
+                          staticStyle: { "padding-right": "1%" },
+                          attrs: { width: "30%" }
+                        },
+                        [
+                          _c("div", { staticClass: "form-group" }, [
+                            _c("label", [_vm._v("Seleccione un caja")]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              { staticClass: "form-control" },
+                              [
+                                _c("option", { attrs: { value: "" } }),
+                                _vm._v(" "),
+                                _vm._l(_vm.cajas, function(caja) {
+                                  return _c(
+                                    "option",
+                                    { domProps: { value: caja.IdCaja } },
+                                    [
+                                      _vm._v(
+                                        "\n                                                " +
+                                          _vm._s(caja.Descripcion) +
+                                          "\n                                            "
+                                      )
+                                    ]
+                                  )
+                                })
+                              ],
+                              2
+                            )
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        {
+                          staticStyle: { "padding-right": "1%" },
+                          attrs: { width: "30%" }
+                        },
+                        [
+                          _c("div", { staticClass: "form-group" }, [
+                            _c("label", [_vm._v("Tipo de Documento")]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              { staticClass: "form-control" },
+                              [
+                                _c("option", { attrs: { value: "" } }),
+                                _vm._v(" "),
+                                _vm._l(_vm.tipo_documento, function(tipdoc) {
+                                  return _c(
+                                    "option",
+                                    {
+                                      domProps: {
+                                        value: tipdoc.IdTipoComprobante
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                                " +
+                                          _vm._s(tipdoc.Descripcion) +
+                                          "\n                                            "
+                                      )
+                                    ]
+                                  )
+                                })
+                              ],
+                              2
+                            )
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("td", { attrs: { width: "20%" } }, [
+                        _c("div", { staticClass: "radio" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.btn_af($event)
+                                }
+                              }
+                            },
+                            [_vm._v("APERTURA"), _c("br"), _vm._v("DE CAJA")]
+                          )
+                        ])
+                      ])
+                    ])
+                  ]
+                )
+              ])
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "box box-primary",
+          staticStyle: { display: "none" },
+          attrs: { id: "cuerpo_factura" }
+        },
+        [
+          _c("div", { staticClass: "box-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-xs-6" }, [
+                _c("table", { staticStyle: { width: "100%" } }, [
+                  _c("tr", [
+                    _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.ruc,
+                            expression: "ruc"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          placeholder: "RUC",
+                          id: "ruc_bus"
+                        },
+                        domProps: { value: _vm.ruc },
+                        on: {
+                          keyup: function($event) {
+                            if (
+                              !("button" in $event) &&
+                              $event.keyCode !== 13
+                            ) {
+                              return null
+                            }
+                            return _vm.buscar_proveedor($event)
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.ruc = $event.target.value
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Razón Social:")
+                      ]),
+                      _vm._v(
+                        "\n                                    " +
+                          _vm._s(_vm.razonsocial) +
+                          "\n                                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td"),
+                    _vm._v(" "),
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c("td")
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [
+                      _c("label", { attrs: { for: "" } }, [_vm._v("R.U.C. :")]),
+                      _vm._v(
+                        "\n                                    " +
+                          _vm._s(_vm.rucv) +
+                          "\n                                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td"),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c("label", [_vm._v("Fecha de Emisión: ")]),
+                      _vm._v(
+                        "\n                                    " +
+                          _vm._s(
+                            new Date().getDate() +
+                              "/" +
+                              (new Date().getMonth() + 1) +
+                              "/" +
+                              new Date().getFullYear()
+                          ) +
+                          "\n                                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(3)
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm._m(4),
+            _vm._v(" "),
+            _vm._m(5)
+          ])
+        ]
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("section", { staticClass: "content-header" }, [
-        _c("h1", [
-          _vm._v("\n            Cajas\n            "),
-          _c("small", [_vm._v("Caja")])
+    return _c("section", { staticClass: "content-header" }, [
+      _c("h1", [
+        _vm._v("\n            Cajas\n            "),
+        _c("small", [_vm._v("Caja")])
+      ]),
+      _vm._v(" "),
+      _c("ol", { staticClass: "breadcrumb" }, [
+        _c("li", [
+          _c("a", { attrs: { href: "restaurar" } }, [
+            _c("i", { staticClass: "fa fa-dashboard" }),
+            _vm._v(" Inicio")
+          ])
         ]),
         _vm._v(" "),
-        _c("ol", { staticClass: "breadcrumb" }, [
-          _c("li", [
-            _c("a", { attrs: { href: "restaurar" } }, [
-              _c("i", { staticClass: "fa fa-dashboard" }),
-              _vm._v(" Inicio")
+        _c("li", { staticClass: "active" }, [_vm._v("Caja")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "box-header with-border" }, [
+      _c("h3", { staticClass: "box-title" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "box-tools pull-right" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-box-tool",
+            attrs: { type: "button", "data-widget": "collapse" }
+          },
+          [_c("i", { staticClass: "fa fa-plus" })]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [_c("label", [_vm._v("Dirección :")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-6 text-right" }, [
+      _c("button", { staticClass: "btn btn-info", attrs: { type: "" } }, [
+        _c("i", { staticClass: "fa fa-plus" }),
+        _vm._v(" AGREGAR PRODUCTOS")
+      ]),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn btn-success", attrs: { type: "" } }, [
+        _c("i", { staticClass: "fa fa-print" }),
+        _vm._v(" GENERAR")
+      ]),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn btn-warning", attrs: { type: "" } }, [
+        _c("i", { staticClass: "fa fa-close" }),
+        _vm._v(" CERRAR CAJA")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-xs-12" }, [
+        _c("table", { staticClass: "table table-bordered" }, [
+          _c("thead", [
+            _c("tr", {}, [
+              _c("th", [_vm._v("COD")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("DESCRIPCION")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("CANTIDAD")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("PRECIO")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("TOTAL")]),
+              _vm._v(" "),
+              _c("th")
             ])
           ]),
           _vm._v(" "),
-          _c("li", { staticClass: "active" }, [_vm._v("Caja")])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("section", { staticClass: "content container-fluid" }, [
-        _c(
-          "div",
-          {
-            staticClass: "box box-default color-palette-box text-center",
-            attrs: { id: "" }
-          },
-          [
-            _c("div", { staticClass: "box-body" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-xs-12" }, [
-                  _c(
-                    "table",
-                    { staticStyle: { width: "70%", "text-align": "left" } },
-                    [
-                      _c("tr", [
-                        _c(
-                          "td",
-                          {
-                            staticStyle: { "padding-right": "1%" },
-                            attrs: { width: "20%" }
-                          },
-                          [_c("label", [_vm._v("Seleccione una Caja:")])]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "td",
-                          {
-                            staticStyle: { "padding-right": "1%" },
-                            attrs: { width: "30%" }
-                          },
-                          [_c("select", { staticClass: "form-control" })]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "td",
-                          {
-                            staticStyle: { "padding-right": "1%" },
-                            attrs: { width: "20%" }
-                          },
-                          [
-                            _c("div", { staticClass: "radio" }, [
-                              _c("label", [
-                                _c("input", {
-                                  attrs: {
-                                    type: "radio",
-                                    name: "optionsRadios",
-                                    id: "optionsRadios1",
-                                    value: "option1"
-                                  }
-                                }),
-                                _vm._v(
-                                  "\n                                            APERTURA\n                                        "
-                                )
-                              ])
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("td", { attrs: { width: "20%" } }, [
-                          _c("div", { staticClass: "radio" }, [
-                            _c("label", [
-                              _c("input", {
-                                attrs: {
-                                  type: "radio",
-                                  name: "optionsRadios",
-                                  id: "optionsRadios1",
-                                  value: "option1"
-                                }
-                              }),
-                              _vm._v(
-                                "\n                                            CIERRE\n                                        "
-                              )
-                            ])
-                          ])
-                        ])
-                      ])
-                    ]
-                  )
+          _c("tbody", [
+            _c("tr", [
+              _c("td", [_vm._v("25280")]),
+              _vm._v(" "),
+              _c("td", [_vm._v("Alargamiento o acortamiento de tendones")]),
+              _vm._v(" "),
+              _c("td", [_vm._v("1")]),
+              _vm._v(" "),
+              _c("td", [_vm._v("250")]),
+              _vm._v(" "),
+              _c("td", [_vm._v("250")]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-center" }, [
+                _c("button", { staticClass: "btn btn-sm btn-default" }, [
+                  _c("i", {
+                    staticClass: "fa fa-pencil",
+                    attrs: { "aria-hidden": "true" }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("button", { staticClass: "btn btn-sm btn-default" }, [
+                  _c("i", {
+                    staticClass: "fa fa-trash-o",
+                    attrs: { "aria-hidden": "true" }
+                  })
                 ])
               ])
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td"),
+              _vm._v(" "),
+              _c("td"),
+              _vm._v(" "),
+              _c("td"),
+              _vm._v(" "),
+              _c("td", { staticClass: "warning" }, [
+                _vm._v("SUBTOTAL "),
+                _c("i", {
+                  staticClass: "fa fa-usd",
+                  attrs: { "aria-hidden": "true" }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [_vm._v("205")]),
+              _vm._v(" "),
+              _c("td")
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td"),
+              _vm._v(" "),
+              _c("td"),
+              _vm._v(" "),
+              _c("td"),
+              _vm._v(" "),
+              _c("td", { staticClass: "warning" }, [_vm._v("I.G.V.")]),
+              _vm._v(" "),
+              _c("td", [_vm._v("45")]),
+              _vm._v(" "),
+              _c("td")
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td"),
+              _vm._v(" "),
+              _c("td"),
+              _vm._v(" "),
+              _c("td"),
+              _vm._v(" "),
+              _c("td", { staticClass: "warning" }, [
+                _vm._v("TOTAL "),
+                _c("i", {
+                  staticClass: "fa fa-usd",
+                  attrs: { "aria-hidden": "true" }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [_vm._v("250")]),
+              _vm._v(" "),
+              _c("td")
             ])
-          ]
-        )
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-xs-12" }, [
+        _c("label", { attrs: { for: "" } }, [_vm._v("Observaciones")]),
+        _vm._v(" "),
+        _c("textarea", {
+          staticClass: "form-control",
+          attrs: { rows: "3", placeholder: "Observaciones ..." }
+        })
       ])
     ])
   }
@@ -65542,6 +65862,264 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            cajas: [],
+            tipo_documento: [],
+            ruc: '',
+            rucv: '',
+            razonsocial: ''
+        };
+    },
+
+    created: function created() {
+        this.loadData();
+    },
+    methods: {
+
+        // carga de datos
+        loadData: function loadData() {
+            var _this = this;
+
+            var url = 'cajas/listar';
+            var url2 = 'cajas/listar_tipo_documento';
+            // cargando cajas
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url).then(function (response) {
+                _this.cajas = response.data.data;
+            }).catch(function (error) {
+                console.log('no hay datos de cajas');
+            });
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url2).then(function (response) {
+                _this.tipo_documento = response.data.data;
+            }).catch(function (error) {
+                console.log('no hay datos de tipos de documentos');
+            });
+        },
+
+        btn_af: function btn_af() {
+            $('#cabecera_factura').addClass('collapsed-box');
+            $('#cuerpo_factura').show();
+        },
+        buscar_proveedor: function buscar_proveedor() {
+            var _this2 = this;
+
+            var url = 'sistema/proveedor/' + this.ruc;
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url).then(function (response) {
+                var datos = response.data;
+                _this2.razonsocial = datos.RAZONSOCIAL;
+                _this2.rucv = datos.RUC;
+                $('#ruc_bus').val('');
+            }).catch(function (error) {
+                console.log(error.response.data);
+            });
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

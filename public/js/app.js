@@ -65447,7 +65447,82 @@ var staticRenderFns = [
             staticClass: "box box-default color-palette-box text-center",
             attrs: { id: "" }
           },
-          [_c("div", { staticClass: "box-body" })]
+          [
+            _c("div", { staticClass: "box-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-xs-12" }, [
+                  _c(
+                    "table",
+                    { staticStyle: { width: "70%", "text-align": "left" } },
+                    [
+                      _c("tr", [
+                        _c(
+                          "td",
+                          {
+                            staticStyle: { "padding-right": "1%" },
+                            attrs: { width: "20%" }
+                          },
+                          [_c("label", [_vm._v("Seleccione una Caja:")])]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          {
+                            staticStyle: { "padding-right": "1%" },
+                            attrs: { width: "30%" }
+                          },
+                          [_c("select", { staticClass: "form-control" })]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          {
+                            staticStyle: { "padding-right": "1%" },
+                            attrs: { width: "20%" }
+                          },
+                          [
+                            _c("div", { staticClass: "radio" }, [
+                              _c("label", [
+                                _c("input", {
+                                  attrs: {
+                                    type: "radio",
+                                    name: "optionsRadios",
+                                    id: "optionsRadios1",
+                                    value: "option1"
+                                  }
+                                }),
+                                _vm._v(
+                                  "\n                                            APERTURA\n                                        "
+                                )
+                              ])
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("td", { attrs: { width: "20%" } }, [
+                          _c("div", { staticClass: "radio" }, [
+                            _c("label", [
+                              _c("input", {
+                                attrs: {
+                                  type: "radio",
+                                  name: "optionsRadios",
+                                  id: "optionsRadios1",
+                                  value: "option1"
+                                }
+                              }),
+                              _vm._v(
+                                "\n                                            CIERRE\n                                        "
+                              )
+                            ])
+                          ])
+                        ])
+                      ])
+                    ]
+                  )
+                ])
+              ])
+            ])
+          ]
         )
       ])
     ])

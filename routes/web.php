@@ -42,3 +42,9 @@ Route::post('farmacia/reporte_traslados', 'ReporteAlmacenController@reporte_tras
 Route::post('farmacia/reporte_ingresos_almacen', 'ReporteAlmacenController@reporte_ingresos_almacen');
 Route::get('farmacia/reporte_traslados_excel/{inicio}/{fin}/{idalmacen}', 'ReporteAlmacenController@reporte_traslados_excel');
 Route::get('farmacia/reporte_ingresos_almacen_excel/{inicio}/{fin}/{ruc}', 'ReporteAlmacenController@reporte_ingresos_almacen_excel');
+
+
+/**
+ * Cajas
+ */
+Route::get('Cajas','CajaController@cajas');

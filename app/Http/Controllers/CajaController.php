@@ -68,6 +68,6 @@ class CajaController extends Controller
         $Caja = new Caja();
         $data = $Caja->Apertura_Caja($fechaapertura,$estadolote,$idcaja,$idturno,$totalcobrado,$idempleado);
 
-        return response()->json(['data' => 'Apertura de Caja Correcto']);
+        return response()->json(['data' => $data]);
     }
 }

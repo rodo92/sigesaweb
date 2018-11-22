@@ -233,10 +233,14 @@
                     'idcaja' : this.idCaja,
                     'tipodocumento' : this.idTIpoDocumento
                 }).then(response => {
-                    toastr.success(response.data.data);
-                    $('#cabecera_factura').hide();
-                    $('#cuerpo_factura').fadeIn(400);
-                    $('#ruc_bus').focus();
+                    if (response.data.data == true) {
+                        toastr.success('Apertura de caja correcta.', 'WebSigesa');
+                        $('#cabecera_factura').hide();
+                        $('#cuerpo_factura').fadeIn(400);
+                        $('#ruc_bus').focus();
+                    } else {
+                        toastr.error('Hubo un error en la apertura de caja. Intentelo nuevamente.', 'WebSigesa');
+                    }                  
                 }).catch(error => {
                     this.errores = error.response.data.errors;
                 });
@@ -244,12 +248,20 @@
             buscar_proveedor: function() {
                 var url = 'sistema/proveedor/' + this.ruc;
                 axios.get(url).then(response => {
-                    this.ruc = '';
-                    var datos = response.data;
-                    this.razonsocial = datos.RAZONSOCIAL;
-                    this.rucv = datos.RUC;
-                    this.direccion = datos.DIRECCION;
-                    $('#btn_buscar_productos').focus();
+                    toastr.clear();
+                    if (response.data == false) {
+                        toastr.warning('No existen datos asociados a ese número de RUC.', 'WebSigesa');
+                        this.ruc = '';
+                        $('#ruc_bus').focus();
+                    }
+                    else {
+                        this.ruc = '';
+                        var datos = response.data;
+                        this.razonsocial = datos.RAZONSOCIAL;
+                        this.rucv = datos.RUC;
+                        this.direccion = datos.DIRECCION;
+                        $('#btn_buscar_productos').focus();
+                    }
                 }).catch(error => {
                     console.log(error.response.data);
                 });

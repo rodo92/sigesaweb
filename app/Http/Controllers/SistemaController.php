@@ -80,22 +80,20 @@ class SistemaController extends Controller
 
     public function proveedor($ruc)
     {
-        $data = [];
+        $data = false;
+
         $Sistema = new Sistema();
         $proveedores = $Sistema->Mostrar_Provedores();
-
-        for ($i=0; $i < count($proveedores); $i++) { 
-            if ($proveedores[$i]['RUC'] == trim($ruc)) {
-                    $data = array(
-                    'IDPROVEEDOR'   => $proveedores[$i]['IDPROVEEDOR'],
-                    'RUC'           => $proveedores[$i]['RUC'],
-                    'RAZONSOCIAL'   => $proveedores[$i]['RAZONSOCIAL'],
-                    'DIRECCION'     => $proveedores[$i]['DIRECCION']
-                );
-            }
-            
-        }
-        //array_values($proveedores);
+            for ($i=0; $i < count($proveedores); $i++) { 
+                if ($proveedores[$i]['RUC'] == trim($ruc)) {
+                        $data = array(
+                        'IDPROVEEDOR'   => $proveedores[$i]['IDPROVEEDOR'],
+                        'RUC'           => $proveedores[$i]['RUC'],
+                        'RAZONSOCIAL'   => $proveedores[$i]['RAZONSOCIAL'],
+                        'DIRECCION'     => $proveedores[$i]['DIRECCION']
+                    );
+                }                
+            }     
         return response()->json($data);
     }
 }

@@ -107,4 +107,38 @@ class CajaController extends Controller
 
         return response()->json(['data' => $pre_data]);
     }
+
+    public function servicios_medicamentos($seguro,$parametro)
+    {
+        echo $seguro . '<br>';
+        echo $parametro . '<br>';
+
+        // verificando si es cadena o codigo
+        if(ctype_digit($parametro))
+        {
+            
+            $TipoBusqueda = [1,3];
+
+            // probando en servicios 
+            $filtro = "and FactCatalogoServiciosHosp.IdTipoFinanciamiento = " . $seguro . " and FactCatalogoServicios.Codigo = '" . $parametro . "'";
+
+            $caja = new Caja();
+            $data = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[0],$filtro);
+
+            if (count($data) == 0) {
+               // probar en medicamentos
+                $data = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[1],$parametro);
+                echo '<pre>';
+                print_r($data);
+            }
+            else{
+                echo '<pre>';
+                print_r($data);
+            }
+
+        }
+        else{
+            $filtro = [0,2];
+        }
+    }
 }

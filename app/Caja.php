@@ -27,4 +27,11 @@ class Caja extends Model
 
     	return json_decode(json_encode($result), true);
     }
+
+    public function Medicamentos_Servicios_Filtrados($tipobusqueda,$filtro)
+    {
+        $result = DB::select('exec SIGESA_MEDICAMENTOS_SERVICIOS_FACTURACION_CAJA ?,?', [$tipobusqueda,$filtro]);
+
+        return json_decode(json_encode($result), true);
+    }
 }

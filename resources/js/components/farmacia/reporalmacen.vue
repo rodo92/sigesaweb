@@ -50,7 +50,7 @@
                                     <label for="">Almacen:</label>
                                     <div class="input-group">
                                         <select name="" id="id_almacen" class="form-control" v-model="almacenid">
-                                            <option value="0">TODOS</option>}
+                                            <option value="0">TODOS</option>
                                             option
                                             <option v-for="almacen in almacenes" :value="almacen.idAlmacen">
                                                 {{ almacen.descripcion }}

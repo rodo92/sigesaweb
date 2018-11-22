@@ -48,40 +48,64 @@
             <div class="box box-default" id="cuerpo_factura" style="display: none;">
                 <div class="box-body" style="padding: 3%;">
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-8">
                             <table style="width: 100%">
                                 <tr>
-                                    <td>
+                                    <td width="15%" style="padding-right: 1%;">
                                         <input type="text" class="form-control" placeholder="RUC" v-on:keyup.13="buscar_proveedor" v-model="ruc" id="ruc_bus">
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label for="">Raz&oacute;n Social:</label>
-                                        {{ razonsocial }}
+                                    <td width="15%">
+                                        <label for="">RAZON&Oacute;N SOCIAL:</label>                                        
                                     </td>                    
-                                    
-                                    <td>
-                                        <label>Direcci&oacute;n :</label>
-                                        {{ direccion }}
+                                    <td width="40%" class="bg-warning">
+                                        {{ razonsocial }}
                                     </td>
-                                   
+                                    <td width="10%">
+                                        <label> R.U.C.:</label>                                        
+                                    </td>
+                                   <td width="20%">
+                                       {{ direccion }}
+                                   </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <label for="">R.U.C. :</label>
+                                    <td width="15%">
+                                        
+                                    </td>
+                                    <td width="15%">
+                                        <label for="">DIRECCI&Oacute;N :</label>                                        
+                                    </td>
+                                    <td width="%">
                                         {{ rucv }}
                                     </td>
-                                    
-                                    <td>
-                                        <label>Fecha de Emisi&oacute;n: </label>
+                                    <td width="10%">
+                                        <label>FECHA: </label>
+                                        
+                                    </td>
+                                    <td width="20%">
                                         {{ new Date().getDate() + "/" + (new Date().getMonth() +1) + "/" + new Date().getFullYear() }}
                                     </td>
-                                    
+                                </tr>
+
+                                <tr>
+                                    <td width="15%" style="padding-right: 1%;">
+                                        <input type="text" class="form-control" placeholder="DNI" v-on:keyup.13="buscar_paciente" v-model="dni" id="dni_bus">
+                                    </td>
+                                    <td width="15%">
+                                        <label for="">PACIENTE:</label>                                        
+                                    </td>                    
+                                    <td width="40%"  class="bg-warning">
+                                        {{ paciente }}
+                                    </td>
+                                    <td width="10%">
+                                        <label> SEGURO:</label>                                        
+                                    </td>
+                                   <td width="20%" class="bg-warning">
+                                       {{ seguro }}
+                                   </td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="col-xs-6 text-right">
+                        <div class="col-xs-4 text-right">
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
                             <button type="" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
@@ -200,11 +224,15 @@
                 direccion:'',
                 idCaja: '',
                 idTIpoDocumento: '',
+                dni: '',
+                paciente: '',
+                seguro: '',
                 errores: '',
             }
         },
         created: function() {
             this.loadData();
+
         },
         methods: {
 
@@ -260,6 +288,27 @@
                         this.razonsocial = datos.RAZONSOCIAL;
                         this.rucv = datos.RUC;
                         this.direccion = datos.DIRECCION;
+                        $('#dni_bus').focus();
+                        
+                    }
+                }).catch(error => {
+                    console.log(error.response.data);
+                });
+            },
+            buscar_paciente: function() {
+                var url = 'cajas/tipo_seguro_paciente/' + this.dni;
+                axios.get(url).then(response => {
+                    toastr.clear();
+                    if (response.data == false) {
+                        toastr.warning('No existen datos asociados a ese número de DNI.', 'WebSigesa');
+                        this.dni = '';
+                        $('#dni_bus').focus();
+                    }
+                    else {
+                        this.dni = '';
+                        var datos = response.data.data[0];
+                        this.seguro = datos.Financiamiento;
+                        this.paciente = datos.ApellidoPaterno + ' ' + datos.ApellidoMaterno + ' ' + datos.PrimerNombre;
                         $('#btn_buscar_productos').focus();
                     }
                 }).catch(error => {

@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="box box-default" id="cuerpo_factura" >
+            <div class="box box-default" id="cuerpo_factura" style="display: none;">
                 <div class="box-body" style="padding: 3%;">
                     <div class="row">
                         <div class="col-xs-8">
@@ -204,7 +204,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-xs-8">
-                                <input type="text" class="form-control" placeholder="NOMBRE O CODIGO">
+                                <input type="text" class="form-control" placeholder="NOMBRE O CODIGO" id="paramatro_busqueda">
                             </div>
                             <div class="col-xs-4">
                                 <button class="btn btn-default"><i class="fa fa-search"></i> BUSCAR</button>
@@ -269,6 +269,21 @@
         created: function() {
             this.loadData();
 
+        },
+        mounted() {
+            $('#serie_boleta').keyup(function() {
+                var cantidad = $(this).val().length;
+                if (cantidad == 4) {
+                    $('#ndocumento_boleta').focus();
+                }
+            });
+
+            $('#paramatro_busqueda').keyup(function() {
+                var cantidad = $(this).val().length;
+                if (cantidad == 3) {
+                    this.buscar_item();
+                }
+            })
         },
         methods: {
 
@@ -339,20 +354,25 @@
                         toastr.warning('No existen datos asociados a ese número de DNI.', 'WebSigesa');
                         this.dni = '';
                         $('#dni_bus').focus();
+
                     }
                     else {
                         this.dni = '';
                         var datos = response.data.data[0];
                         this.seguro = datos.Financiamiento;
                         this.paciente = datos.ApellidoPaterno + ' ' + datos.ApellidoMaterno + ' ' + datos.PrimerNombre;
-                        $('#btn_buscar_productos').focus();
+                        $('#serie_boleta').focus();
                     }
+                    console.log(response.data);
                 }).catch(error => {
                     console.log(error.response.data);
                 });
             },
             ver_modal: function() {
                 $('#modal_ingresos_productos').modal('show');
+                $('#modal_ingresos_productos').on('shown.bs.modal', function() {
+                    $('#paramatro_busqueda').focus();
+                });
             },
             buscar_boleta: function() {
                 var url = 'cajas/detalle_boleta/' + this.serie + '/' + this.ndocumento;
@@ -382,15 +402,11 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
+            },
+            buscar_item: function() {
+                console.log('hacer busqueda');
             }
-        },
-        mounted() {
-            $('#serie_boleta').keyup(function() {
-                var cantidad = $(this).val().length;
-                if (cantidad == 4) {
-                    $('#ndocumento_boleta').focus();
-                }
-            });
         }
+       
     }
 </script>

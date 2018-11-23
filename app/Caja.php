@@ -34,4 +34,11 @@ class Caja extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Datos_X_Codigo_Para_Facturar($serio,$ndocumento)
+    {
+        $result = DB::select('exec SIGESA_CAJA_DATOS_X_CODIGO_PARA_FACTURACION ?,?', [$serio,$ndocumento]);
+
+        return json_decode(json_encode($result), true);
+    }
 }

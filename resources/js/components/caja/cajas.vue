@@ -1,4 +1,9 @@
-
+<style type="text/css" media="screen">
+    table#tabla_datos{
+        border-spacing: 5px;
+        border-collapse: separate;
+    }
+</style>
 <template>    
     <div>
         <section class="content-header">
@@ -45,14 +50,14 @@
                 </div>
             </div>
 
-            <div class="box box-default" id="cuerpo_factura" style="display: none;">
+            <div class="box box-default" id="cuerpo_factura" >
                 <div class="box-body" style="padding: 3%;">
                     <div class="row">
                         <div class="col-xs-8">
-                            <table style="width: 100%">
+                            <table style="width: 100%" id="tabla_datos">
                                 <tr>
-                                    <td width="15%" style="padding-right: 1%;">
-                                        <input type="text" class="form-control" placeholder="RUC" v-on:keyup.13="buscar_proveedor" v-model="ruc" id="ruc_bus">
+                                    <td width="15%">
+                                        <input type="text" class="form-control" placeholder="RUC" v-on:keyup.13="buscar_proveedor" v-model="ruc" id="ruc_bus" maxlength="11">
                                     </td>
                                     <td width="15%">
                                         <label for="">RAZON&Oacute;N SOCIAL:</label>                                        
@@ -87,8 +92,8 @@
                                 </tr>
 
                                 <tr>
-                                    <td width="15%" style="padding-right: 1%;">
-                                        <input type="text" class="form-control" placeholder="DNI" v-on:keyup.13="buscar_paciente" v-model="dni" id="dni_bus">
+                                    <td width="15%">
+                                        <input type="text" class="form-control" placeholder="DNI" v-on:keyup.13="buscar_paciente" v-model="dni" id="dni_bus" maxlength="8">
                                     </td>
                                     <td width="15%">
                                         <label for="">PACIENTE:</label>                                        
@@ -99,8 +104,22 @@
                                     <td width="10%">
                                         <label> SEGURO:</label>                                        
                                     </td>
-                                   <td width="20%" class="bg-warning">
+                                    <td width="20%" class="bg-warning">
                                        {{ seguro }}
+                                   </td>
+                                </tr>
+                                <tr>
+                                    <td width="15%">
+                                        <input type="text" id="serie_boleta" class="form-control"  placeholder="SERIE" v-model="serie" >
+                                    </td>
+                                    <td width="15%" colspan="2">
+                                        <input type="text" id="ndocumento_boleta"  class="form-control" placeholder="N° DOCUMENTO" v-on:keyup.13="buscar_boleta" v-model="ndocumento">
+                                    </td>
+                                    <td width="10%">
+                                        <label> DOCUMENTO:</label>                                        
+                                    </td>
+                                    <td width="20%" class="bg-warning">
+                                       {{ comprobante }}
                                    </td>
                                 </tr>
                             </table>
@@ -117,37 +136,47 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="">
-                                        <th>COD</th>
+                                        <th class="text-center">DOCUMENTO</th>
+                                        <th class="text-center">CODIGO</th>
                                         <th>DESCRIPCION</th>
-                                        <th>CANTIDAD</th>
-                                        <th>PRECIO</th>
-                                        <th>TOTAL</th>
+                                        <th class="text-center">CANTIDAD</th>
+                                        <th class="text-center">PRECIO</th>
+                                        <th class="text-center">TOTAL</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="warning">SUBTOTAL <i class="fa fa-usd" aria-hidden="true"></i></td>
-                                        <td>205</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="warning">I.G.V.</td>
-                                        <td>45</td>
+                                    <tr v-for="producto in productos">
+                                        <td class="text-center">{{ producto.Comprobante }}</td>
+                                        <td class="text-center">{{ producto.Codigo }}</td>
+                                        <td>{{ producto.Producto }}</td>
+                                        <td class="text-center">{{ producto.Cantidad }}</td>
+                                        <td class="text-right">{{ producto.Precio }}</td>
+                                        <td class="text-right">{{ producto.TotalUnitario }}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td class="warning">TOTAL <i class="fa fa-usd" aria-hidden="true"></i></td>
-                                        <td>250</td>
+                                        <td class="warning text-right">SUBTOTAL <i class="fa fa-usd" aria-hidden="true"></i></td>
+                                        <td class="text-right">{{ sumsubtotal }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="warning text-right">I.G.V.</td>
+                                        <td class="text-right">{{ sumigv }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="warning text-right">TOTAL <i class="fa fa-usd" aria-hidden="true"></i></td>
+                                        <td class="text-right">{{ sumtotal }}</td>
                                         <td></td>
                                     </tr>
                                 </tbody>
@@ -228,6 +257,13 @@
                 paciente: '',
                 seguro: '',
                 errores: '',
+                serie: '',
+                sumsubtotal: 0,
+                sumigv: 0,
+                sumtotal: 0,
+                comprobante: '',
+                productos: [],
+                ndocumento: '',
             }
         },
         created: function() {
@@ -317,7 +353,44 @@
             },
             ver_modal: function() {
                 $('#modal_ingresos_productos').modal('show');
+            },
+            buscar_boleta: function() {
+                var url = 'cajas/detalle_boleta/' + this.serie + '/' + this.ndocumento;
+
+                axios.get(url).then(response => {
+                    var datos = response.data.data;
+                    
+
+                    if (datos == 'sindatos') {
+                        toastr.error('No se encontraron datos asociados a este numero de documento', 'WebSigesa');
+                    }
+                    else{
+                        this.serie = '';
+                        this.ndocumento = '';
+                        $('#serie_boleta').focus();
+                        this.paciente = datos.paciente;                        
+                        this.comprobante = datos.comprobante;
+
+                        
+                        this.sumtotal = parseFloat(datos.total) + parseFloat(this.sumtotal);
+                        
+                        for (var i = 0; i < datos.productos.length; i++) {
+                            this.productos.push(datos.productos[i]);
+                        }
+                    }
+                    
+                }).catch(error => {
+                    console.log(error.response.data);
+                });
             }
+        },
+        mounted() {
+            $('#serie_boleta').keyup(function() {
+                var cantidad = $(this).val().length;
+                if (cantidad == 4) {
+                    $('#ndocumento_boleta').focus();
+                }
+            });
         }
     }
 </script>

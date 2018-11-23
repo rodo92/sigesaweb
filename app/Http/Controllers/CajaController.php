@@ -141,4 +141,44 @@ class CajaController extends Controller
             $filtro = [0,2];
         }
     }
+
+    public function buscar_detalle_boleta_x_codigo($serio,$ndocumento)
+    {
+        $caja = new Caja();
+        $data = $caja->Datos_X_Codigo_Para_Facturar($serio,$ndocumento);
+
+        if (count($data) > 0) {
+            $paciente       = $data[0]['RazonSocial'];
+            $subtotal       = number_format($data[0]['SubTotal'],4,'.',' ');
+            $igv            = number_format($data[0]['IGV'],4,'.',' ');
+            $total          = number_format($data[0]['Total'],4,'.',' ');
+            $comprobante    = $data[0]['Comprobante'];
+
+            for ($i=0; $i < count($data); $i++) { 
+                $productos[] = array(
+                    'Comprobante'   => $data[$i]['Comprobante'],
+                    'Codigo'        => $data[$i]['Codigo'],
+                    'Producto'      => $data[$i]['Producto'],
+                    'Cantidad'      => $data[$i]['Cantidad'],
+                    'Precio'        => number_format($data[$i]['Precio'],4,'.',' '),
+                    'TotalUnitario' => number_format($data[$i]['TotalUnitario'],4,'.',' ')
+                );
+            }
+
+            $response = array(
+                'paciente'      => $paciente,
+                'subtotal'      => $subtotal,
+                'igv'           => $igv,
+                'total'         => $total,
+                'comprobante'   => $comprobante,
+                'productos'     => $productos
+            );
+
+            return response()->json(['data' => $response]);
+        }
+        else{
+            return response()->json(['data' => 'sindatos']);
+        }
+        
+    }
 }

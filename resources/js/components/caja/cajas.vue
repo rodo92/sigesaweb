@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="box box-default" id="cuerpo_factura" style="display: none;">
+            <div class="box box-default" id="cuerpo_factura" ><!-- style="display: none;" -->
                 <div class="box-body" style="padding: 3%;">
                     <div class="row">
                         <div class="col-xs-8">
@@ -66,7 +66,7 @@
                                         {{ razonsocial }}
                                     </td>
                                     <td width="10%">
-                                        <label> R.U.C.:</label>                                        
+                                        <label>DIRECCI&Oacute;N :</label>                                        
                                     </td>
                                    <td width="20%">
                                        {{ direccion }}
@@ -77,7 +77,7 @@
                                         
                                     </td>
                                     <td width="15%">
-                                        <label for="">DIRECCI&Oacute;N :</label>                                        
+                                        <label for="">R.U.C. :</label>                                        
                                     </td>
                                     <td width="%">
                                         {{ rucv }}
@@ -146,14 +146,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="producto in productos">
-                                        <td class="text-center">{{ producto.Comprobante }}</td>
-                                        <td class="text-center">{{ producto.Codigo }}</td>
-                                        <td>{{ producto.Producto }}</td>
-                                        <td class="text-center">{{ producto.Cantidad }}</td>
-                                        <td class="text-right">{{ producto.Precio }}</td>
-                                        <td class="text-right">{{ producto.TotalUnitario }}</td>
-                                        <td></td>
+                                    <tr v-for="(producto,index) in productos" v-bind:index="index">
+                                        <td class="text-center" v-text="producto.Comprobante"></td>
+                                        <td class="text-center" v-text="producto.Codigo"></td>
+                                        <td v-text="producto.Producto"></td>
+                                        <td class="text-center" v-text="producto.Cantidad"></td>
+                                        <td class="text-right" v-text="producto.Precio"></td>
+                                        <td class="text-right" v-text="producto.TotalUnitario"></td>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-danger" v-on:click.prevent="eliminarRegistrov(index)">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -204,7 +208,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-xs-8">
-                                <input type="text" class="form-control" placeholder="NOMBRE O CODIGO" id="paramatro_busqueda">
+                                <input type="text" class="form-control" placeholder="NOMBRE O CODIGO" id="paramatro_busqueda" v-on:keyup="buscar_item" v-model="txt_busqueda">
                             </div>
                             <div class="col-xs-4">
                                 <button class="btn btn-default"><i class="fa fa-search"></i> BUSCAR</button>
@@ -215,15 +219,29 @@
                             <div class="col-xs-12">
                                 <table class="table table-bordered">
                                     <thead>
-                                        <tr class="bg-warning">
-                                            <th>CODIGO</th>
-                                            <th>DESCRIPCION</th>
-                                            <th class="text-center">CANTIDAD</th>
-                                            <th class="text-center">PRECIO</th>
-                                            <th class="text-center">AGREGAR</th>
+                                        <tr>
+                                            <th class="text-center col-xs-2">CODIGO</th>
+                                            <th  class="col-xs-6">DESCRIPCION</th>
+                                            <th class="text-center col-xs-1">CANTIDAD</th>
+                                            <th class="text-center col-xs-2">PRECIO</th>
+                                            <th class="text-center col-xs-1">AGREGAR</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <tr v-if="productos_temp" v-for="producto_temp in productos_temp">
+                                            <td class="text-center col-xs-2">{{ producto_temp.Codigo }}</td>
+                                            <td class="text-left col-xs-6">{{ producto_temp.Nombre }}</td>
+                                            <td class="text-center col-xs-1">
+                                                <input type="number" v-bind:id="'codigo_'+producto_temp.Codigo" value="0">
+                                            </td>
+                                            <td class="text-center col-xs-2">{{ producto_temp.Precio }}</td>
+                                            <td class="text-center col-xs-1">
+                                                
+                                                <button class="btn btn-sm btn-primary" v-on:click.prevent="agregarItenm(producto_temp.Codigo,producto_temp.Nombre,producto_temp.Precio)">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -263,6 +281,9 @@
                 sumtotal: 0,
                 comprobante: '',
                 productos: [],
+                productos_temp: [],
+                txt_busqueda: '',
+                idTipoFinanciamiento: '',
                 ndocumento: '',
             }
         },
@@ -277,13 +298,6 @@
                     $('#ndocumento_boleta').focus();
                 }
             });
-
-            $('#paramatro_busqueda').keyup(function() {
-                var cantidad = $(this).val().length;
-                if (cantidad == 3) {
-                    this.buscar_item();
-                }
-            })
         },
         methods: {
 
@@ -303,6 +317,19 @@
                 }).catch(error => {
                     console.log('no hay datos de tipos de documentos');
                 });                
+            },
+
+            eliminarRegistrov: function(index) {
+                //this.productos.splice(index,1);
+                //console.log(this.productos[index]['Comprobante']);
+                var clave = this.productos[index]['Comprobante'];
+
+                for (var i = 0; i < this.productos.length; i++) {
+                    if (this.productos[i]['Comprobante'] == clave) {
+                        this.productos.splice([i]);
+                        //console.log(this.productos[i]);
+                    }
+                }
             },
 
             btn_ac: function() {
@@ -360,15 +387,18 @@
                         this.dni = '';
                         var datos = response.data.data[0];
                         this.seguro = datos.Financiamiento;
+                        this.idTipoFinanciamiento = datos.idFuenteFinanciamiento;
                         this.paciente = datos.ApellidoPaterno + ' ' + datos.ApellidoMaterno + ' ' + datos.PrimerNombre;
                         $('#serie_boleta').focus();
                     }
-                    console.log(response.data);
+                    // console.log(response.data);
                 }).catch(error => {
                     console.log(error.response.data);
                 });
             },
             ver_modal: function() {
+                this.productos_temp = [];
+                this.txt_busqueda = '';
                 $('#modal_ingresos_productos').modal('show');
                 $('#modal_ingresos_productos').on('shown.bs.modal', function() {
                     $('#paramatro_busqueda').focus();
@@ -404,7 +434,49 @@
                 });
             },
             buscar_item: function() {
-                console.log('hacer busqueda');
+                if (this.txt_busqueda.length > 2) {
+                   // hacer busqueda
+                    var url = 'cajas/servicios_medicamentos/' + this.idTipoFinanciamiento + '/' + this.txt_busqueda; 
+                    axios.get(url).then(response => {
+                        if (response.data.data == 'sindatos') {
+
+                        }
+                        else{
+                            this.productos_temp = [];
+                            var datos = response.data.data;
+                            for (var i = 0; i < datos.length; i++) {
+                                this.productos_temp.push(datos[i]);
+                            }
+                            this.txt_busqueda = '';
+                        }
+                    }).catch(response => {
+
+                    });
+                }
+                else{
+                    console.log('aun no');
+                }
+            },
+            agregarItenm: function(codigo,nombre,precio)
+            {   
+                var cantidad = $('#codigo_'+codigo).val();
+                if (cantidad == 0) {
+                    toastr.warning('Debe ingresar una cantidad','WebSigesa');
+                }
+
+                else{
+                    var totalunitario = parseFloat(cantidad) * parseFloat(precio);
+
+                    this.productos.push({
+                        Comprobante: codigo,
+                        Codigo: codigo,
+                        Producto: nombre,
+                        Cantidad: cantidad,
+                        Precio: precio,
+                        TotalUnitario: totalunitario
+                    });
+                    $('#paramatro_busqueda').focus();
+                }
             }
         }
        

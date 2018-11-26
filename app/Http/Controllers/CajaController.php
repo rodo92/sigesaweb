@@ -139,7 +139,16 @@ class CajaController extends Controller
             return response()->json(['data' => 'sindatos']);
         }
         else {
-            return response()->json(['data' => $data]);
+            for ($i=0; $i < count($data); $i++) { 
+                $productos[] = array(
+                    'Codigo'    => $data[$i]['Codigo'],
+                    'Nombre'    => $data[$i]['Nombre'],
+                    'Cantidad'  => 0,
+                    'Precio'    => number_format($data[$i]['Precio'],4,'.',' ')
+                );
+            }
+
+            return response()->json(['data' => $productos]);
         }
     }
 

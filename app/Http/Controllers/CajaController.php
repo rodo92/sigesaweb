@@ -152,10 +152,10 @@ class CajaController extends Controller
         }
     }
 
-    public function buscar_detalle_boleta_x_codigo($serio,$ndocumento)
+    public function buscar_detalle_boleta_x_codigo($serio,$ndocumento,$idOrden='')
     {
         $caja = new Caja();
-        $data = $caja->Datos_X_Codigo_Para_Facturar($serio,$ndocumento);
+        $data = $caja->Datos_X_Codigo_Para_Facturar($serio,$ndocumento,$idOrden);
 
         if (count($data) > 0) {
             $paciente       = $data[0]['RazonSocial'];

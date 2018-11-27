@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="box box-default" id="cuerpo_factura" ><!-- style="display: none;" -->
+            <div class="box box-default" id="cuerpo_factura" style="display: none;"><!-- style="display: none;" -->
                 <div class="box-body" style="padding: 3%;">
                     <div class="row">
                         <div class="col-xs-8">
@@ -124,6 +124,11 @@
                                     <td width="20%" class="bg-warning">
                                        {{ comprobante }}
                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="15%">
+                                        <input type="text" id="id_orden" class="form-control"  placeholder="N° ORDEN" v-model="idorden" v-on:keyup.13="buscar_boleta_id_orden">
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -278,7 +283,7 @@
                 paciente: '',
                 seguro: '',
                 errores: '',
-                serie: '',
+                serie: null,
                 sumsubtotal: 0,
                 sumigv: 0,
                 sumtotal: 0,
@@ -287,7 +292,8 @@
                 productos_temp: [],
                 txt_busqueda: '',
                 idTipoFinanciamiento: '',
-                ndocumento: '',
+                ndocumento: null,
+                idorden: null,
             }
         },
         created: function() {
@@ -414,7 +420,7 @@
                 });
             },
             buscar_boleta: function() {
-                var url = 'cajas/detalle_boleta/' + this.serie + '/' + this.ndocumento;
+                var url = 'cajas/detalle_boleta/' + this.serie + '/' + this.ndocumento + '/' + '';
 
                 axios.get(url).then(response => {
                     var datos = response.data.data;
@@ -424,6 +430,7 @@
                         toastr.error('No se encontraron datos asociados a este numero de documento', 'WebSigesa');
                     }
                     else{
+                        this.idorden = '';
                         this.serie = '';
                         this.ndocumento = '';
                         $('#serie_boleta').focus();
@@ -444,15 +451,65 @@
                     console.log(error.response.data);
                 });
             },
+
+            buscar_boleta_id_orden: function() {
+                var url = 'cajas/detalle_boleta/' + null + '/' + null + '/' + this.idorden;
+                // console.log(url);
+
+                axios.get(url).then(response => {
+                    var datos = response.data.data;
+                    // console.log(datos)
+
+                    if (datos == 'sindatos') {
+                        toastr.error('No se encontraron datos asociados a este numero de documento', 'WebSigesa');
+                    }
+                    else{
+                        this.idorden = '';
+                        this.serie = '';
+                        this.ndocumento = '';
+                        $('#id_orden').focus();
+                        this.paciente = datos.paciente;                        
+                        // this.comprobante = datos.comprobante;
+
+                        
+                        // console.log(datos.productos[0].Codigo);
+                        
+                        for (var i = 0; i < datos.productos.length; i++) {
+                            this.productos.push({
+                                Comprobante: datos.productos[0].Codigo,
+                                Codigo: datos.productos[0].Codigo,
+                                Producto: datos.productos[0].Producto,
+                                Cantidad: datos.productos[0].Cantidad,
+                                Precio: datos.productos[0].Precio,
+                                TotalUnitario: datos.productos[0].TotalUnitario
+                            });
+                            
+                        }
+                        this.sumarmontos(datos.subtotal,datos.igv,datos.total);
+                        
+                    }
+                    
+                }).catch(error => {
+                    console.log(error.response.data);
+                });
+            },
             sumarmontos: function(subtotal,igv,total) {
                 this.sumsubtotal = parseFloat(subtotal) + parseFloat(this.sumsubtotal);
                 this.sumigv = parseFloat(igv) + parseFloat(this.sumigv);
                 this.sumtotal = parseFloat(total) + parseFloat(this.sumtotal);
+
+                this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
+                this.sumigv = Math.round(this.sumigv * 100) / 100;
+                this.sumtotal = Math.round(this.sumtotal * 100) / 100;
             },
             restarmontos: function(subtotal,igv,total) {
                 this.sumsubtotal = parseFloat(this.sumsubtotal) - parseFloat(subtotal) ;
                 this.sumigv = parseFloat(this.sumigv) - parseFloat(igv) ;
                 this.sumtotal = parseFloat(this.sumtotal) - parseFloat(total) ;
+
+                this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
+                this.sumigv = Math.round(this.sumigv * 100) / 100;
+                this.sumtotal = Math.round(this.sumtotal * 100) / 100;
             },
             buscar_item: function() {
                 if (this.txt_busqueda.length > 2) {
@@ -488,6 +545,7 @@
 
                 else{
                     var totalunitario = parseFloat(cantidad) * parseFloat(precio);
+                    totalunitario = Math.round(totalunitario * 100) / 100;
 
                     this.productos.push({
                         Comprobante: codigo,

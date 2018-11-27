@@ -3,6 +3,9 @@
         border-spacing: 5px;
         border-collapse: separate;
     }
+    #serie_boleta {
+        text-transform: uppercase;
+    }
 </style>
 <template>    
     <div>
@@ -320,20 +323,26 @@
             },
 
             eliminarRegistrov: function(index) {
-                //this.productos.splice(index,1);
-                //console.log(this.productos[index]['Comprobante']);
                 var clave = this.productos[index]['Comprobante'];
-
+                var aborrar = [];
                 for (var i = 0; i < this.productos.length; i++) {
                     if (this.productos[i]['Comprobante'] == clave) {
-                        this.productos.splice([i]);
-                        //console.log(this.productos[i]);
+                        aborrar.push(i);
                     }
+                }
+
+                if (aborrar.length > 1) {
+                    this.productos.splice(aborrar[0],aborrar.length);
+                }
+                else
+                {
+                    var indice = aborrar[0];
+                    this.restarmontos(this.productos[indice]['TotalUnitario'],0,this.productos[indice]['TotalUnitario']);
+                    this.productos.splice(aborrar[0],1);
                 }
             },
 
-            btn_ac: function() {
-                
+            btn_ac: function() {                
                 var url = 'cajas/aperturar_caja';
                 axios.post(url, {
                     'idcaja' : this.idCaja,
@@ -422,16 +431,28 @@
                         this.comprobante = datos.comprobante;
 
                         
-                        this.sumtotal = parseFloat(datos.total) + parseFloat(this.sumtotal);
+                        
                         
                         for (var i = 0; i < datos.productos.length; i++) {
                             this.productos.push(datos.productos[i]);
                         }
+
+                        this.sumarmontos(datos.subtotal,datos.igv,datos.total);
                     }
                     
                 }).catch(error => {
                     console.log(error.response.data);
                 });
+            },
+            sumarmontos: function(subtotal,igv,total) {
+                this.sumsubtotal = parseFloat(subtotal) + parseFloat(this.sumsubtotal);
+                this.sumigv = parseFloat(igv) + parseFloat(this.sumigv);
+                this.sumtotal = parseFloat(total) + parseFloat(this.sumtotal);
+            },
+            restarmontos: function(subtotal,igv,total) {
+                this.sumsubtotal = parseFloat(this.sumsubtotal) - parseFloat(subtotal) ;
+                this.sumigv = parseFloat(this.sumigv) - parseFloat(igv) ;
+                this.sumtotal = parseFloat(this.sumtotal) - parseFloat(total) ;
             },
             buscar_item: function() {
                 if (this.txt_busqueda.length > 2) {
@@ -448,6 +469,7 @@
                                 this.productos_temp.push(datos[i]);
                             }
                             this.txt_busqueda = '';
+
                         }
                     }).catch(response => {
 
@@ -476,6 +498,8 @@
                         TotalUnitario: totalunitario
                     });
                     $('#paramatro_busqueda').focus();
+
+                    this.sumarmontos(totalunitario,0,totalunitario);
                 }
             }
         }

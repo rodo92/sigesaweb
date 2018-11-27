@@ -116,12 +116,18 @@ class CajaController extends Controller
         {
             
             $TipoBusqueda = [0,2];
-            $filtro = "and FactCatalogoServiciosHosp.IdTipoFinanciamiento = " . $seguro . " and FactCatalogoServicios.Codigo = '" . $parametro . "'";
+            $filtro = "and FactCatalogoServiciosHosp.IdTipoFinanciamiento = " . $seguro . " and FactCatalogoServicios.Nombre like '%" . $parametro . "%'";
 
             $data = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[0],$filtro);
+            //echo $filtro;exit();
 
             if (count($data) == 0) {
                 $data = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[1],$parametro);
+            }
+            else{
+                $data2 = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[1],$parametro);
+                $data = array_merge($data, $data2);
+
             }         
         }
         else{
@@ -139,6 +145,10 @@ class CajaController extends Controller
             return response()->json(['data' => 'sindatos']);
         }
         else {
+            
+            $data  = array_values($data);
+            // return response()->json($data);exit();
+
             for ($i=0; $i < count($data); $i++) { 
                 $productos[] = array(
                     'Codigo'    => $data[$i]['Codigo'],
@@ -146,8 +156,9 @@ class CajaController extends Controller
                     'Cantidad'  => 0,
                     'Precio'    => number_format($data[$i]['Precio'],4,'.',' ')
                 );
+                // return response()->json($data[$i]['Codigo']);
             }
-
+            // exit();
             return response()->json(['data' => $productos]);
         }
     }

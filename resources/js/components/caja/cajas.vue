@@ -408,7 +408,10 @@
                     }
                     // console.log(response.data);
                 }).catch(error => {
-                    console.log(error.response.data);
+                    // console.log(error.response.data);
+                    toastr.warning('No existen datos asociados a ese número de DNI.', 'WebSigesa');
+                    this.dni = '';
+                    $('#dni_bus').focus();
                 });
             },
             ver_modal: function() {
@@ -428,6 +431,10 @@
 
                     if (datos == 'sindatos') {
                         toastr.error('No se encontraron datos asociados a este numero de documento', 'WebSigesa');
+                        this.idorden = '';
+                        this.serie = '';
+                        this.ndocumento = '';
+                        $('#serie_boleta').focus();
                     }
                     else{
                         this.idorden = '';
@@ -461,7 +468,11 @@
                     // console.log(datos)
 
                     if (datos == 'sindatos') {
-                        toastr.error('No se encontraron datos asociados a este numero de documento', 'WebSigesa');
+                        toastr.error('No se encontraron datos asociados a este numero de orden', 'WebSigesa');
+                        this.idorden = '';
+                        this.serie = '';
+                        this.ndocumento = '';
+                        $('#id_orden').focus();
                     }
                     else{
                         this.idorden = '';
@@ -525,7 +536,7 @@
                             for (var i = 0; i < datos.length; i++) {
                                 this.productos_temp.push(datos[i]);
                             }
-                            this.txt_busqueda = '';
+                            //this.txt_busqueda = '';
 
                         }
                     }).catch(response => {
@@ -555,6 +566,7 @@
                         Precio: precio,
                         TotalUnitario: totalunitario
                     });
+                    this.txt_busqueda = '';
                     $('#paramatro_busqueda').focus();
 
                     this.sumarmontos(totalunitario,0,totalunitario);

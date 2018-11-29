@@ -129,6 +129,9 @@
                                     <td width="15%">
                                         <input type="text" id="id_orden" class="form-control"  placeholder="N° ORDEN" v-model="idorden" v-on:keyup.13="buscar_boleta_id_orden">
                                     </td>
+                                    <td>
+                                       <input type="text" id="id_cuenta" class="form-control"  placeholder="N° CUENTA" v-model="cuenta" v-on:keyup.13="buscar_boleta_cuenta"> 
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -294,6 +297,7 @@
                 idTipoFinanciamiento: '',
                 ndocumento: null,
                 idorden: null,
+                cuenta: '',
             }
         },
         created: function() {
@@ -458,9 +462,40 @@
                     console.log(error.response.data);
                 });
             },
+            buscar_boleta_cuenta: function() {
+                var url = 'cajas/detalle_boleta/' + this.cuenta;
 
+                axios.get(url).then(response => {
+                    var datos = response.data.data;
+                    
+
+                    if (datos == 'sindatos') {
+                        toastr.error('No se encontraron datos asociados a este numero de cuenta', 'WebSigesa');
+                        this.cuenta = '';
+                        $('#id_cuenta').focus();
+                    }
+                    else{
+                  /*      this.cuenta = '';
+                        $('#id_cuenta').focus();
+                        this.paciente = datos.paciente;                        
+                        this.comprobante = datos.comprobante;
+
+                        
+                        
+                        
+                        for (var i = 0; i < datos.productos.length; i++) {
+                            this.productos.push(datos.productos[i]);
+                        }
+
+                        this.sumarmontos(datos.subtotal,datos.igv,datos.total);*/
+                    }
+                    
+                }).catch(error => {
+                    console.log(error.response.data);
+                });
+            },
             buscar_boleta_id_orden: function() {
-                var url = 'cajas/detalle_boleta/' + null + '/' + null + '/' + this.idorden;
+                var url = 'ajas/detalle_cuenta/' + null + '/' + null + '/' + this.idorden;
                 // console.log(url);
 
                 axios.get(url).then(response => {

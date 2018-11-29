@@ -202,4 +202,17 @@ class CajaController extends Controller
         }
         
     }
+
+    public function buscar_boleta_x_cuenta($cuenta)
+    {
+        $caja = new Caja();
+        $data = $caja->Datos_X_Cuenta($cuenta);
+
+        if (count($data) > 0) {
+            return response()->json(['data' => $data]);
+        }
+        else {
+            return response()->json(['data' => 'sindatos']);
+        }
+    }
 }

@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="box box-default" id="cuerpo_factura" style="display: none;"><!-- style="display: none;" -->
+            <div class="box box-default" id="cuerpo_factura"><!-- style="display: none;" -->
                 <div class="box-body" style="padding: 3%;">
                     <div class="row">
                         <div class="col-xs-8">
@@ -93,7 +93,11 @@
                                         {{ new Date().getDate() + "/" + (new Date().getMonth() +1) + "/" + new Date().getFullYear() }}
                                     </td>
                                 </tr>
-
+                                <tr>
+                                    <td>
+                                       <input type="text" id="id_cuenta" class="form-control"  placeholder="N° CUENTA" v-model="cuenta" v-on:keyup.13="buscar_boleta_cuenta"> 
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td width="15%">
                                         <input type="text" class="form-control" placeholder="DNI" v-on:keyup.13="buscar_paciente" v-model="dni" id="dni_bus" maxlength="8">
@@ -111,7 +115,7 @@
                                        {{ seguro }}
                                    </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td width="15%">
                                         <input type="text" id="serie_boleta" class="form-control"  placeholder="SERIE" v-model="serie" >
                                     </td>
@@ -128,11 +132,8 @@
                                 <tr>
                                     <td width="15%">
                                         <input type="text" id="id_orden" class="form-control"  placeholder="N° ORDEN" v-model="idorden" v-on:keyup.13="buscar_boleta_id_orden">
-                                    </td>
-                                    <td>
-                                       <input type="text" id="id_cuenta" class="form-control"  placeholder="N° CUENTA" v-model="cuenta" v-on:keyup.13="buscar_boleta_cuenta"> 
-                                    </td>
-                                </tr>
+                                    </td>                                    
+                                </tr> -->
                             </table>
                         </div>
                         <div class="col-xs-4 text-right">
@@ -151,8 +152,10 @@
                                         <th class="text-center">CODIGO</th>
                                         <th>DESCRIPCION</th>
                                         <th class="text-center">CANTIDAD</th>
+                                        <th class="text-center">I.G.V.</th>
                                         <th class="text-center">PRECIO</th>
                                         <th class="text-center">TOTAL</th>
+                                        <th style="display: none;">SUBTOTAL</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -162,8 +165,10 @@
                                         <td class="text-center" v-text="producto.Codigo"></td>
                                         <td v-text="producto.Producto"></td>
                                         <td class="text-center" v-text="producto.Cantidad"></td>
+                                        <td class="text-right" v-text="producto.Impuesto"></td>
                                         <td class="text-right" v-text="producto.Precio"></td>
                                         <td class="text-right" v-text="producto.TotalUnitario"></td>
+                                        <td v-text="producto.Subtotal"></td>
                                         <td class="text-center">
                                             <button class="btn btn-sm btn-danger" v-on:click.prevent="eliminarRegistrov(index)">
                                                 <i class="fa fa-trash-o"></i>
@@ -171,6 +176,8 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -182,11 +189,15 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td class="warning text-right">I.G.V.</td>
                                         <td class="text-right">{{ sumigv }}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -342,12 +353,24 @@
                 }
 
                 if (aborrar.length > 1) {
+                    var indice;
+                    var impus = 0;
+                    for (var i = 0; i < aborrar.length; i++) {
+                        indice = aborrar[i];
+                        this.restarmontos(this.productos[indice]['Subtotal'],this.productos[indice]['Impuesto'],this.productos[indice]['TotalUnitario']);
+                        /*impus = parseFloat(this.productos[indice]['Impuesto']) + parseFloat(impus);
+                        impus = Math.round(impus * 100) / 100;*/
+                        //console.log(this.productos[indice]['TotalUnitario']);
+                    }  
                     this.productos.splice(aborrar[0],aborrar.length);
+                    
+                    /*this.sumsubtotal = parseFloat(this.sumsubtotal) + parseFloat(impus);
+                    this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100 ;*/
                 }
                 else
                 {
                     var indice = aborrar[0];
-                    this.restarmontos(this.productos[indice]['TotalUnitario'],0,this.productos[indice]['TotalUnitario']);
+                    this.restarmontos(this.productos[indice]['Subtotal'],this.productos[indice]['Impuesto'],this.productos[indice]['TotalUnitario']);
                     this.productos.splice(aborrar[0],1);
                 }
             },
@@ -385,7 +408,7 @@
                         this.razonsocial = datos.RAZONSOCIAL;
                         this.rucv = datos.RUC;
                         this.direccion = datos.DIRECCION;
-                        $('#dni_bus').focus();
+                        $('#id_cuenta').focus();
                         
                     }
                 }).catch(error => {
@@ -408,7 +431,7 @@
                         this.seguro = datos.Financiamiento;
                         this.idTipoFinanciamiento = datos.idFuenteFinanciamiento;
                         this.paciente = datos.ApellidoPaterno + ' ' + datos.ApellidoMaterno + ' ' + datos.PrimerNombre;
-                        $('#serie_boleta').focus();
+                        $('#btn_buscar_productos').focus();
                     }
                     // console.log(response.data);
                 }).catch(error => {
@@ -426,7 +449,7 @@
                     $('#paramatro_busqueda').focus();
                 });
             },
-            buscar_boleta: function() {
+            /*buscar_boleta: function() {
                 var url = 'cajas/detalle_boleta/' + this.serie + '/' + this.ndocumento + '/' + '';
 
                 axios.get(url).then(response => {
@@ -461,9 +484,9 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
-            },
+            },*/
             buscar_boleta_cuenta: function() {
-                var url = 'cajas/detalle_boleta/' + this.cuenta;
+                var url = 'cajas/detalle_cuenta/' + this.cuenta;
 
                 axios.get(url).then(response => {
                     var datos = response.data.data;
@@ -475,27 +498,33 @@
                         $('#id_cuenta').focus();
                     }
                     else{
-                  /*      this.cuenta = '';
+                        this.paciente = datos.paciente;
+                        this.idTipoFinanciamiento = datos.idseguro;
+                        this.seguro = datos.seguro;
+                        this.cuenta = '';
                         $('#id_cuenta').focus();
-                        this.paciente = datos.paciente;                        
-                        this.comprobante = datos.comprobante;
 
-                        
-                        
-                        
                         for (var i = 0; i < datos.productos.length; i++) {
-                            this.productos.push(datos.productos[i]);
+                            this.productos.push({
+                                Comprobante: datos.productos[i].Comprobante,
+                                Codigo: datos.productos[i].Codigo,
+                                Producto: datos.productos[i].Producto,
+                                Cantidad: datos.productos[i].Cantidad,
+                                Impuesto: datos.productos[i].Impuesto,
+                                Precio: datos.productos[i].Precio,
+                                Subtotal: datos.productos[i].SubTotal,
+                                TotalUnitario: datos.productos[i].TotalUnitario
+                            });
+                            this.sumarmontos(datos.productos[i].SubTotal,datos.productos[i].Impuesto,datos.productos[i].TotalUnitario);
                         }
-
-                        this.sumarmontos(datos.subtotal,datos.igv,datos.total);*/
                     }
                     
                 }).catch(error => {
                     console.log(error.response.data);
                 });
             },
-            buscar_boleta_id_orden: function() {
-                var url = 'ajas/detalle_cuenta/' + null + '/' + null + '/' + this.idorden;
+            /*buscar_boleta_id_orden: function() {
+                var url = 'cajas/detalle_boleta/' + null + '/' + null + '/' + this.idorden;
                 // console.log(url);
 
                 axios.get(url).then(response => {
@@ -522,12 +551,12 @@
                         
                         for (var i = 0; i < datos.productos.length; i++) {
                             this.productos.push({
-                                Comprobante: datos.productos[0].Codigo,
-                                Codigo: datos.productos[0].Codigo,
-                                Producto: datos.productos[0].Producto,
-                                Cantidad: datos.productos[0].Cantidad,
-                                Precio: datos.productos[0].Precio,
-                                TotalUnitario: datos.productos[0].TotalUnitario
+                                Comprobante: datos.productos[i].Codigo,
+                                Codigo: datos.productos[i].Codigo,
+                                Producto: datos.productos[i].Producto,
+                                Cantidad: datos.productos[i].Cantidad,
+                                Precio: datos.productos[i].Precio,
+                                TotalUnitario: datos.productos[i].TotalUnitario
                             });
                             
                         }
@@ -538,7 +567,7 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
-            },
+            },*/
             sumarmontos: function(subtotal,igv,total) {
                 this.sumsubtotal = parseFloat(subtotal) + parseFloat(this.sumsubtotal);
                 this.sumigv = parseFloat(igv) + parseFloat(this.sumigv);
@@ -598,6 +627,8 @@
                         Codigo: codigo,
                         Producto: nombre,
                         Cantidad: cantidad,
+                        Subtotal: totalunitario,
+                        Impuesto: 0,
                         Precio: precio,
                         TotalUnitario: totalunitario
                     });

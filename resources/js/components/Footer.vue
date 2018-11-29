@@ -5,6 +5,6 @@
       		Hospital Nacional Arzobispo Loayza
     	</div>
     	<!-- Default to the left -->
-    	<strong>Copyright &copy; {{ new Date().getFullYear() }} <a href="">JJ Tecnolog&iacute;as Peruanas</a>.</strong> Todos los derechos reservados.
+    	<strong>Copyright &copy; {{ new Date().getFullYear() }} <a href="">Profesionales Asociados</a>.</strong> Todos los derechos reservados.
   	</footer>
 </template>

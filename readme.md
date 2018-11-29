@@ -36,6 +36,10 @@ $ npm run dev
 ```
 ### Otras configuraciones
 ```sh
+--- Actualizaciones de BD ---
+ejecutar el archivo /database/actualizaciones.sql
+* leer el archivo antes de ejecutar
+
 --- Configuraciones para GIT ---
 $ git config --global user.name 'Su Nombre'
 $ git config --global user.email 'su email'

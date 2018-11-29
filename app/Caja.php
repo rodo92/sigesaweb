@@ -42,9 +42,16 @@ class Caja extends Model
         return json_decode(json_encode($result), true);
     }
 
-    public function Datos_X_Cuenta($cuenta)
+    public function Datos_X_Cuenta_Cabecera($cuenta)
     {
-        $result = DB::select('exec SIGESA_CAJA_DATOS_X_CUENTA_ATENCION ?', [$cuenta]);
+        $result = DB::select('exec SIGESA_DATOS_FACTURACION_X_CUENTA_CABECERA ?', [$cuenta]);
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Datos_X_Cuenta_Detalle($cuenta)
+    {
+        $result = DB::select('exec SIGESA_DATOS_FACTURACION_X_CUENTA_DETALLE ?', [$cuenta]);
 
         return json_decode(json_encode($result), true);
     }

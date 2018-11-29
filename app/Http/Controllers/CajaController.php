@@ -216,14 +216,14 @@ class CajaController extends Controller
 
             for ($i=0; $i < count($data_detalle); $i++) { 
                 $productos[] = array(
-                    'Comprobante'   => $data_detalle[$i]['IdCuentaAtencion'],
-                    'Codigo'        => $data_detalle[$i]['Codigo'],
-                    'Producto'        => strtoupper($data_detalle[$i]['Nombre']),
-                    'Cantidad'      => $data_detalle[$i]['cantidad'],
-                    'Precio'        => number_format($data_detalle[$i]['PrecioUnitario'],4,'.',' '),
-                    'SubTotal'        => number_format($data_detalle[$i]['SubTotal'],4,'.',' '),
-                    'Impuesto'        => number_format($data_detalle[$i]['Impuesto'],4,'.',' '),
-                    'TotalUnitario' => number_format($data_detalle[$i]['Total'],4,'.',' ')
+                    'Comprobante'       => $data_detalle[$i]['IdCuentaAtencion'],
+                    'Codigo'            => $data_detalle[$i]['Codigo'],
+                    'Producto'          => strtoupper($data_detalle[$i]['Nombre']),
+                    'Cantidad'          => $data_detalle[$i]['cantidad'],
+                    'Precio'            => number_format($data_detalle[$i]['PrecioUnitario'],4,'.',' '),
+                    'SubTotal'          => number_format($data_detalle[$i]['SubTotal'],4,'.',' '),
+                    'Impuesto'          => number_format($data_detalle[$i]['Impuesto'],4,'.',' '),
+                    'TotalUnitario'     => number_format($data_detalle[$i]['Total'],4,'.',' ')
                 );
             }
 

@@ -1,5 +1,5 @@
 <style type="text/css" media="screen">
-    table#tabla_datos{
+    table.tabla_datos{
         border-spacing: 5px;
         border-collapse: separate;
     }
@@ -53,11 +53,11 @@
                 </div>
             </div>
 
-            <div class="box box-default" id="cuerpo_factura"><!-- style="display: none;" -->
-                <div class="box-body" style="padding: 3%;">
+            <div class="box box-default" id="cuerpo_factura" style="display: none;"><!-- style="display: none;" -->
+                <div class="box-body" style="padding: 1%;">
                     <div class="row">
                         <div class="col-xs-8">
-                            <table style="width: 100%" id="tabla_datos">
+                            <table style="width: 100%" class="tabla_datos">
                                 <tr>
                                     <td width="15%">
                                         <input type="text" class="form-control" placeholder="RUC" v-on:keyup.13="buscar_proveedor" v-model="ruc" id="ruc_bus" maxlength="11">
@@ -65,31 +65,37 @@
                                     <td width="15%">
                                         <label for="">RAZON&Oacute;N SOCIAL:</label>                                        
                                     </td>                    
-                                    <td width="40%" class="bg-warning">
+                                    <td width="40%" class="bg-warning"  colspan="3">
                                         {{ razonsocial }}
                                     </td>
-                                    <td width="10%">
-                                        <label>DIRECCI&Oacute;N :</label>                                        
-                                    </td>
-                                   <td width="20%">
-                                       {{ direccion }}
-                                   </td>
+                                   
                                 </tr>
                                 <tr>
                                     <td width="15%">
                                         
                                     </td>
-                                    <td width="15%">
-                                        <label for="">R.U.C. :</label>                                        
+                                     <td width="10%">
+                                        <label>DIRECCI&Oacute;N :</label>                                        
                                     </td>
-                                    <td width="%">
+                                    <td width="20%" colspan="3" class="bg-warning">
+                                       {{ direccion }}
+                                    </td>                                    
+                                </tr>
+                                <tr>
+                                    <td>
+                                        
+                                    </td>
+                                    <td>
+                                         <label>RUC: </label>
+                                    </td>
+                                    <td class="bg-warning">
                                         {{ rucv }}
                                     </td>
                                     <td width="10%">
                                         <label>FECHA: </label>
                                         
                                     </td>
-                                    <td width="20%">
+                                    <td width="20%" class="bg-warning">
                                         {{ new Date().getDate() + "/" + (new Date().getMonth() +1) + "/" + new Date().getFullYear() }}
                                     </td>
                                 </tr>
@@ -152,9 +158,9 @@
                                         <th class="text-center">CODIGO</th>
                                         <th>DESCRIPCION</th>
                                         <th class="text-center">CANTIDAD</th>
-                                        <th class="text-center">I.G.V.</th>
-                                        <th class="text-center">PRECIO</th>
-                                        <th class="text-center">TOTAL</th>
+                                        <th class="text-right">I.G.V.</th>
+                                        <th class="text-right">PRECIO</th>
+                                        <th class="text-right">TOTAL</th>
                                         <th style="display: none;">SUBTOTAL</th>
                                         <th></th>
                                     </tr>
@@ -168,7 +174,7 @@
                                         <td class="text-right" v-text="producto.Impuesto"></td>
                                         <td class="text-right" v-text="producto.Precio"></td>
                                         <td class="text-right" v-text="producto.TotalUnitario"></td>
-                                        <td v-text="producto.Subtotal"></td>
+                                        <td v-text="producto.Subtotal" style="display: none;"></td>
                                         <td class="text-center">
                                             <button class="btn btn-sm btn-danger" v-on:click.prevent="eliminarRegistrov(index)">
                                                 <i class="fa fa-trash-o"></i>
@@ -211,8 +217,24 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
-                            <label for="">Observaciones</label>
-                            <textarea class="form-control" rows="3" placeholder="Observaciones ..."></textarea>
+                            <table style="width: 100%;" class="tabla_datos">
+                                <tr >
+                                    <td width="12%">
+                                        <label>OBSERVACIONES 1:</label>
+                                    </td>
+                                    <td width="88%">
+                                        <textarea name="" class="form-control" rows="1" style="width: 100%;"></textarea>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td width="12%">
+                                        <label>OBSERVACIONES 2:</label>
+                                    </td>
+                                    <td width="88%">
+                                        <textarea name="" class="form-control" rows="1" style="width: 100%;"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>

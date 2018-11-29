@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="box box-default" id="cuerpo_factura"><!-- style="display: none;" -->
+            <div class="box box-default" id="cuerpo_factura" style="display: none;"><!-- style="display: none;" -->
                 <div class="box-body" style="padding: 3%;">
                     <div class="row">
                         <div class="col-xs-8">
@@ -168,7 +168,7 @@
                                         <td class="text-right" v-text="producto.Impuesto"></td>
                                         <td class="text-right" v-text="producto.Precio"></td>
                                         <td class="text-right" v-text="producto.TotalUnitario"></td>
-                                        <td v-text="producto.Subtotal"></td>
+                                        <td v-text="producto.Subtotal" style="display: none;"></td>
                                         <td class="text-center">
                                             <button class="btn btn-sm btn-danger" v-on:click.prevent="eliminarRegistrov(index)">
                                                 <i class="fa fa-trash-o"></i>

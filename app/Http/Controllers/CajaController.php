@@ -211,6 +211,7 @@ class CajaController extends Controller
 
         if (count($data_cabecera) > 0) {
             $paciente       = $data_cabecera[0]['ApellidoPaterno'] . ' ' . $data_cabecera[0]['ApellidoMaterno'] . ' ' . $data_cabecera[0]['PrimerNombre'];
+            $idpaciente     = $data_cabecera[0]['IdPaciente'];
             $idSeguro       = $data_cabecera[0]['idFuenteFinanciamiento'];
             $seguro         = $data_cabecera[0]['dFuenteFinanciamiento'];
 
@@ -229,6 +230,7 @@ class CajaController extends Controller
 
             $response = array(
                 'paciente'      => $paciente,
+                'idpaciente'    => $idpaciente,
                 'idseguro'      => $idSeguro,
                 'seguro'        => $seguro,
                 'productos'     => $productos
@@ -244,27 +246,44 @@ class CajaController extends Controller
     public function registro_factura(Request $request)
     {
         // cabecera
-        $FechaCobranza      = $request->FechaCobranza;
+        $FechaCobranza      = date('Y-m-d H:i:s') . '.000';
         $NroSerie           = $request->NroSerie;
         $NroDocumento       = $request->NroDocumento;
         $Ruc                = $request->Ruc;
         $RazonSocial        = $request->RazonSocial;
         $IdTipoComprobante  = $request->IdTipoComprobante;
-        $IdCajero           = $request->IdCajero;
+        $IdCajero           = session()->get('id_empleado');
         $Subtotal           = $request->Subtotal;
         $IGV                = $request->IGV;
         $Total              = $request->Total;
         $IdPaciente         = $request->IdPaciente;
         $Observacion1       = $request->Observacion1;
         $Observacion2       = $request->Observacion2;
+        $IdCuentaAtencion   = $request->IdCuentaAtencion;
+        $productos          = $request->productos;
+
+        echo 'FechaCobranza: ' . $FechaCobranza . '\n';
+        echo 'NroSerie: ' . $NroSerie . '\n';
+        echo 'NroDocumento: ' . $NroDocumento . '\n';
+        echo 'Ruc: ' . $Ruc . '\n';
+        echo 'RazonSocial: ' . $RazonSocial . '\n';
+        echo 'IdTipoComprobante: ' . $IdTipoComprobante . '\n';
+        echo 'IdCajero: ' . $IdCajero . '\n';
+        echo 'Subtotal: ' . $Subtotal . '\n';
+        echo 'IGV: ' . $IGV . '\n';
+        echo 'Total: ' . $Total . '\n';
+        echo 'IdPaciente: ' . $IdPaciente . '\n';
+        echo 'Observacion1: ' . $Observacion1 . '\n';
+        echo 'Observacion2: ' . $Observacion2 . '\n';
+        echo 'IdCuentaAtencion: ' . $IdCuentaAtencion . '\n';
 
         // detalle
-        $IdCajaFacturacion  = 0;        // codigo del documeto generado
-        $IdCuentaAtencion   = $request->IdCuentaAtencion;
-        $Tipo               = 'B';      // tipo de documento: boleta, ticket, recibo, factura,ect.
+        // $IdCajaFacturacion  = 0;        // codigo del documeto generado
+        // $IdCuentaAtencion   = $request->IdCuentaAtencion;
+        // $Tipo               = 'B';      // tipo de documento: boleta, ticket, recibo, factura,ect.
 
         // productos
-        $productos = $request->productos;
+        // $productos = $request->productos;
 
         /*for ($i=0; $i < count($productos); $i++) { 
             

@@ -144,7 +144,7 @@
                         </div>
                         <div class="col-xs-4 text-right">
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
-                            <button type="" class="btn btn-success"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
+                            <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
                             <button type="" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
                         </div>
                     </div>
@@ -223,7 +223,7 @@
                                         <label>OBSERVACIONES 1:</label>
                                     </td>
                                     <td width="88%">
-                                        <textarea name="" class="form-control" rows="1" style="width: 100%;"></textarea>
+                                        <textarea name="" class="form-control" rows="1" style="width: 100%;" v-model="observacion_uno"></textarea>
                                     </td>
                                 </tr>
                                 <tr >
@@ -231,7 +231,7 @@
                                         <label>OBSERVACIONES 2:</label>
                                     </td>
                                     <td width="88%">
-                                        <textarea name="" class="form-control" rows="1" style="width: 100%;"></textarea>
+                                        <textarea name="" class="form-control" rows="1" style="width: 100%;" v-model="observacion_dos"></textarea>
                                     </td>
                                 </tr>
                             </table>
@@ -317,6 +317,7 @@
                 idTIpoDocumento: '',
                 dni: '',
                 paciente: '',
+                idpaciente: '',
                 seguro: '',
                 errores: '',
                 serie: null,
@@ -331,6 +332,8 @@
                 ndocumento: null,
                 idorden: null,
                 cuenta: '',
+                observacion_uno: '',
+                observacion_dos: '',
             }
         },
         created: function() {
@@ -453,6 +456,7 @@
                         this.seguro = datos.Financiamiento;
                         this.idTipoFinanciamiento = datos.idFuenteFinanciamiento;
                         this.paciente = datos.ApellidoPaterno + ' ' + datos.ApellidoMaterno + ' ' + datos.PrimerNombre;
+                        this.idpaciente = datos.IdPaciente;
                         $('#btn_buscar_productos').focus();
                     }
                     // console.log(response.data);
@@ -521,6 +525,7 @@
                     }
                     else{
                         this.paciente = datos.paciente;
+                        this.idpaciente = datos.idpaciente;
                         this.idTipoFinanciamiento = datos.idseguro;
                         this.seguro = datos.seguro;
                         this.cuenta = '';
@@ -659,6 +664,29 @@
 
                     this.sumarmontos(totalunitario,0,totalunitario);
                 }
+            },
+
+            registrarfactura: function()
+            {
+                var url = 'cajas/registro_factura';
+                axios.post(url, {
+                    'NroSerie': this.serie,
+                    'NroDocumento': this.ndocumento,
+                    'Ruc': this.rucv,
+                    'RazonSocial': this.razonsocial,
+                    // 'IdTipoComprobante': this.,
+                    'Subtotal': this.sumsubtotal,
+                    'IGV': this.sumigv,
+                    'Total': this.sumtotal,
+                    'IdPaciente': this.idpaciente,
+                    'Observacion1': this.observacion_uno,
+                    'Observacion2': this.observacion_dos,
+                    'IdCuentaAtencion': this.cuenta
+                }).then(response => {
+                    console.log(response.data);
+                }).catch(error => {
+
+                })
             }
         }
        

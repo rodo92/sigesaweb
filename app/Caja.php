@@ -55,4 +55,18 @@ class Caja extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Generar_Factura_Cabecera($FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2)
+    {
+        $result = DB::insert('exec SIGESA_CajaFacturacionInsertar ?,?,?,?,?,?,?,?,?,?,?,?,?', [$FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2]);
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Generar_Factura_Detalle($IdCajaFacturacion,$IdCuentaAtencion,$Tipo,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
+    {
+        $result = DB::insert('exec SIGESA_CajaFacturacionInsertar ?,?,?,?,?,?,?,?,?', [$IdCajaFacturacion,$IdCuentaAtencion,$Tipo,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total]);
+
+        return json_decode(json_encode($result), true);
+    }
 }

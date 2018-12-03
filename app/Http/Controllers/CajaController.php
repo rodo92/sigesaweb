@@ -240,4 +240,41 @@ class CajaController extends Controller
             return response()->json(['data' => 'sindatos']);
         }
     }
+
+    public function registro_factura(Request $request)
+    {
+        // cabecera
+        $FechaCobranza      = $request->FechaCobranza;
+        $NroSerie           = $request->NroSerie;
+        $NroDocumento       = $request->NroDocumento;
+        $Ruc                = $request->Ruc;
+        $RazonSocial        = $request->RazonSocial;
+        $IdTipoComprobante  = $request->IdTipoComprobante;
+        $IdCajero           = $request->IdCajero;
+        $Subtotal           = $request->Subtotal;
+        $IGV                = $request->IGV;
+        $Total              = $request->Total;
+        $IdPaciente         = $request->IdPaciente;
+        $Observacion1       = $request->Observacion1;
+        $Observacion2       = $request->Observacion2;
+
+        // detalle
+        $IdCajaFacturacion  = 0;        // codigo del documeto generado
+        $IdCuentaAtencion   = $request->IdCuentaAtencion;
+        $Tipo               = 'B';      // tipo de documento: boleta, ticket, recibo, factura,ect.
+
+        // productos
+        $productos = $request->productos;
+
+        /*for ($i=0; $i < count($productos); $i++) { 
+            
+        }
+
+        $ProductoCodigo
+        $ProductoCantidad
+        $ProductoValorUnitario
+        $ProductoSubTotal
+        $ProductoIGV
+        $ProductoTotal*/
+    }
 }

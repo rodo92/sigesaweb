@@ -36,6 +36,14 @@ class Caja extends Model
     	return json_decode(json_encode($result), true);
     }
 
+    public function Actualizar_Nro_Documento($IdCaja,$NroSerie,$NroDocumento)
+    {
+        DB::table('CajaNroDocumento')
+            ->where('IdCaja', $IdCaja)
+            ->where('NroSerie', $NroSerie)
+            ->update(['NroDocumento' => $NroDocumento]);
+    }
+
     public function Traer_Serie_Correlativo($IdCaja,$TipoDocumento)
     {
         $result = DB::table('CajaNroDocumento')
@@ -94,13 +102,21 @@ class Caja extends Model
         $IdCajaFacturacion = DB::table('CajaFacturacion')->insertGetId($datos);
         // exit();
         return json_decode(json_encode($IdCajaFacturacion), true);
-        exit();
     }
 
-    public function Generar_Factura_Detalle($IdCajaFacturacion,$IdCuentaAtencion,$Tipo,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
+    public function Generar_Factura_Detalle($IdCajaFacturacion,$IdCuentaAtencion,$IdPartida,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
     {
-        $result = DB::insert('exec SIGESA_CajaFacturacionInsertar ?,?,?,?,?,?,?,?,?', [$IdCajaFacturacion,$IdCuentaAtencion,$Tipo,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total]);
-
-        return json_decode(json_encode($result), true);
+        $datos = array(
+                'IdCajaFacturacion' => $IdCajaFacturacion,
+                'IdCuentaAtencion'  => $IdCuentaAtencion,
+                'IdPartida'         => $IdPartida,
+                'Codigo'            => $Codigo,
+                'Cantidad'          => $Cantidad,
+                'ValorUnitario'     => $ValorUnitario,
+                'SubTotal'          => $SubTotal,
+                'IGV'               => $IGV,
+                'Total'             => $Total
+            );
+        DB::table('CajaFacturacionDetalle')->insert($datos);
     }
 }

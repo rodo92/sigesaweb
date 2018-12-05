@@ -173,6 +173,8 @@ return [
         WebSigesa\Providers\EventServiceProvider::class,
         WebSigesa\Providers\RouteServiceProvider::class,
 
+        // Generacion de PDF
+        Codedge\Fpdf\FpdfServiceProvider::class,
     ],
 
     /*
@@ -202,6 +204,7 @@ return [
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
         'File' => Illuminate\Support\Facades\File::class,
+        'Fpdf' => Codedge\Fpdf\Facades\Fpdf::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
         'Lang' => Illuminate\Support\Facades\Lang::class,

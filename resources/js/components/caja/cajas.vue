@@ -288,7 +288,7 @@
                                             <td class="text-center col-xs-2">{{ producto_temp.Precio }}</td>
                                             <td class="text-center col-xs-1">
                                                 
-                                                <button class="btn btn-sm btn-primary" v-on:click.prevent="agregarItenm(producto_temp.Codigo,producto_temp.Nombre,producto_temp.Precio)">
+                                                <button class="btn btn-sm btn-primary" v-on:click.prevent="agregarItenm(producto_temp.Codigo,producto_temp.Nombre,producto_temp.Precio,producto_temp.IdPartida)">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </td>
@@ -339,6 +339,7 @@
                 ndocumento: null,
                 idorden: null,
                 cuenta: '',
+                cuenta_grabar: '',
                 observacion_uno: '',
                 observacion_dos: '',
                 nroserie_grabar: '',
@@ -547,6 +548,7 @@
                         this.idpaciente = datos.idpaciente;
                         this.idTipoFinanciamiento = datos.idseguro;
                         this.seguro = datos.seguro;
+                        this.cuenta_grabar = this.cuenta;
                         this.cuenta = '';
                         $('#id_cuenta').focus();
 
@@ -557,6 +559,7 @@
                                 Producto: datos.productos[i].Producto,
                                 Cantidad: datos.productos[i].Cantidad,
                                 Impuesto: datos.productos[i].Impuesto,
+                                IdPartida: datos.productos[i].IdPartida,
                                 Precio: datos.productos[i].Precio,
                                 Subtotal: datos.productos[i].SubTotal,
                                 TotalUnitario: datos.productos[i].TotalUnitario
@@ -657,7 +660,7 @@
                     console.log('aun no');
                 }
             },
-            agregarItenm: function(codigo,nombre,precio)
+            agregarItenm: function(codigo,nombre,precio,idpartida)
             {   
                 var cantidad = $('#codigo_'+codigo).val();
                 if (cantidad == 0) {
@@ -675,6 +678,7 @@
                         Cantidad: cantidad,
                         Subtotal: totalunitario,
                         Impuesto: 0,
+                        IdPartida: idpartida,
                         Precio: precio,
                         TotalUnitario: totalunitario
                     });
@@ -700,10 +704,11 @@
                     'IdPaciente': this.idpaciente,
                     'Observacion1': this.observacion_uno,
                     'Observacion2': this.observacion_dos,
-                    'IdCuentaAtencion': this.cuenta,
-                    'productos': this.productos
+                    'IdCuentaAtencion': this.cuenta_grabar,
+                    'productos': this.productos,
+                    'idcaja': this.idCaja
                 }).then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                 }).catch(error => {
 
                 })

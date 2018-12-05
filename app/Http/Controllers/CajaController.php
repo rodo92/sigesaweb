@@ -1,10 +1,11 @@
 <?php
 
 namespace WebSigesa\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use WebSigesa\Caja;
 use WebSigesa\Paciente;
+use WebSigesa\Sistema;
 
 class CajaController extends Controller
 {
@@ -63,13 +64,38 @@ class CajaController extends Controller
         $totalcobrado = 0;
         $idempleado = session()->get('id_empleado');
         $idcaja = $request->idcaja;
+        $tipodocumento = $request->tipodocumento;
 
 
 
         $Caja = new Caja();
         $data = $Caja->Apertura_Caja($fechaapertura,$estadolote,$idcaja,$idturno,$totalcobrado,$idempleado);
+        $data_documento = $Caja->Traer_Serie_Correlativo($idcaja,$tipodocumento);
 
-        return response()->json(['data' => $data]);
+        $nrodocumento_temp = (int)$data_documento[0]['NroDocumento'] + 1;
+        $nrodocumento_temp = (string)$nrodocumento_temp;
+
+        $contador = strlen($nrodocumento_temp);
+        $ceros = 8 - $contador;
+        $nuevo_ceros = '';
+        for ($i=0; $i < $ceros; $i++) { 
+            $nuevo_ceros .= '0';
+        }
+        
+        $nrodocumento = $nuevo_ceros . $nrodocumento_temp;
+
+        $data_documento[0] =  array(
+            'NroSerie' => $data_documento[0]['NroSerie'],
+            'NroDocumento' => $nrodocumento
+        );
+
+        // trayendo serie 
+
+
+        return response()->json([
+            'data'              => $data,
+            'data_documento'    => $data_documento
+        ]);
     }
 
     public function tipo_seguro_paciente($dni)
@@ -245,6 +271,8 @@ class CajaController extends Controller
 
     public function registro_factura(Request $request)
     {
+        
+        
         // cabecera
         $FechaCobranza      = date('Y-m-d H:i:s') . '.000';
         $NroSerie           = $request->NroSerie;
@@ -263,14 +291,31 @@ class CajaController extends Controller
         $productos          = $request->productos;
 
         $caja = new Caja();
+        $sistema = new Sistema();
+ 
+        // Obteniendo tipo de comprobante
+        $IdTipoComprobante_temp = $sistema->Obtener_Tipo_Comprobante($IdTipoComprobante);
+
+        $IdTipoComprobante = strtoupper($IdTipoComprobante_temp[0]['Descripcion']);
+        $IdTipoComprobante = $IdTipoComprobante[0];
+        
         $id_cabecera = $caja->Generar_Factura_Cabecera($FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2);
 
-        if($id_cabecera)
+        if ($id_cabecera > 0) {
+            // se genera el detalle
+            for ($i=0; $i < count($productos); $i++) { 
+                // $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$Tipo,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
+            }
+
+            // se actualiza Número de Documento
+        }
+
+        /*if($id_cabecera)
         {
             for ($i=0; $i < count($productos); $i++) { 
                 $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$Tipo,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
             }
-        }
+        }*/
 
         /*echo 'FechaCobranza: ' . $FechaCobranza . '\n';
         echo 'NroSerie: ' . $NroSerie . '\n';
@@ -295,7 +340,7 @@ class CajaController extends Controller
         // productos
         // $productos = $request->productos;
 
-        print_r($productos);
+        // print_r($productos);
 
         /*$ProductoCodigo
         $ProductoCantidad

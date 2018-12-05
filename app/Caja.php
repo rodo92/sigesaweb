@@ -14,6 +14,14 @@ class Caja extends Model
         return json_decode(json_encode($result), true);
     }
 
+    public function Obtener_Caja($IdCaja)
+    {
+        $result = DB::table('CajaCaja')
+                ->where('IdCaja','=',$IdCaja)->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
     public function Mostrar_Cajas_Tipo_Comprobante()
     {
         $result = DB::select('exec SIGESA_CajaCajaTipoComprobante');
@@ -26,6 +34,16 @@ class Caja extends Model
     	$result = DB::insert('exec SIGESA_Apertura_Caja ?,?,?,?,?,?', [$FechaApertura,$EstadoLote,$IdCaja,$IdTurno,$TotalCobrado,$IdCajero]);
 
     	return json_decode(json_encode($result), true);
+    }
+
+    public function Traer_Serie_Correlativo($IdCaja,$TipoDocumento)
+    {
+        $result = DB::table('CajaNroDocumento')
+                ->select(['NroSerie', 'NroDocumento'])
+                ->where('IdCaja','=',$IdCaja)
+                ->where('IdTipoComprobante','=',$TipoDocumento)->get();
+
+        return json_decode(json_encode($result), true);
     }
 
     public function Medicamentos_Servicios_Filtrados($tipobusqueda,$filtro)
@@ -58,9 +76,25 @@ class Caja extends Model
 
     public function Generar_Factura_Cabecera($FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2)
     {
-        $result = DB::insert('exec SIGESA_CajaFacturacionInsertar ?,?,?,?,?,?,?,?,?,?,?,?,?', [$FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2]);
-
-        return json_decode(json_encode($result), true);
+        $datos = array(
+                'FechaCobranza'     => $FechaCobranza,
+                'NroSerie'          => $NroSerie,
+                'NroDocumento'      => $NroDocumento,
+                'Ruc'               => $Ruc,
+                'RazonSocial'       => $RazonSocial,
+                'IdTipoComprobante' => $IdTipoComprobante,
+                'IdCajero'          => $IdCajero,
+                'Subtotal'          => $Subtotal,
+                'IGV'               => $IGV,
+                'Total'             => $Total,
+                'IdPaciente'        => $IdPaciente,
+                'Observacion1'      => $Observacion1,
+                'Observacion2'      => $Observacion2
+            );
+        $IdCajaFacturacion = DB::table('CajaFacturacion')->insertGetId($datos);
+        // exit();
+        return json_decode(json_encode($IdCajaFacturacion), true);
+        exit();
     }
 
     public function Generar_Factura_Detalle($IdCajaFacturacion,$IdCuentaAtencion,$Tipo,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)

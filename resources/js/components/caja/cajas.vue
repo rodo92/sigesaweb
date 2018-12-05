@@ -38,7 +38,7 @@
                             </div>
                              <div class="form-group">
                                 <label>Tipo de Documento</label>
-                                <select class="form-control" v-model="idTIpoDocumento">
+                                <select class="form-control" v-model="idTIpoDocumento" id="tipo_documento_id">
                                     <option value=""></option>
                                     <option v-for="tipdoc in tipo_documento" :value="tipdoc.IdTipoComprobante">
                                         {{ tipdoc.Descripcion }}
@@ -146,6 +146,13 @@
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
                             <button type="" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
+                            <br>
+                            <div class="panel panel-default">
+                                <div class="panel-body" style="text-transform: uppercase;">
+                                    <h4>{{ cadena_tipo_documento }} ELECTR&Oacute;NICA</h4>
+                                    <h4>{{ nroserie_grabar }} - {{ nrodocumento_grabar}}</h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr>
@@ -334,6 +341,9 @@
                 cuenta: '',
                 observacion_uno: '',
                 observacion_dos: '',
+                nroserie_grabar: '',
+                nrodocumento_grabar: '',
+                cadena_tipo_documento: '',
             }
         },
         created: function() {
@@ -411,9 +421,18 @@
                         $('#cabecera_factura').hide();
                         $('#cuerpo_factura').fadeIn(400);
                         $('#ruc_bus').focus();
+                        this.cadena_tipo_documento = $('#tipo_documento_id option:selected').text().trim();
+                        this.nroserie_grabar = response.data.data_documento[0].NroSerie;
+                        this.nrodocumento_grabar = response.data.data_documento[0].NroDocumento.trim();
+
+
+                        // console.log(this.cadena_tipo_documento);
+                        // console.log(this.nroserie_grabar);
+                        // console.log(this.nrodocumento_grabar);
                     } else {
                         toastr.error('Hubo un error en la apertura de caja. Intentelo nuevamente.', 'WebSigesa');
-                    }                  
+                    } 
+                    // console.log(response.data);
                 }).catch(error => {
                     this.errores = error.response.data.errors;
                 });
@@ -670,11 +689,11 @@
             {
                 var url = 'cajas/registro_factura';
                 axios.post(url, {
-                    'NroSerie': this.serie,
-                    'NroDocumento': this.ndocumento,
+                    'NroSerie': this.nroserie_grabar,
+                    'NroDocumento': this.nrodocumento_grabar,
                     'Ruc': this.rucv,
                     'RazonSocial': this.razonsocial,
-                    // 'IdTipoComprobante': this.,
+                    'IdTipoComprobante': this.idTIpoDocumento,
                     'Subtotal': this.sumsubtotal,
                     'IGV': this.sumigv,
                     'Total': this.sumtotal,

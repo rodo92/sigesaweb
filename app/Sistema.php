@@ -44,4 +44,12 @@ class Sistema extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Obtener_Tipo_Comprobante($IdTipoComprobante)
+    {
+        $result = DB::table('CajaTiposComprobante')
+                ->where('IdTipoComprobante','=',$IdTipoComprobante)->get();
+
+        return json_decode(json_encode($result), true);
+    }
 }

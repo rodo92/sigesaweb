@@ -262,7 +262,17 @@ class CajaController extends Controller
         $IdCuentaAtencion   = $request->IdCuentaAtencion;
         $productos          = $request->productos;
 
-        echo 'FechaCobranza: ' . $FechaCobranza . '\n';
+        $caja = new Caja();
+        $id_cabecera = $caja->Generar_Factura_Cabecera($FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2);
+
+        if($id_cabecera)
+        {
+            for ($i=0; $i < count($productos); $i++) { 
+                $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$Tipo,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
+            }
+        }
+
+        /*echo 'FechaCobranza: ' . $FechaCobranza . '\n';
         echo 'NroSerie: ' . $NroSerie . '\n';
         echo 'NroDocumento: ' . $NroDocumento . '\n';
         echo 'Ruc: ' . $Ruc . '\n';
@@ -275,7 +285,7 @@ class CajaController extends Controller
         echo 'IdPaciente: ' . $IdPaciente . '\n';
         echo 'Observacion1: ' . $Observacion1 . '\n';
         echo 'Observacion2: ' . $Observacion2 . '\n';
-        echo 'IdCuentaAtencion: ' . $IdCuentaAtencion . '\n';
+        echo 'IdCuentaAtencion: ' . $IdCuentaAtencion . '\n';*/
 
         // detalle
         // $IdCajaFacturacion  = 0;        // codigo del documeto generado
@@ -285,11 +295,9 @@ class CajaController extends Controller
         // productos
         // $productos = $request->productos;
 
-        /*for ($i=0; $i < count($productos); $i++) { 
-            
-        }
+        print_r($productos);
 
-        $ProductoCodigo
+        /*$ProductoCodigo
         $ProductoCantidad
         $ProductoValorUnitario
         $ProductoSubTotal

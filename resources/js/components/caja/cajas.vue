@@ -681,7 +681,8 @@
                     'IdPaciente': this.idpaciente,
                     'Observacion1': this.observacion_uno,
                     'Observacion2': this.observacion_dos,
-                    'IdCuentaAtencion': this.cuenta
+                    'IdCuentaAtencion': this.cuenta,
+                    'productos': this.productos
                 }).then(response => {
                     console.log(response.data);
                 }).catch(error => {

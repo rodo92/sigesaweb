@@ -15,6 +15,7 @@ class PDFComprobantesController extends Controller
     private $cabecera;
     private $nombre;
     private $data_proveedor;
+    private $fecha_emision;
 
     public function generar($idorden)
     {
@@ -36,9 +37,14 @@ class PDFComprobantesController extends Controller
 
         $Sistema = new Sistema();
         $this->data_proveedor = $Sistema->Obtener_Proveedor($this->cabecera[0]['Ruc']);
+
+        $this->fecha_emision = substr($this->cabecera[0]['FechaCobranza'], 0,10);
+        list($anio, $mes, $dia) = explode("-", $this->fecha_emision);
+        $this->fecha_emision = $dia."/".$mes."/".$anio;
         /*echo '<pre>';
         print_r($this->data_proveedor);exit();*/
     	$this->fpdf = new Fpdf();
+        $this->fpdf->SetAutoPageBreak(true, 2);
         $this->fpdf->AddPage('P','A4');
         $this->cabecera_factura();
         $this->datos_receptor();
@@ -51,16 +57,17 @@ class PDFComprobantesController extends Controller
 	public function cabecera_factura()
     {
     	$this->fpdf->Image('svg/Logos/logo-factura.jpg',10,8,33);
-		$this->fpdf->SetFont('Arial','B',8);
-		$this->fpdf->Cell(35);
+		$this->fpdf->SetFont('Arial','B',9);
+		$this->fpdf->Cell(32);
 		$this->fpdf->Cell(65,5,'HOSPITAL NACIONAL ARZOBISPO LOAYZA',0,1,'L');
-		$this->fpdf->SetXY(48,14);
-		$this->fpdf->SetFont('Arial','',8);
-		$this->fpdf->Cell(65,4,'Av. Alfonso Ugarte 848 - Cercado de Lima',0,1,'L');
-		$this->fpdf->SetXY(57,18);
-		$this->fpdf->Cell(65,4,'Prov. de Lima - Lima - Peru',0,1,'L');
-		$this->fpdf->SetXY(140,5);
-		$this->fpdf->MultiCell(50,4,"\n" . $this->nombre . " ELECTRONICA \n R.U.C  Nro. 20154996991\n" . $this->cabecera[0]['NroSerie'] . "-" . $this->cabecera[0]['NroDocumento'] . "\n ",1,'C');
+		$this->fpdf->SetXY(46,14);
+		$this->fpdf->SetFont('Arial','',7);
+		$this->fpdf->Cell(65,4,utf8_decode(strtoupper('Av. Alfonso Ugarte 848 - Cercado de Lima')),0,1,'L');
+		$this->fpdf->SetXY(56,17);
+		$this->fpdf->Cell(65,4,utf8_decode(strtoupper('Prov. de Lima - Lima - Peru')),0,1,'L');
+		$this->fpdf->SetXY(150,5);
+		$this->fpdf->SetFont('Arial','B',8);
+		$this->fpdf->MultiCell(50,4,utf8_decode("\n" . $this->nombre . " ELECTRÓNICA \n R.U.C: 20154996991\n" . $this->cabecera[0]['NroSerie'] . "-" . $this->cabecera[0]['NroDocumento'] . "\n "),1,'C');
 		$this->fpdf->Ln(5);
 		$this->fpdf->Line(10, 30, 210-10, 30);
 		$this->fpdf->Ln(8);
@@ -74,7 +81,7 @@ class PDFComprobantesController extends Controller
     	$this->fpdf->Cell(110,4,utf8_decode($this->cabecera[0]['RazonSocial']),0,0,'L');
     	$this->fpdf->SetFont('Arial','',7);    	
     	$this->fpdf->Cell(30,4,utf8_decode('FECHA DE EMISIÓN:'),0,0,'L');
-    	$this->fpdf->Cell(20,4,utf8_decode('23/08/2018'),0,1,'L');
+    	$this->fpdf->Cell(20,4,$this->fecha_emision,0,1,'L');
 
     	$this->fpdf->Cell(30,4,utf8_decode('R.U.C.:'),0,0,'L');
     	$this->fpdf->SetFont('Arial','B',7);
@@ -91,9 +98,9 @@ class PDFComprobantesController extends Controller
 
     	$this->fpdf->SetFont('Arial','',7);
     	$this->fpdf->Cell(30,4,utf8_decode('PACIENTE:'),0,0,'L');
-    	$this->fpdf->Cell(160,4,utf8_decode($this->cabecera[0]['ApellidoPaterno'] . ' ' . $this->cabecera[0]['ApellidoMaterno'] . ' ' . $this->cabecera[0]['PrimerNombre']),0,1,'L');
-    	// $this->fpdf->Cell(30,4,utf8_decode('C.I.I.U NRO:'),1,0,'L');
-    	// $this->fpdf->Cell(20,4,utf8_decode('85111'),1,1,'L');
+    	$this->fpdf->Cell(110,4,utf8_decode($this->cabecera[0]['ApellidoPaterno'] . ' ' . $this->cabecera[0]['ApellidoMaterno'] . ' ' . $this->cabecera[0]['PrimerNombre']),0,0,'L');
+    	$this->fpdf->Cell(30,4,utf8_decode('TIPO MONEDA:'),0,0,'L');
+    	$this->fpdf->Cell(20,4,utf8_decode('SOLES'),0,1,'L');
 
     	$this->fpdf->Cell(30,4,utf8_decode('OBSERVACIÓN 1:'),0,0,'L');
     	$this->fpdf->MultiCell(160,4,utf8_decode($this->cabecera[0]['Observacion1']),0,'L',false);
@@ -175,13 +182,12 @@ class PDFComprobantesController extends Controller
     public function pie_factura()
 	{
 	    // Position at 1.5 cm from bottom
-	    $this->fpdf->SetY(-30);
+	    $this->fpdf->SetY(-20);
 	    // Arial italic 8
-	    $this->fpdf->SetFont('Arial','I',7);
-	    // Page number
-	    $this->fpdf->MultiCell(0,4,utf8_decode("Esta es una representación impresa de la factura electrónica, generada por el Hospital Nacional Arzobispo Loayza."),1,'C');
 	    $this->fpdf->SetFont('Arial','',7);
-	    $this->fpdf->Cell(175,5,utf8_decode('Fecha de Impresión: '),0,0,'R');
-	    $this->fpdf->Cell(15,5,date('d-m-Y'),0,1,'C');
+	    // Page number
+	    $this->fpdf->Cell(160,5,utf8_decode('FECHA DE IMPRESIÓN:'),0,0,'R');
+	    $this->fpdf->Cell(30,5,date('d/m/Y h:i:s A'),0,1,'C');
+	    $this->fpdf->MultiCell(0,4,utf8_decode("Autorizado mediante resolución Nro. 0340050010017/SUNAT. Para consultar el comprobante ingresar a https://escondatagate.page.link/bon2. Representación impresa del Comprobante Electrónico."),'T','C');
 	}
 }

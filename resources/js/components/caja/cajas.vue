@@ -709,9 +709,34 @@
                     'idcaja': this.idCaja
                 }).then(response => {
                     // console.log(response.data);
+                    if (response.data.data == 'correcto') {
+                        toastr.success('Factura generada con éxito.', 'WebSigesa')
+                        this.imprimir(response.data.idcabecera);
+                    }
                 }).catch(error => {
 
-                })
+                });
+            },
+            imprimir: function(idorder)
+            {
+                var url = 'cajas/generar_pdf/' + idorder;
+                // console.log(url);
+                // window.open(url,'_blank');
+                axios({
+                    url: url,
+                    method: 'GET',
+                    responseType: 'blob', // important
+                }).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('target','_blank');
+                    //link.setAttribute('onclick', "w=window.open('" + url + "'); w.print(); w.close();"); //or any other extension
+                    document.body.appendChild(link);
+                    // w.print();
+                    link.click();
+
+                });
             }
         }
        

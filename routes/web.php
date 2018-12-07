@@ -59,4 +59,4 @@ Route::get('cajas/detalle_cuenta/{cuenta}','CajaController@buscar_boleta_x_cuent
 
 // Facturación Electrónica
 Route::post('cajas/registro_factura','CajaController@registro_factura');
-Route::get('cajas/generar_pdf','CajaController@generar_pdf_documento');
+Route::get('cajas/generar_pdf/{idorden}','PDFComprobantesController@generar');

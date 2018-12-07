@@ -7,6 +7,7 @@ use WebSigesa\Caja;
 use WebSigesa\Paciente;
 use WebSigesa\Sistema;
 use Codedge\Fpdf\Fpdf\Fpdf;
+use WebSigesa\Http\Controllers\PDFComprobantesController;
 
 class CajaController extends Controller
 {
@@ -310,198 +311,20 @@ class CajaController extends Controller
             // se genera el detalle
             for ($i=0; $i < count($productos); $i++) { 
                 // $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$IdPartida,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
-                $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$productos[$i]['IdPartida'],$productos[$i]['Codigo'],$productos[$i]['Cantidad'],$productos[$i]['Precio'],$productos[$i]['Subtotal'],$productos[$i]['Impuesto'],$productos[$i]['TotalUnitario']);
+                $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$productos[$i]['IdPartida'],$productos[$i]['Codigo'],$productos[$i]['Producto'],$productos[$i]['Cantidad'],$productos[$i]['Precio'],$productos[$i]['Subtotal'],$productos[$i]['Impuesto'],$productos[$i]['TotalUnitario']);
             }
 
             // se actualiza Número de Documento
             $caja->Actualizar_Nro_Documento($IdCaja,$NroSerie,$NroDocumento);
 
-            // return response()->json(['data' => 'correcto']);
-            /*$fpdf = new Fpdf();
-            $fpdf->AddPage();
-            $fpdf->Image('svg/Logos/logo-factura.jpg',10,8,33);
-            $fpdf->SetFont('Helvetica','B',8);
-            $fpdf->Cell(35);
-            $fpdf->Cell(65,5,'HOSPITAL NACIONAL ARZOBISPO LOAYZA',0,1,'L');
-            $fpdf->SetXY(48,15);
-            $fpdf->SetFont('Helvetica','',8);
-            $fpdf->Cell(65,4,'Av. Alfonso Ugarte 848 - Cercado de Lima',0,1,'L');
-            $fpdf->SetXY(57,19);
-            $fpdf->Cell(65,4,'Prov. de Lima - Lima - Peru',0,1,'L');
-            $fpdf->SetXY(140,12);
-            $fpdf->MultiCell(50,4,"FACTURA ELECTRONICA \n R.U.C  Nro. 20154996991\n Nro. FF10-00000050",1,'C');
-            $fpdf->Ln(5);
-            $fpdf->Cell(0,0,'','B',2,'C');
-            $fpdf->Ln(20);
-
-            $fpdf->SetFont('Helvetica','',7);
-            $fpdf->SetFillColor(248,249,249);
-            $fpdf->SetXY(150,32);
-            $fpdf->Cell(26,4,'FECHA DE EMSION :',0, 0, 'L', True);
-            $fpdf->SetXY(176,32);
-            $fpdf->Cell(25,4,'23/08/2018',0, 0, 'L', True);
-            $fpdf->SetXY(150,36);
-            $fpdf->Cell(15,4,'C.I.I.U Nro:',0, 0, 'L', True);
-            $fpdf->SetXY(176,36);
-            $fpdf->Cell(30,4,'85111',0, 0, 'L', True);
-            $fpdf->SetXY(150,40);
-            $fpdf->Cell(425,4,'TIPO DE MONEDA :',0, 0, 'L', True);
-            $fpdf->SetXY(176,40);
-            $fpdf->Cell(110,4,'SOLES',0, 0, 'L', True);
-            $fpdf->SetXY(10,36);
-            $fpdf->Cell(40,4,utf8_decode('SEÑOR(ES) :'),0, 0, 'L', True);
-            $fpdf->SetXY(51,36);
-            $fpdf->SetFont('Helvetica','B',7);
-            $fpdf->Cell(90,4,'ACCESORIOS GENERALES D&J MOTOR\'S EIRL',0, 0, 'L', True);
-            $fpdf->SetXY(10,40);
-            $fpdf->SetFont('Helvetica','',7);
-            $fpdf->Cell(40,4,'R.U.C. :',0, 0, 'L', True);
-            $fpdf->SetXY(51,40);
-            $fpdf->SetFont('Helvetica','B',7);
-            $fpdf->Cell(60,4,'20518324005',0, 0, 'L', True);
-            $fpdf->SetFont('Helvetica','',7);
-            $fpdf->SetXY(10,44);
-            $fpdf->Cell(40,4,'DIRECCION DEL CLIENTE :',0, 0, 'L', True);
-            $fpdf->SetXY(51,44);
-            $fpdf->SetFont('Helvetica','B',7);
-            $fpdf->Cell(110,4,'AV. CENTRAL, POSTA MOTUPE LIMA-LIMA-SAN JUAN DE LURIGANCHO',0, 0, 'L', True);
-            $fpdf->SetFont('Helvetica','',7);
-            $fpdf->SetXY(10,48);
-            $fpdf->Cell(40,4,'PACIENTE :',0, 0, 'L', True);
-            $fpdf->SetXY(51,48);
-            $fpdf->SetFont('Helvetica','B',7);
-            $fpdf->Cell(90,4,'SALCEDO PRADA ERNESTO',0, 0, 'L', True);
-            $fpdf->SetFont('Helvetica','',7);
-            $fpdf->SetXY(10,52);
-            $fpdf->Cell(40,4,'OBSERVACION 1 :',0, 0, 'L', True);
-            $fpdf->SetXY(51,52);
-            $fpdf->Cell(110,4,'CONTENIDO DE LA OBSERVACION 1',0, 0, 'L', True);
-            $fpdf->SetXY(10,56);
-            $fpdf->Cell(40,4,'OBSERVACION 2 :',0, 0, 'L', True);
-            $fpdf->SetXY(51,56);
-            $fpdf->Cell(110,4,'CONTENIDO DE LA OBSERVACION 2',0, 0, 'L', True);
-            $fpdf->SetXY(10,63); 
-
-            $fpdf->Ln(5);
-            $fpdf->SetFont('Helvetica','B',7);
-            $fpdf->Cell(20,5, 'CODIGO',1, 0 , 'C' );
-            $fpdf->Cell(15,5, 'CANTIDAD',1, 0 , 'C' );
-            $fpdf->Cell(125,5, 'DESCRIPCION',1, 0 , 'L' );
-            $fpdf->Cell(10,5, 'IGV',1, 0 , 'C' );
-            $fpdf->Cell(20,5, 'SUBTOTAL',1, 0 , 'C' );
-            
-            $fpdf->SetFont('Helvetica','',7);
-            for ($i=0; $i < 10; $i++) { 
-
-                $fpdf->Ln(5);
-                $fpdf->Cell(20,5, 'CODIGO' . $i,'LR', 0 , 'C' );
-                $fpdf->Cell(15,5, 'CANTIDAD' . $i,'LR', 0 , 'C' );
-                $fpdf->Cell(125,5, 'DESCRIPCION' . $i,'LR', 0 , 'L' );
-                $fpdf->Cell(10,5, 'IGV' . $i,'LR', 0 , 'C' );
-                $fpdf->Cell(20,5, 'SUBTOTAL' . $i,'LR', 0 , 'C' );
-            }
-            $pathFile = storage_path(). '/factura.pdf';
-            $fpdf->Output('F',$pathFile);
-            $headers = ['Content-Type' => 'application/pdf'];
-            return response()->file($pathFile, $headers);*/
-
-            // generando pdf
-            
+            // $generar_pdf = new PDFComprobantesController();
+            // $generar_pdf->generar($id_cabecera);
+            return response()->json(['data' => 'correcto','idcabecera' => $id_cabecera]);
         }
 
         // problemas a la hora de generar
         else {
             return response()->json(['data' => 'sindatos']);
         }
-    }
-
-    public function generar_pdf_documento()
-    {
-        $fpdf = new Fpdf();
-        $fpdf->AddPage();
-        $fpdf->Image('svg/Logos/logo-factura.jpg',10,8,33);
-        $fpdf->SetFont('Helvetica','B',8);
-        $fpdf->Cell(35);
-        $fpdf->Cell(65,5,'HOSPITAL NACIONAL ARZOBISPO LOAYZA',0,1,'L');
-        $fpdf->SetXY(48,15);
-        $fpdf->SetFont('Helvetica','',8);
-        $fpdf->Cell(65,4,'Av. Alfonso Ugarte 848 - Cercado de Lima',0,1,'L');
-        $fpdf->SetXY(57,19);
-        $fpdf->Cell(65,4,'Prov. de Lima - Lima - Peru',0,1,'L');
-        $fpdf->SetXY(140,12);
-        $fpdf->MultiCell(50,4,"FACTURA ELECTRONICA \n R.U.C  Nro. 20154996991\n Nro. FF10-00000050",1,'C');
-        $fpdf->Ln(5);
-        $fpdf->Cell(0,0,'','B',2,'C');
-        $fpdf->Ln(20);
-
-        $fpdf->SetFont('Helvetica','',7);
-        $fpdf->SetFillColor(248,249,249);
-        $fpdf->SetXY(150,32);
-        $fpdf->Cell(26,4,'FECHA DE EMSION :',0, 0, 'L', True);
-        $fpdf->SetXY(176,32);
-        $fpdf->Cell(25,4,'23/08/2018',0, 0, 'L', True);
-        $fpdf->SetXY(150,36);
-        $fpdf->Cell(15,4,'C.I.I.U Nro:',0, 0, 'L', True);
-        $fpdf->SetXY(176,36);
-        $fpdf->Cell(30,4,'85111',0, 0, 'L', True);
-        $fpdf->SetXY(150,40);
-        $fpdf->Cell(425,4,'TIPO DE MONEDA :',0, 0, 'L', True);
-        $fpdf->SetXY(176,40);
-        $fpdf->Cell(110,4,'SOLES',0, 0, 'L', True);
-        $fpdf->SetXY(10,36);
-        $fpdf->Cell(40,4,utf8_decode('SEÑOR(ES) :'),0, 0, 'L', True);
-        $fpdf->SetXY(51,36);
-        $fpdf->SetFont('Helvetica','B',7);
-        $fpdf->Cell(90,4,'ACCESORIOS GENERALES D&J MOTOR\'S EIRL',0, 0, 'L', True);
-        $fpdf->SetXY(10,40);
-        $fpdf->SetFont('Helvetica','',7);
-        $fpdf->Cell(40,4,'R.U.C. :',0, 0, 'L', True);
-        $fpdf->SetXY(51,40);
-        $fpdf->SetFont('Helvetica','B',7);
-        $fpdf->Cell(60,4,'20518324005',0, 0, 'L', True);
-        $fpdf->SetFont('Helvetica','',7);
-        $fpdf->SetXY(10,44);
-        $fpdf->Cell(40,4,'DIRECCION DEL CLIENTE :',0, 0, 'L', True);
-        $fpdf->SetXY(51,44);
-        $fpdf->SetFont('Helvetica','B',7);
-        $fpdf->Cell(110,4,'AV. CENTRAL, POSTA MOTUPE LIMA-LIMA-SAN JUAN DE LURIGANCHO',0, 0, 'L', True);
-        $fpdf->SetFont('Helvetica','',7);
-        $fpdf->SetXY(10,48);
-        $fpdf->Cell(40,4,'PACIENTE :',0, 0, 'L', True);
-        $fpdf->SetXY(51,48);
-        $fpdf->SetFont('Helvetica','B',7);
-        $fpdf->Cell(90,4,'SALCEDO PRADA ERNESTO',0, 0, 'L', True);
-        $fpdf->SetFont('Helvetica','',7);
-        $fpdf->SetXY(10,52);
-        $fpdf->Cell(40,4,'OBSERVACION 1 :',0, 0, 'L', True);
-        $fpdf->SetXY(51,52);
-        $fpdf->Cell(110,4,'CONTENIDO DE LA OBSERVACION 1',0, 0, 'L', True);
-        $fpdf->SetXY(10,56);
-        $fpdf->Cell(40,4,'OBSERVACION 2 :',0, 0, 'L', True);
-        $fpdf->SetXY(51,56);
-        $fpdf->Cell(110,4,'CONTENIDO DE LA OBSERVACION 2',0, 0, 'L', True);
-        $fpdf->SetXY(10,63); 
-
-        $fpdf->Ln(5);
-        $fpdf->SetFont('Helvetica','B',7);
-        $fpdf->Cell(20,5, 'CODIGO',1, 0 , 'C' );
-        $fpdf->Cell(15,5, 'CANTIDAD',1, 0 , 'C' );
-        $fpdf->Cell(125,5, 'DESCRIPCION',1, 0 , 'L' );
-        $fpdf->Cell(10,5, 'IGV',1, 0 , 'C' );
-        $fpdf->Cell(20,5, 'SUBTOTAL',1, 0 , 'C' );
-        
-        $fpdf->SetFont('Helvetica','',7);
-        for ($i=0; $i < 10; $i++) { 
-
-            $fpdf->Ln(5);
-            $fpdf->Cell(20,5, 'CODIGO' . $i,'LR', 0 , 'C' );
-            $fpdf->Cell(15,5, 'CANTIDAD' . $i,'LR', 0 , 'C' );
-            $fpdf->Cell(125,5, 'DESCRIPCION' . $i,'LR', 0 , 'L' );
-            $fpdf->Cell(10,5, 'IGV' . $i,'LR', 0 , 'C' );
-            $fpdf->Cell(20,5, 'SUBTOTAL' . $i,'LR', 0 , 'C' );
-        }
-        
-        $fpdf->Output();
-        exit;
     }
 }

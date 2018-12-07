@@ -86,7 +86,7 @@ class SistemaController extends Controller
         $proveedores = $Sistema->Mostrar_Provedores();
             for ($i=0; $i < count($proveedores); $i++) { 
                 if ($proveedores[$i]['RUC'] == trim($ruc)) {
-                        $data = array(
+                    $data = array(
                         'IDPROVEEDOR'   => $proveedores[$i]['IDPROVEEDOR'],
                         'RUC'           => $proveedores[$i]['RUC'],
                         'RAZONSOCIAL'   => $proveedores[$i]['RAZONSOCIAL'],

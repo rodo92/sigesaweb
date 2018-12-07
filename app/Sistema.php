@@ -52,4 +52,14 @@ class Sistema extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Obtener_Proveedor($ruc)
+    {
+        $result = DB::table('Proveedores')
+                ->where('Proveedores.Ruc','=',$ruc)
+                ->select('Proveedores.Direccion')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
 }

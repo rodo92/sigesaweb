@@ -104,13 +104,14 @@ class Caja extends Model
         return json_decode(json_encode($IdCajaFacturacion), true);
     }
 
-    public function Generar_Factura_Detalle($IdCajaFacturacion,$IdCuentaAtencion,$IdPartida,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
+    public function Generar_Factura_Detalle($IdCajaFacturacion,$IdCuentaAtencion,$IdPartida,$Codigo,$Descripcion,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
     {
         $datos = array(
                 'IdCajaFacturacion' => $IdCajaFacturacion,
                 'IdCuentaAtencion'  => $IdCuentaAtencion,
                 'IdPartida'         => $IdPartida,
                 'Codigo'            => $Codigo,
+                'Descripcion'       => $Descripcion,
                 'Cantidad'          => $Cantidad,
                 'ValorUnitario'     => $ValorUnitario,
                 'SubTotal'          => $SubTotal,
@@ -118,5 +119,25 @@ class Caja extends Model
                 'Total'             => $Total
             );
         DB::table('CajaFacturacionDetalle')->insert($datos);
+    }
+
+    public function Obtener_Datos_Factura_Cabecera_Id($IdCajaFacturacion)
+    {
+        $result = DB::table('CajaFacturacion')
+                ->leftJoin('Pacientes', 'Pacientes.IdPaciente', '=', 'CajaFacturacion.IdPaciente')
+                ->select('CajaFacturacion.*', 'Pacientes.ApellidoPaterno', 'Pacientes.ApellidoMaterno','Pacientes.PrimerNombre')
+                ->where('IdCajaFacturacion','=',$IdCajaFacturacion)
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Obtener_Datos_Factura_Detalle_Id($IdCajaFacturacion)
+    {
+        $result = DB::table('CajaFacturacionDetalle')
+                ->where('IdCajaFacturacion','=',$IdCajaFacturacion)
+                ->get();
+
+        return json_decode(json_encode($result), true);
     }
 }

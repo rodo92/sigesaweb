@@ -146,13 +146,13 @@
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
                             <button type="" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
-                            <br>
+                            <!-- <br>
                             <div class="panel panel-default">
                                 <div class="panel-body" style="text-transform: uppercase;">
                                     <h4>{{ cadena_tipo_documento }} ELECTR&Oacute;NICA</h4>
                                     <h4>{{ nroserie_grabar }} - {{ nrodocumento_grabar}}</h4>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <hr>
@@ -663,8 +663,8 @@
             agregarItenm: function(codigo,nombre,precio,idpartida)
             {   
                 var cantidad = $('#codigo_'+codigo).val();
-                if (cantidad == 0) {
-                    toastr.warning('Debe ingresar una cantidad','WebSigesa');
+                if (cantidad <= 0) {
+                    toastr.warning('Debe ingresar una cantidad válida.','WebSigesa');
                 }
 
                 else{
@@ -691,6 +691,11 @@
 
             registrarfactura: function()
             {
+                if (this.rucv.length <= 0) {
+                    toastr.error('Debe ingresar un RUC');
+                    return false;
+                }
+
                 var url = 'cajas/registro_factura';
                 axios.post(url, {
                     'NroSerie': this.nroserie_grabar,
@@ -713,6 +718,29 @@
                         toastr.success('Factura generada con éxito.', 'WebSigesa')
                         this.imprimir(response.data.idcabecera);
                     }
+                    this.ruc = '';
+                    this.rucv = '';
+                    this.razonsocial = '';
+                    this.direccion ='';
+                    this.dni = '';
+                    this.paciente = '';
+                    this.idpaciente = '';
+                    this.seguro = '';
+                    this.serie = null;
+                    this.sumsubtotal = 0;
+                    this.sumigv = 0;
+                    this.sumtotal = 0;
+                    this.comprobante = '';
+                    this.productos = [];
+                    this.productos_temp = [];
+                    this.txt_busqueda = '';
+                    this.idTipoFinanciamiento = '';
+                    this.ndocumento = null;
+                    this.idorden = null;
+                    this.cuenta = '';
+                    this.cuenta_grabar = '';
+                    this.observacion_uno = '';
+                    this.observacion_dos = '';
                 }).catch(error => {
 
                 });
@@ -728,13 +756,14 @@
                     responseType: 'blob', // important
                 }).then((response) => {
                     const url = window.URL.createObjectURL(new Blob([response.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('target','_blank');
-                    //link.setAttribute('onclick', "w=window.open('" + url + "'); w.print(); w.close();"); //or any other extension
-                    document.body.appendChild(link);
+                    window.open(url,'WebSigesa', 'width=500,height=700,toolbar=0')
+                    // const link = document.createElement('a');
+                    // link.href = url;
+                    // link.setAttribute('target','_blank');
+                    // link.setAttribute('onclick', "w=window.open('" + url + "'); w.print(); w.close();"); //or any other extension
+                    // document.body.appendChild(link);
                     // w.print();
-                    link.click();
+                    // link.click();
 
                 });
             }

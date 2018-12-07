@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use WebSigesa\Caja;
 use WebSigesa\Sistema;
+use WebSigesa\Http\Controllers\QRController;
 
 class PDFComprobantesController extends Controller
 {
@@ -41,8 +42,6 @@ class PDFComprobantesController extends Controller
         $this->fecha_emision = substr($this->cabecera[0]['FechaCobranza'], 0,10);
         list($anio, $mes, $dia) = explode("-", $this->fecha_emision);
         $this->fecha_emision = $dia."/".$mes."/".$anio;
-        /*echo '<pre>';
-        print_r($this->data_proveedor);exit();*/
     	$this->fpdf = new Fpdf();
         $this->fpdf->SetAutoPageBreak(true, 2);
         $this->fpdf->AddPage('P','A4');
@@ -51,7 +50,7 @@ class PDFComprobantesController extends Controller
         $this->detalle_factura();
         $this->pie_factura();
 		$this->fpdf->Output();
-		$this->fpdf->Close();
+		$this->fpdf->Close();		
     }
 	
 	public function cabecera_factura()
@@ -181,13 +180,16 @@ class PDFComprobantesController extends Controller
 
     public function pie_factura()
 	{
-	    // Position at 1.5 cm from bottom
-	    $this->fpdf->SetY(-20);
-	    // Arial italic 8
-	    $this->fpdf->SetFont('Arial','',7);
-	    // Page number
+	    $this->fpdf->SetY(-17);
+	    $codigo = $this->cabecera[0]['Ruc'] . '|' . $this->cabecera[0]['NroSerie'] . '|' . trim($this->cabecera[0]['NroDocumento']) . '|' . $this->cabecera[0]['Subtotal'] . '|' . $this->cabecera[0]['IGV'] . '|' . $this->cabecera[0]['Total'];
+
+	    $this->fpdf->Image('http://localhost/sistema/qr_s/' . trim($codigo),10,255,25,25,'PNG');
+
+	    $this->fpdf->SetFont('Arial','',6);
 	    $this->fpdf->Cell(160,5,utf8_decode('FECHA DE IMPRESIÓN:'),0,0,'R');
 	    $this->fpdf->Cell(30,5,date('d/m/Y h:i:s A'),0,1,'C');
+
+	    $this->fpdf->SetFont('Arial','',7);
 	    $this->fpdf->MultiCell(0,4,utf8_decode("Autorizado mediante resolución Nro. 0340050010017/SUNAT. Para consultar el comprobante ingresar a https://escondatagate.page.link/bon2. Representación impresa del Comprobante Electrónico."),'T','C');
 	}
 }

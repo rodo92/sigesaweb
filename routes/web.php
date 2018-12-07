@@ -26,6 +26,7 @@ Route::get('restaurar', 'InicioController@restaurar');
 Route::get('sistema/get_data_session', 'SistemaController@get_data_session');
 Route::get('sistema/proveedores', 'SistemaController@proveedores');
 Route::get('sistema/proveedor/{ruc}', 'SistemaController@proveedor');
+Route::get('sistema/qr_s/{cadena}', 'QRController@qr_simple');
 				
 /**
  * Farmacia

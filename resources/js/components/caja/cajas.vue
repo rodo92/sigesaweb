@@ -9,6 +9,9 @@
 </style>
 <template>    
     <div>
+        <div>
+                        <frame id="pdf_cuerpo" name="pdf_cuerpo"></frame>
+                    </div>
         <section class="content-header">
             <h1>
                 Cajas
@@ -146,13 +149,13 @@
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
                             <button type="" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
-                            <!-- <br>
+                            <br>
                             <div class="panel panel-default">
                                 <div class="panel-body" style="text-transform: uppercase;">
                                     <h4>{{ cadena_tipo_documento }} ELECTR&Oacute;NICA</h4>
                                     <h4>{{ nroserie_grabar }} - {{ nrodocumento_grabar}}</h4>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <hr>
@@ -301,6 +304,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>
                     </div>
+                    
                 </div>
             </div>
         </div>  
@@ -747,25 +751,39 @@
             },
             imprimir: function(idorder)
             {
-                var url = 'cajas/generar_pdf/' + idorder;
-                // console.log(url);
-                // window.open(url,'_blank');
-                axios({
-                    url: url,
-                    method: 'GET',
-                    responseType: 'blob', // important
-                }).then((response) => {
-                    const url = window.URL.createObjectURL(new Blob([response.data]));
-                    window.open(url,'WebSigesa', 'width=500,height=700,toolbar=0')
-                    // const link = document.createElement('a');
-                    // link.href = url;
-                    // link.setAttribute('target','_blank');
-                    // link.setAttribute('onclick', "w=window.open('" + url + "'); w.print(); w.close();"); //or any other extension
-                    // document.body.appendChild(link);
-                    // w.print();
-                    // link.click();
+                // var link_pdf = document.getElementById('link_pdf');
+                var pdf_cuerpo = document.getElementById('pdf_cuerpo');  
+                var url = 'http://websigesa.desarrollo/cajas/generar_pdf/' + idorder;
 
-                });
+                pdf_cuerpo.setAttribute('src',url);
+
+                pdf_cuerpo.focus();
+                pdf_cuerpo.contentWindow.print();
+                // pdf_cuerpo.print();
+                // document.getElementById("pdf_cuerpo").contentWindow.print();
+                // link_pdf.click();
+                // var url = 'cajas/generar_pdf/' + idorder;
+                // // console.log(url);
+                // // window.open(url,'_blank');
+                // axios({
+                //     url: url,
+                //     method: 'GET',
+                //     responseType: 'blob', // important
+                // }).then((response) => {
+                //     const url = window.URL.createObjectURL(new Blob([response.data]));
+                //     // window.open(url,'WebSigesa', 'width=500,height=700,toolbar=0')
+                //     const link = document.createElement('a');
+                //     const iframe = document.createElement('frame')
+                //     link.href = 'javascript:window.print()';
+                //     iframe.src = url;
+                //     // link.setAttribute('target','_blank');
+                //     // link.setAttribute('onclick', "w=window.open('" + url + "'); w.print(); w.close();"); //or any other extension
+                //     link.appendChild(iframe);
+                //     document.body.appendChild(link);
+                //     // w.print();
+                //     link.click();
+
+                // });
             }
         }
        

@@ -183,7 +183,7 @@ class PDFComprobantesController extends Controller
 	    $this->fpdf->SetY(-17);
 	    $codigo = $this->cabecera[0]['Ruc'] . '|' . $this->cabecera[0]['NroSerie'] . '|' . trim($this->cabecera[0]['NroDocumento']) . '|' . $this->cabecera[0]['Subtotal'] . '|' . $this->cabecera[0]['IGV'] . '|' . $this->cabecera[0]['Total'];
 
-	    $this->fpdf->Image('http://localhost/sistema/qr_s/' . trim($codigo),10,255,25,25,'PNG');
+	    $this->fpdf->Image(route('qrsimple',$codigo) . trim($codigo),10,255,25,25,'PNG');
 
 	    $this->fpdf->SetFont('Arial','',6);
 	    $this->fpdf->Cell(160,5,utf8_decode('FECHA DE IMPRESIÓN:'),0,0,'R');

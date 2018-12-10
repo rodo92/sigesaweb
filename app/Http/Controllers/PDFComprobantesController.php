@@ -7,6 +7,7 @@ use Codedge\Fpdf\Fpdf\Fpdf;
 use WebSigesa\Caja;
 use WebSigesa\Sistema;
 use WebSigesa\Http\Controllers\QRController;
+use NumerosEnLetras;
 
 class PDFComprobantesController extends Controller
 {
@@ -167,7 +168,7 @@ class PDFComprobantesController extends Controller
 
 		$this->fpdf->Cell(15,5,'',0,0,'C');
 		$this->fpdf->SetFont('Arial','B',7);
-		$this->fpdf->Cell(65,5,'SON: ',0,0,'L');
+		$this->fpdf->Cell(65,5,'SON: ' . strtoupper(NumerosEnLetras::convertir(number_format($this->cabecera[0]['Total'],2,'.',' '),'SOLES',true,'Centavos')),0,0,'L');
 		$this->fpdf->SetFont('Arial','',7);
 		$this->fpdf->Cell(95,5,utf8_decode('Otros Cargos: '),0,0,'R');
 		$this->fpdf->Cell(15,5,'0.00',1,1,'C');

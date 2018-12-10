@@ -660,7 +660,12 @@
             buscar_item: function() {
                 if (this.txt_busqueda.length > 2) {
                    // hacer busqueda
+                    if (this.idTipoFinanciamiento == '') {
+                        this.idTipoFinanciamiento = 1;
+                        console.log(this.idTipoFinanciamiento);
+                    }
                     var url = 'cajas/servicios_medicamentos/' + this.idTipoFinanciamiento + '/' + this.txt_busqueda; 
+                    console.log(this.idTipoFinanciamiento);
                     axios.get(url).then(response => {
                         if (response.data.data == 'sindatos') {
 

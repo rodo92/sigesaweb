@@ -31,9 +31,30 @@ class Caja extends Model
 
     public function Apertura_Caja($FechaApertura,$EstadoLote,$IdCaja,$IdTurno,$TotalCobrado,$IdCajero)
     {
-    	$result = DB::insert('exec SIGESA_Apertura_Caja ?,?,?,?,?,?', [$FechaApertura,$EstadoLote,$IdCaja,$IdTurno,$TotalCobrado,$IdCajero]);
+    	$datos = array(
+            'FechaApertura' => $FechaApertura,
+            'EstadoLote'    => $EstadoLote,
+            'IdCaja'        => $IdCaja,
+            'IdTurno'       => $IdTurno,
+            'TotalCobrado'  => $TotalCobrado,
+            'IdCajero'      => $IdCajero
+            );
+        $IdGestionCaja = DB::table('CajaGestion')->insertGetId($datos);
+        return json_decode(json_encode($IdGestionCaja), true);
+    }
 
-    	return json_decode(json_encode($result), true);
+    public function Cierre_Caja($IdGestionCaja,$EstadoLote,$FechaCierre,$TotalCobrado)
+    {
+        $datos = array(
+            // 'IdGestionCaja' => $IdGestionCaja,
+            'EstadoLote'    => $EstadoLote,
+            'FechaCierre'   => $FechaCierre,
+            'TotalCobrado'  => $TotalCobrado
+        );
+
+        DB::table('CajaGestion')
+            ->where('IdGestionCaja', $IdGestionCaja)
+            ->update($datos);
     }
 
     public function Actualizar_Nro_Documento($IdCaja,$NroSerie,$NroDocumento)

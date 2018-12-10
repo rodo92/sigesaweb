@@ -148,7 +148,7 @@
                         <div class="col-xs-4 text-right">
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
-                            <a href="Cajas" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR<br>CAJA</a>
+                            <button  class="btn btn-warning" v-on:click.prevent="cerrar_caja"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
                             <br>
                             <div class="panel panel-default">
                                 <div class="panel-body" style="text-transform: uppercase;">
@@ -349,6 +349,8 @@
                 nroserie_grabar: '',
                 nrodocumento_grabar: '',
                 cadena_tipo_documento: '',
+                IdGestionCaja: '',
+                totalcobrado: 0,
             }
         },
         created: function() {
@@ -429,9 +431,9 @@
                         this.cadena_tipo_documento = $('#tipo_documento_id option:selected').text().trim();
                         this.nroserie_grabar = response.data.data_documento[0].NroSerie;
                         this.nrodocumento_grabar = response.data.data_documento[0].NroDocumento.trim();
-
-
-                        // console.log(this.cadena_tipo_documento);
+                        this.IdGestionCaja = response.data.data_documento[0].IdGestionCaja;
+                        console.log(this.IdGestionCaja);
+                        // console.log(this.nrodocumento_grabar);
                         // console.log(this.nroserie_grabar);
                         // console.log(this.nrodocumento_grabar);
                     } else {
@@ -733,6 +735,9 @@
                         toastr.success('Factura generada con éxito.', 'WebSigesa');
                         this.nuevo_correlativo();
                         this.imprimir(response.data.idcabecera);
+
+                        //suma total cobrado
+                        this.totalcobrado = parseFloat(this.totalcobrado) + parseFloat(this.sumtotal);
                     }
                     this.ruc = '';
                     this.rucv = '';
@@ -785,6 +790,20 @@
                     link.click();
 
                 });*/
+            },
+            cerrar_caja: function()
+            {
+                var url = 'cajas/cerrar_caja/' + this.IdGestionCaja + '/C/fecha/' + this.totalcobrado;
+
+                axios.get(url).then(response => {
+                    $('#cuerpo_factura').hide();
+                    $('#cabecera_factura').fadeIn(400);
+                    toastr.clear();
+                    toastr.success('Caja cerrada con exito.','WebSigesa');
+                }).catch(error => {
+                    toastr.clear();
+                    toastr.error('No se puede cerrar la caja,intentelo nuevamente.','WebSigesa');
+                });
             }
         }
        

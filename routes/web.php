@@ -53,6 +53,7 @@ Route::get('Cajas','CajaController@cajas');
 Route::get('cajas/listar', 'CajaController@listar_cajas');
 Route::get('cajas/listar_tipo_documento', 'CajaController@listar_caja_tipo_documento');
 Route::post('cajas/aperturar_caja', 'CajaController@aperturar_caja');
+Route::get('cajas/cerrar_caja/{IdGestionCaja}/{EstadoLote}/{FechaCierre}/{TotalCobrado}','CajaController@cierre_caja');
 Route::get('cajas/tipo_seguro_paciente/{dni}', 'CajaController@tipo_seguro_paciente');
 Route::get('cajas/servicios_medicamentos/{seguro}/{parametro}','CajaController@servicios_medicamentos');
 Route::get('cajas/detalle_boleta/{serio}/{ndocumento}/{idorden?}','CajaController@buscar_detalle_boleta_x_codigo');	

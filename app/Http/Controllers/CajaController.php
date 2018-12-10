@@ -46,9 +46,9 @@ class CajaController extends Controller
     	return response()->json(['data' => $data]);
     }
 
-    public function aperturar_caja(Request $request)
+    public function aperturar_caja(/*Request $request*/)
     {
-        $messages = [
+        /*$messages = [
             'idcaja.required'           => 'Debe seleccionar una caja',
             'tipodocumento.required'    => 'Debe seleccionar un tipo de documento'
         ];
@@ -58,15 +58,15 @@ class CajaController extends Controller
             'tipodocumento' => 'required'
         ];
 
-        $this->validate($request,$rules,$messages);
+        $this->validate($request,$rules,$messages);*/
 
         $fechaapertura = date('Y-m-d H:i:s') . '.000';
         $estadolote = 'A';
         $idturno = 1;
         $totalcobrado = 0;
         $idempleado = session()->get('id_empleado');
-        $idcaja = $request->idcaja;
-        $tipodocumento = $request->tipodocumento;
+        $idcaja = 2;
+        $tipodocumento = 3;
 
 
 
@@ -88,14 +88,15 @@ class CajaController extends Controller
 
         $data_documento[0] =  array(
             'NroSerie' => $data_documento[0]['NroSerie'],
-            'NroDocumento' => $nrodocumento
+            'NroDocumento' => $nrodocumento,
+            'IdGestionCaja' => $data
         );
 
         // trayendo serie 
 
 
         return response()->json([
-            'data'              => $data,
+            'data'              => true,
             'data_documento'    => $data_documento
         ]);
     }
@@ -351,5 +352,12 @@ class CajaController extends Controller
         else {
             return response()->json(['data' => 'sindatos']);
         }
+    }
+
+    public function cierre_caja($IdGestionCaja,$EstadoLote,$FechaCierre,$TotalCobrado)
+    {
+        $FechaCierreServer = date('Y-m-d H:i:s') . '.000';
+        $Caja =new Caja();
+        $Caja->Cierre_Caja($IdGestionCaja,$EstadoLote,$FechaCierreServer,$TotalCobrado);
     }
 }

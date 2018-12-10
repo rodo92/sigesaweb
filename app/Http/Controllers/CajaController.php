@@ -100,6 +100,31 @@ class CajaController extends Controller
         ]);
     }
 
+    public function correlativo($idcaja,$tipodocumento)
+    {
+        $Caja = new Caja();
+        $data_documento = $Caja->Traer_Serie_Correlativo($idcaja,$tipodocumento);
+
+        $nrodocumento_temp = (int)$data_documento[0]['NroDocumento'] + 1;
+        $nrodocumento_temp = (string)$nrodocumento_temp;
+
+        $contador = strlen($nrodocumento_temp);
+        $ceros = 8 - $contador;
+        $nuevo_ceros = '';
+        for ($i=0; $i < $ceros; $i++) { 
+            $nuevo_ceros .= '0';
+        }
+        
+        $nrodocumento = $nuevo_ceros . $nrodocumento_temp;
+
+        $data_documento[0] =  array(
+            'NroSerie' => $data_documento[0]['NroSerie'],
+            'NroDocumento' => $nrodocumento
+        );
+
+        return response()->json(['data' => $data_documento]);
+    }
+
     public function tipo_seguro_paciente($dni)
     {
         $data = false;

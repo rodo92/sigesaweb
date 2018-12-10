@@ -442,6 +442,17 @@
                     this.errores = error.response.data.errors;
                 });
             },
+            nuevo_correlativo: function()
+            {
+                var url = 'cajas/nuevo_correlativo/' + this.idCaja + '/' + this.idTIpoDocumento;
+                axios.get(url).then(response => {
+                    this.nroserie_grabar = response.data.data[0].NroSerie;
+                    this.nrodocumento_grabar = response.data.data[0].NroDocumento.trim();
+                    $('#ruc_bus').focus();
+                }).catch({
+
+                });
+            },
             buscar_proveedor: function() {
                 var url = 'sistema/proveedor/' + this.ruc;
                 axios.get(url).then(response => {
@@ -719,7 +730,8 @@
                 }).then(response => {
                     // console.log(response.data);
                     if (response.data.data == 'correcto') {
-                        toastr.success('Factura generada con éxito.', 'WebSigesa')
+                        toastr.success('Factura generada con éxito.', 'WebSigesa');
+                        this.nuevo_correlativo();
                         this.imprimir(response.data.idcabecera);
                     }
                     this.ruc = '';
@@ -751,39 +763,28 @@
             },
             imprimir: function(idorder)
             {
-                // var link_pdf = document.getElementById('link_pdf');
-                var pdf_cuerpo = document.getElementById('pdf_cuerpo');  
-                var url = 'http://websigesa.desarrollo/cajas/generar_pdf/' + idorder;
+                var url = 'http://laravel-dev/cajas/generar_pdf/' + idorder;
+                // console.log(url);
+                window.open(url,'_blank');
+                /*axios({
+                    url: urls,
+                    method: 'GET',
+                    responseType: 'blob', // important
+                }).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    window.open(url,'WebSigesa', 'width=500,height=700,toolbar=0')
+                    const link = document.createElement('a');
+                    // const iframe = document.createElement('frame')
+                    link.href = url;
+                    // iframe.src = url;
+                    link.setAttribute('target','_blank');
+                    // link.setAttribute('onclick', "w=window.open('" + url + "'); w.print(); w.close();"); //or any other extension
+                    link.appendChild(iframe);
+                    document.body.appendChild(link);
+                    // w.print();
+                    link.click();
 
-                pdf_cuerpo.setAttribute('src',url);
-
-                pdf_cuerpo.focus();
-                pdf_cuerpo.contentWindow.print();
-                // pdf_cuerpo.print();
-                // document.getElementById("pdf_cuerpo").contentWindow.print();
-                // link_pdf.click();
-                // var url = 'cajas/generar_pdf/' + idorder;
-                // // console.log(url);
-                // // window.open(url,'_blank');
-                // axios({
-                //     url: url,
-                //     method: 'GET',
-                //     responseType: 'blob', // important
-                // }).then((response) => {
-                //     const url = window.URL.createObjectURL(new Blob([response.data]));
-                //     // window.open(url,'WebSigesa', 'width=500,height=700,toolbar=0')
-                //     const link = document.createElement('a');
-                //     const iframe = document.createElement('frame')
-                //     link.href = 'javascript:window.print()';
-                //     iframe.src = url;
-                //     // link.setAttribute('target','_blank');
-                //     // link.setAttribute('onclick', "w=window.open('" + url + "'); w.print(); w.close();"); //or any other extension
-                //     link.appendChild(iframe);
-                //     document.body.appendChild(link);
-                //     // w.print();
-                //     link.click();
-
-                // });
+                });*/
             }
         }
        

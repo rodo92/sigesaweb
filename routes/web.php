@@ -63,3 +63,4 @@ Route::get('cajas/nuevo_correlativo/{idcaja}/{idtipocomprobante}','CajaControlle
 // Facturación Electrónica
 Route::post('cajas/registro_factura','CajaController@registro_factura');
 Route::get('cajas/generar_pdf/{idorden}','PDFComprobantesController@generar');
+Route::get('cajas/generar_ticket/{idorden}','PDFTicketController@generar');

@@ -148,7 +148,7 @@
                         <div class="col-xs-4 text-right">
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
-                            <button type="" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
+                            <a href="Cajas" class="btn btn-warning"><i class="fa fa-close"></i> CERRAR<br>CAJA</a>
                             <br>
                             <div class="panel panel-default">
                                 <div class="panel-body" style="text-transform: uppercase;">
@@ -763,7 +763,7 @@
             },
             imprimir: function(idorder)
             {
-                var url = 'http://websigesa-desarrollo/cajas/generar_pdf/' + idorder;
+                var url = 'cajas/generar_pdf/' + idorder;
                 // console.log(url);
                 window.open(url,'_blank');
                 /*axios({

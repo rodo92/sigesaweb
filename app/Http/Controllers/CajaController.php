@@ -261,41 +261,50 @@ class CajaController extends Controller
     public function buscar_boleta_x_cuenta($cuenta)
     {
         $caja = new Caja();
-        $data_cabecera = $caja->Datos_X_Cuenta_Cabecera($cuenta);
-        $data_detalle =  $caja->Datos_X_Cuenta_Detalle($cuenta);
 
-        if (count($data_cabecera) > 0) {
-            $paciente       = $data_cabecera[0]['ApellidoPaterno'] . ' ' . $data_cabecera[0]['ApellidoMaterno'] . ' ' . $data_cabecera[0]['PrimerNombre'];
-            $idpaciente     = $data_cabecera[0]['IdPaciente'];
-            $idSeguro       = $data_cabecera[0]['idFuenteFinanciamiento'];
-            $seguro         = $data_cabecera[0]['dFuenteFinanciamiento'];
+        $verificacion = $caja->Buscar_Boleta_Factura($cuenta);
 
-            for ($i=0; $i < count($data_detalle); $i++) { 
-                $productos[] = array(
-                    'Comprobante'       => $data_detalle[$i]['IdCuentaAtencion'],
-                    'Codigo'            => $data_detalle[$i]['Codigo'],
-                    'Producto'          => strtoupper($data_detalle[$i]['Nombre']),
-                    'Cantidad'          => $data_detalle[$i]['cantidad'],
-                    'IdPartida'         => $data_detalle[$i]['codPartida'],
-                    'Precio'            => number_format($data_detalle[$i]['PrecioUnitario'],4,'.',' '),
-                    'SubTotal'          => number_format($data_detalle[$i]['SubTotal'],4,'.',' '),
-                    'Impuesto'          => number_format($data_detalle[$i]['Impuesto'],4,'.',' '),
-                    'TotalUnitario'     => number_format($data_detalle[$i]['Total'],4,'.',' ')
-                );
-            }
-
-            $response = array(
-                'paciente'      => $paciente,
-                'idpaciente'    => $idpaciente,
-                'idseguro'      => $idSeguro,
-                'seguro'        => $seguro,
-                'productos'     => $productos
-            );
-
-            return response()->json(['data' => $response]);
+        if (count($verificacion) > 0) {
+            return response()->json(['data' => 'yafacturada']);
         }
-        else {
-            return response()->json(['data' => 'sindatos']);
+
+        else{
+            $data_cabecera = $caja->Datos_X_Cuenta_Cabecera($cuenta);
+            $data_detalle =  $caja->Datos_X_Cuenta_Detalle($cuenta);
+
+            if (count($data_cabecera) > 0) {
+                $paciente       = $data_cabecera[0]['ApellidoPaterno'] . ' ' . $data_cabecera[0]['ApellidoMaterno'] . ' ' . $data_cabecera[0]['PrimerNombre'];
+                $idpaciente     = $data_cabecera[0]['IdPaciente'];
+                $idSeguro       = $data_cabecera[0]['idFuenteFinanciamiento'];
+                $seguro         = $data_cabecera[0]['dFuenteFinanciamiento'];
+
+                for ($i=0; $i < count($data_detalle); $i++) { 
+                    $productos[] = array(
+                        'Comprobante'       => $data_detalle[$i]['IdCuentaAtencion'],
+                        'Codigo'            => $data_detalle[$i]['Codigo'],
+                        'Producto'          => strtoupper($data_detalle[$i]['Nombre']),
+                        'Cantidad'          => $data_detalle[$i]['cantidad'],
+                        'IdPartida'         => $data_detalle[$i]['codPartida'],
+                        'Precio'            => number_format($data_detalle[$i]['PrecioUnitario'],4,'.',' '),
+                        'SubTotal'          => number_format($data_detalle[$i]['SubTotal'],4,'.',' '),
+                        'Impuesto'          => number_format($data_detalle[$i]['Impuesto'],4,'.',' '),
+                        'TotalUnitario'     => number_format($data_detalle[$i]['Total'],4,'.',' ')
+                    );
+                }
+
+                $response = array(
+                    'paciente'      => $paciente,
+                    'idpaciente'    => $idpaciente,
+                    'idseguro'      => $idSeguro,
+                    'seguro'        => $seguro,
+                    'productos'     => $productos
+                );
+
+                return response()->json(['data' => $response]);
+            }
+            else {
+                return response()->json(['data' => 'sindatos']);
+            }
         }
     }
 

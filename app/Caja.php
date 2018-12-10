@@ -161,4 +161,13 @@ class Caja extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Buscar_Boleta_Factura($IdCuentaAtencion)
+    {
+        $result = DB::table('CajaFacturacionDetalle')
+                ->where('IdCuentaAtencion','=',$IdCuentaAtencion)
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
 }

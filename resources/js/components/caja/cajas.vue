@@ -560,6 +560,11 @@
                         this.cuenta = '';
                         $('#id_cuenta').focus();
                     }
+                    else if (datos == 'yafacturada') {
+                        toastr.error('Esta cuenta ya se esta facturada.', 'WebSigesa');
+                        this.cuenta = '';
+                        $('#id_cuenta').focus();
+                    }
                     else{
                         this.paciente = datos.paciente;
                         this.idpaciente = datos.idpaciente;

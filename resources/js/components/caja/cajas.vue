@@ -763,7 +763,7 @@
             },
             imprimir: function(idorder)
             {
-                var url = 'http://laravel-dev/cajas/generar_pdf/' + idorder;
+                var url = 'http://websigesa-desarrollo/cajas/generar_pdf/' + idorder;
                 // console.log(url);
                 window.open(url,'_blank');
                 /*axios({

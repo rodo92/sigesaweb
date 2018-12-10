@@ -18,7 +18,7 @@
         "lodash": "^4.17.5",
         "stylus": "^0.54.5",
         "stylus-loader": "^3.0.2",
-        "vue": "^2.5.18"
+        "vue": "^2.5.19"
     },
     "dependencies": {
         "admin-lte": "^2.4.8",
@@ -28,7 +28,7 @@
         "font-awesome": "^4.7.0",
         "morris": "^0.1.4",
         "toastr": "^2.1.4",
-        "vue-template-compiler": "^2.5.18",
+        "vue-template-compiler": "^2.5.19",
         "webpack-dev-server": "^3.1.10"
     }
 }

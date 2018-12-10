@@ -109,6 +109,9 @@ class PDFComprobantesController extends Controller
 
     	$this->fpdf->Cell(30,4,utf8_decode('OBSERVACIÓN 2:'),0,0,'L');
     	$this->fpdf->MultiCell(160,4,utf8_decode($this->cabecera[0]['Observacion2']),0,'L',false);
+
+        $this->fpdf->Cell(30,4,utf8_decode('CONCEPTO: '),0,0,'L');
+        $this->fpdf->MultiCell(160,4,utf8_decode($this->cabecera[0]['Concepto']),0,'L',false);
     	// $this->fpdf->Cell(30,5,utf8_decode('C.I.I.U NRO:'),1,0,'L');
     	// $this->fpdf->Cell(20,5,utf8_decode('85111'),1,1,'L');
     }

@@ -229,19 +229,14 @@
                         <div class="col-xs-12">
                             <table style="width: 100%;" class="tabla_datos">
                                 <tr >
-                                    <td width="12%">
-                                        <label>OBSERVACIONES 1:</label>
+                                    <td width="33%">
+                                        <textarea name="" class="form-control" rows="5" style="width: 100%;" v-model="conceptos" placeholder="CONCEPTO"></textarea>
                                     </td>
-                                    <td width="88%">
-                                        <textarea name="" class="form-control" rows="1" style="width: 100%;" v-model="observacion_uno"></textarea>
+                                    <td width="33%">
+                                        <textarea name="" class="form-control" rows="5" style="width: 100%;" v-model="observacion_uno" placeholder="OBSERVACIÓN 1"></textarea>
                                     </td>
-                                </tr>
-                                <tr >
-                                    <td width="12%">
-                                        <label>OBSERVACIONES 2:</label>
-                                    </td>
-                                    <td width="88%">
-                                        <textarea name="" class="form-control" rows="1" style="width: 100%;" v-model="observacion_dos"></textarea>
+                                    <td width="33%">
+                                        <textarea name="" class="form-control" rows="5" style="width: 100%;" v-model="observacion_dos" placeholder="OBSERVACIÓN 2"></textarea>
                                     </td>
                                 </tr>
                             </table>
@@ -346,6 +341,7 @@
                 cuenta_grabar: '',
                 observacion_uno: '',
                 observacion_dos: '',
+                conceptos: '',
                 nroserie_grabar: '',
                 nrodocumento_grabar: '',
                 cadena_tipo_documento: '',
@@ -736,11 +732,12 @@
                     'IdPaciente': this.idpaciente,
                     'Observacion1': this.observacion_uno,
                     'Observacion2': this.observacion_dos,
+                    'Concepto': this.conceptos,
                     'IdCuentaAtencion': this.cuenta_grabar,
                     'productos': this.productos,
                     'idcaja': this.idCaja
                 }).then(response => {
-                    // console.log(response.data);
+                    // console.log(response.data); return false;
                     if (response.data.data == 'correcto') {
                         toastr.success('Factura generada con éxito.', 'WebSigesa');
                         this.nuevo_correlativo();
@@ -772,8 +769,9 @@
                     this.cuenta_grabar = '';
                     this.observacion_uno = '';
                     this.observacion_dos = '';
+                    this.conceptos = '';
                 }).catch(error => {
-
+                    console.log(error.response.data);
                 });
             },
             imprimir: function(idorder)

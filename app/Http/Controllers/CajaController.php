@@ -326,6 +326,7 @@ class CajaController extends Controller
         $IdPaciente         = $request->IdPaciente;
         $Observacion1       = $request->Observacion1;
         $Observacion2       = $request->Observacion2;
+        $Concepto           = $request->Concepto;
         $IdCuentaAtencion   = $request->IdCuentaAtencion;
         $IdCaja             = $request->idcaja;
         $productos          = $request->productos;
@@ -339,7 +340,7 @@ class CajaController extends Controller
         $IdTipoComprobante = strtoupper($IdTipoComprobante_temp[0]['Descripcion']);
         $IdTipoComprobante = $IdTipoComprobante[0];
         
-        $id_cabecera = $caja->Generar_Factura_Cabecera($FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2);
+        $id_cabecera = $caja->Generar_Factura_Cabecera($FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2,$Concepto);
 
         // todo correcto
         if ($id_cabecera > 0) {

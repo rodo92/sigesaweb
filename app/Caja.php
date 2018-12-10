@@ -103,7 +103,7 @@ class Caja extends Model
         return json_decode(json_encode($result), true);
     }
 
-    public function Generar_Factura_Cabecera($FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2)
+    public function Generar_Factura_Cabecera($FechaCobranza,$NroSerie,$NroDocumento,$Ruc,$RazonSocial,$IdTipoComprobante,$IdCajero,$Subtotal,$IGV,$Total,$IdPaciente,$Observacion1,$Observacion2,$Concepto)
     {
         $datos = array(
                 'FechaCobranza'     => $FechaCobranza,
@@ -118,7 +118,8 @@ class Caja extends Model
                 'Total'             => $Total,
                 'IdPaciente'        => $IdPaciente,
                 'Observacion1'      => $Observacion1,
-                'Observacion2'      => $Observacion2
+                'Observacion2'      => $Observacion2,
+                'Concepto'          => $Concepto
             );
         $IdCajaFacturacion = DB::table('CajaFacturacion')->insertGetId($datos);
         // exit();

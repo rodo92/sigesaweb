@@ -43,12 +43,12 @@ class PDFTicketController extends Controller
         list($anio, $mes, $dia) = explode("-", $this->fecha_emision);
         $this->fecha_emision = $dia."/".$mes."/".$anio;
     	$this->fpdf = new Fpdf();
-        $this->fpdf->SetAutoPageBreak(true, 2);
+        $this->fpdf->SetAutoPageBreak(true, 1);
         $this->fpdf->AddPage('P',array(74,150));
         $this->cabecera_ticket();
         $this->datos_receptor();
-        // $this->detalle_factura();
-        // $this->pie_factura();
+        $this->detalle_factura();
+        $this->pie_factura();
 		$this->fpdf->Output();
 		$this->fpdf->Close();		
     }
@@ -73,87 +73,84 @@ class PDFTicketController extends Controller
 
     public function datos_receptor()
     {
-    	
+    	$this->fpdf->SetXY(5,32);
+		$this->fpdf->SetFillColor(248,249,249);
+		$this->fpdf->SetFont('Arial','B',9);
+		$this->fpdf->Cell(40,4,$this->cabecera[0]['NroSerie'] . "-" . $this->cabecera[0]['NroDocumento'],0, 0, 'L', True);
+		// FECHA DE EMISION
+		$this->fpdf->SetFont('Arial','',7);
+		$this->fpdf->SetXY(40,32);
+		$this->fpdf->Cell(110,4,$this->fecha_emision,0, 0, 'L', True);
+		$this->fpdf->SetXY(5,36);
+		$this->fpdf->Cell(40,4,'Usuario :',0, 0, 'L', True);
+		$this->fpdf->SetXY(20,36);
+		$this->fpdf->Cell(110,4,utf8_decode($this->cabecera[0]['ApellidoPaterno'] . ' ' . $this->cabecera[0]['ApellidoMaterno'] . ' ' . $this->cabecera[0]['PrimerNombre']),0, 0, 'L', True);
     }
 
     public function detalle_factura()
     {
-    	$this->fpdf->Ln(2);
-    	$this->fpdf->SetFont('Arial','',7);
-		$this->fpdf->Cell(15,5,utf8_decode('CANTIDAD'),1,0,'C');
-		$this->fpdf->Cell(15,5,utf8_decode('CÓDIGO'),1,0,'C');
-		$this->fpdf->Cell(130,5,utf8_decode('DESCRIPCIÓN'),1,0,'L');
-		$this->fpdf->Cell(15,5,utf8_decode('PRECIO'),1,0,'C');
-		$this->fpdf->Cell(15,5,utf8_decode('SUBTOTAL'),1,1,'C');
+    	$this->fpdf->Ln(5);
+    	$this->fpdf->SetX(2);
+    	$this->fpdf->SetFont('Arial','B',7);
+		$this->fpdf->Cell(8,5,utf8_decode('COD'),0,0,'C');
+		$this->fpdf->Cell(38,5,utf8_decode('DESCRIPCIÓN'),0,0,'L');
+		$this->fpdf->Cell(9,5,utf8_decode('CANT'),0,0,'C');
+		$this->fpdf->Cell(7,5,utf8_decode('PU'),0,0,'C');
+		$this->fpdf->Cell(7,5,utf8_decode('PT'),0,1,'C');
 
 		$h = 0;
-
+		$this->fpdf->SetFont('Arial','',7);
 		for ($i=0; $i < count($this->detalle); $i++) { 
 
 			$h =  $h + 1;
-
-			$this->fpdf->Cell(15,5,$this->detalle[$i]['Cantidad'],'L',0,'C');
-			$this->fpdf->Cell(15,5,trim($this->detalle[$i]['Codigo']),'L',0,'C');
-			$this->fpdf->Cell(130,5,utf8_decode(' '.$this->detalle[$i]['IdPartida'] . ' ' . $this->detalle[$i]['Descripcion']),'L',0,'L');
-			$this->fpdf->Cell(15,5,number_format($this->detalle[$i]['ValorUnitario'],2,'.',' '),'L',0,'C');
-			$this->fpdf->Cell(15,5,number_format($this->detalle[$i]['SubTotal'],2,'.',' '),'LR',1,'C');
+			$this->fpdf->SetX(2);
+			$this->fpdf->Cell(8,5,trim($this->detalle[$i]['Codigo']),'',0,'C');
+			$this->fpdf->Cell(38,5,utf8_decode($this->detalle[$i]['Descripcion']),'',0,'L');
+			$this->fpdf->Cell(9,5,$this->detalle[$i]['Cantidad'],'',0,'C');
+			$this->fpdf->Cell(7,5,number_format($this->detalle[$i]['ValorUnitario'],2,'.',' '),'',0,'C');
+			$this->fpdf->Cell(7,5,number_format($this->detalle[$i]['SubTotal'],2,'.',' '),'',1,'C');
 
 			if ($h == 39) {
 				$this->fpdf->AddPage('P','A4');
 			}
 		}
-
-		$this->fpdf->Cell(15,5,"",'LB',0,'C');
-		$this->fpdf->Cell(15,5,"",'LB',0,'C');
-		$this->fpdf->Cell(130,5,"",'LB',0,'L');
-		$this->fpdf->Cell(15,5,"",'LB',0,'C');
-		$this->fpdf->Cell(15,5,"",'LBR',1,'C');
+		$this->fpdf->SetX(2);
+		$this->fpdf->Cell(8,1,"",'B',0,'C');
+		$this->fpdf->Cell(38,1,"",'B',0,'C');
+		$this->fpdf->Cell(9,1,"",'B',0,'L');
+		$this->fpdf->Cell(7,1,"",'B',0,'C');
+		$this->fpdf->Cell(7,1,"",'B',1,'C');
 
 		// Datos Adicionales
-		$this->fpdf->Ln(5);
-    	$this->fpdf->SetFont('Arial','',7);
-		$this->fpdf->Cell(15,5,'',0,0,'C');
-		$this->fpdf->Cell(50,5,'Valor de venta de operaciones gratuitas',0,0,'L');
-		$this->fpdf->Cell(15,5,'S/. 0.00',1,0,'C');
-		$this->fpdf->Cell(95,5,utf8_decode('Sub Total: '),0,0,'R');
-		$this->fpdf->Cell(15,5,number_format($this->cabecera[0]['Subtotal'],2,'.',' '),1,1,'C');
+		$this->fpdf->Ln(1);
+		$this->fpdf->SetX(2);
+		$this->fpdf->Cell(62,5,utf8_decode('Sub Total: '),0,0,'R');
+		$this->fpdf->Cell(7,5,number_format($this->cabecera[0]['Subtotal'],2,'.',' '),0,1,'C');
+		$this->fpdf->SetX(2);
+		$this->fpdf->Cell(62,5,utf8_decode('Adelantos: '),0,0,'R');
+		$this->fpdf->Cell(7,5,number_format('0.00',2,'.',' '),0,1,'C');
+		$this->fpdf->SetX(2);
+		$this->fpdf->Cell(62,5,utf8_decode('Total: '),0,0,'R');
+		$this->fpdf->Cell(7,5,number_format($this->cabecera[0]['Total'],2,'.',' '),0,1,'C');
 
-		$this->fpdf->Cell(175,5,utf8_decode('Anticipos: '),0,0,'R');
-		$this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
-		$this->fpdf->Cell(175,5,utf8_decode('Descuentos: '),0,0,'R');
-		$this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
-		$this->fpdf->Cell(175,5,utf8_decode('Valor Venta: '),0,0,'R');
-		$this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
-		$this->fpdf->Cell(175,5,utf8_decode('ISC: '),0,0,'R');
-		$this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
-		$this->fpdf->Cell(175,5,utf8_decode('IGV: '),0,0,'R');
-		$this->fpdf->Cell(15,5,number_format($this->cabecera[0]['IGV'],2,'.',' '),'LBR',1,'C');
-
-		$this->fpdf->Cell(15,5,'',0,0,'C');
-		$this->fpdf->SetFont('Arial','B',7);
-		$this->fpdf->Cell(65,5,'SON: ',0,0,'L');
-		$this->fpdf->SetFont('Arial','',7);
-		$this->fpdf->Cell(95,5,utf8_decode('Otros Cargos: '),0,0,'R');
-		$this->fpdf->Cell(15,5,'0.00',1,1,'C');
-
-		$this->fpdf->Cell(175,5,utf8_decode('Otros Tributos: '),0,0,'R');
-		$this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
-		$this->fpdf->Cell(175,5,utf8_decode('Importe Total: '),0,0,'R');
-		$this->fpdf->Cell(15,5,number_format($this->cabecera[0]['Total'],2,'.',' '),'LBR',1,'C');
+		
     }
 
     public function pie_factura()
 	{
 	    $this->fpdf->SetY(-17);
+	    $this->fpdf->SetX(2);
 	    $codigo = $this->cabecera[0]['Ruc'] . '|' . $this->cabecera[0]['NroSerie'] . '|' . trim($this->cabecera[0]['NroDocumento']) . '|' . $this->cabecera[0]['Subtotal'] . '|' . $this->cabecera[0]['IGV'] . '|' . $this->cabecera[0]['Total'];
 
-	    $this->fpdf->Image(route('qrsimple',$codigo) . trim($codigo),10,255,25,25,'PNG');
-
-	    $this->fpdf->SetFont('Arial','',6);
-	    $this->fpdf->Cell(160,5,utf8_decode('FECHA DE IMPRESIÓN:'),0,0,'R');
-	    $this->fpdf->Cell(30,5,date('d/m/Y h:i:s A'),0,1,'C');
-
-	    $this->fpdf->SetFont('Arial','',7);
-	    $this->fpdf->MultiCell(0,4,utf8_decode("Autorizado mediante resolución Nro. 0340050010017/SUNAT. Para consultar el comprobante ingresar a https://escondatagate.page.link/bon2. Representación impresa del Comprobante Electrónico."),'T','C');
+	    $this->fpdf->Image(route('qrsimple',$codigo) . trim($codigo),25,103,25,25,'PNG');
+	    $this->fpdf->SetX(2);
+		$this->fpdf->Cell(40,4,'Resolucion: Nro. 0340050010017/SUNAT',0, 0, 'L', True);
+		$this->fpdf->Ln(3);
+		$this->fpdf->SetX(2);
+		$this->fpdf->Cell(40,4,'Consulta en: https://escondatagafe.page.link/bon',0, 0, 'L', True);
+		$this->fpdf->Ln(3);
+		$this->fpdf->SetX(2);
+		$this->fpdf->SetFont('Arial','B',8);
+		$this->fpdf->Cell(40,4,'Gracias por su visita',0, 0, 'L', True);
 	}
 }

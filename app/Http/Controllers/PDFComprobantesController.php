@@ -18,6 +18,72 @@ class PDFComprobantesController extends Controller
     private $nombre;
     private $data_proveedor;
     private $fecha_emision;
+    private $partidas = [];
+
+    public function generar_partida($idorden)
+    {
+        $this->idorden = $idorden;
+        $Caja = new Caja();
+        $this->detalle = $Caja->Obtener_Datos_Factura_Detalle_Id($this->idorden);
+        $this->cabecera = $Caja->Obtener_Datos_Factura_Cabecera_Id($this->idorden);
+
+        switch ($this->cabecera[0]['IdTipoComprobante']) {
+            case 'F':
+                $this->nombre = 'FACTURA';
+                break;
+            
+            case 'B':
+                $this->nombre = 'BOLETA';
+                break;
+        }
+
+        $Sistema = new Sistema();
+        $this->data_proveedor = $Sistema->Obtener_Proveedor($this->cabecera[0]['Ruc']);
+
+        $this->fecha_emision = substr($this->cabecera[0]['FechaCobranza'], 0,10);
+        list($anio, $mes, $dia) = explode("-", $this->fecha_emision);
+        $this->fecha_emision = $dia."/".$mes."/".$anio;
+
+        $partidas_temp = $Caja->Obtener_Partidas_Presupuestales();
+
+        for ($i=0; $i < count($partidas_temp); $i++) { 
+            for ($j=0; $j < count($this->detalle); $j++) { 
+                if (trim($partidas_temp[$i]['Codigo'])  == trim($this->detalle[$j]['IdPartida'])) {
+                    $this->partidas[] = array(
+                        'Codigo'    => $partidas_temp[$i]['Codigo'],
+                        'Nombre'    => $partidas_temp[$i]['Descripcion'],
+                        'Cantidad'  => 1,
+                        'Precio'    => 0,
+                        'SubTotal'  => 0
+                    );
+                    // echo $partidas_temp[$i]['Codigo'] . '-' . $this->detalle[$j]['IdPartida'] . '<br>';
+                    break;
+                }
+                // echo $partidas_temp[$i]['Codigo'] . '-' . $this->detalle[$j]['IdPartida'] . '<br>';
+            }
+        }
+
+        for ($i=0; $i < count($this->detalle); $i++) { 
+            for ($j=0; $j < count($this->partidas); $j++) { 
+                if (trim($this->partidas[$j]['Codigo'])  == trim($this->detalle[$i]['IdPartida'])) {
+                    // $this->partidas[$j]['Cantidad'] = $this->partidas[$j]['Cantidad'] + $this->detalle[$i]['Cantidad'];
+                    $this->partidas[$j]['Precio'] = $this->partidas[$j]['Precio'] + $this->detalle[$i]['ValorUnitario'];
+                    $this->partidas[$j]['SubTotal'] = $this->partidas[$j]['SubTotal'] + $this->detalle[$i]['SubTotal'];
+                }
+            }
+        }
+
+        $this->fpdf = new Fpdf();
+        $this->fpdf->SetAutoPageBreak(true, 2);
+        $this->fpdf->AddPage('P','A4');
+        $this->cabecera_factura();
+        $this->datos_receptor();
+        $this->detalle_factura_partida();
+        $this->pie_factura();
+        $this->fpdf->Output();
+        $this->fpdf->Close();
+        
+    }
 
     public function generar($idorden)
     {
@@ -180,6 +246,72 @@ class PDFComprobantesController extends Controller
 		$this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
 		$this->fpdf->Cell(175,5,utf8_decode('Importe Total: '),0,0,'R');
 		$this->fpdf->Cell(15,5,number_format($this->cabecera[0]['Total'],2,'.',' '),'LBR',1,'C');
+    }
+
+    public function detalle_factura_partida()
+    {
+        $this->fpdf->Ln(2);
+        $this->fpdf->SetFont('Arial','',7);
+        $this->fpdf->Cell(15,5,utf8_decode('CANTIDAD'),1,0,'C');
+        $this->fpdf->Cell(15,5,utf8_decode('CÓDIGO'),1,0,'C');
+        $this->fpdf->Cell(130,5,utf8_decode('DESCRIPCIÓN'),1,0,'L');
+        $this->fpdf->Cell(15,5,utf8_decode('PRECIO'),1,0,'C');
+        $this->fpdf->Cell(15,5,utf8_decode('SUBTOTAL'),1,1,'C');
+
+        $h = 0;
+
+        for ($i=0; $i < count($this->partidas); $i++) { 
+
+            $h =  $h + 1;
+
+            $this->fpdf->Cell(15,5,$this->partidas[$i]['Cantidad'],'L',0,'C');
+            $this->fpdf->Cell(15,5,trim($this->partidas[$i]['Codigo']),'L',0,'C');
+            $this->fpdf->Cell(130,5,strtoupper(utf8_decode($this->partidas[$i]['Nombre'])),'L',0,'L');
+            $this->fpdf->Cell(15,5,number_format($this->partidas[$i]['Precio'],2,'.',' '),'L',0,'C');
+            $this->fpdf->Cell(15,5,number_format($this->partidas[$i]['SubTotal'],2,'.',' '),'LR',1,'C');
+
+            if ($h == 39) {
+                $this->fpdf->AddPage('P','A4');
+            }
+        }
+
+        $this->fpdf->Cell(15,5,"",'LB',0,'C');
+        $this->fpdf->Cell(15,5,"",'LB',0,'C');
+        $this->fpdf->Cell(130,5,"",'LB',0,'L');
+        $this->fpdf->Cell(15,5,"",'LB',0,'C');
+        $this->fpdf->Cell(15,5,"",'LBR',1,'C');
+
+        // Datos Adicionales
+        $this->fpdf->Ln(5);
+        $this->fpdf->SetFont('Arial','',7);
+        $this->fpdf->Cell(15,5,'',0,0,'C');
+        $this->fpdf->Cell(50,5,'Valor de venta de operaciones gratuitas',0,0,'L');
+        $this->fpdf->Cell(15,5,'S/. 0.00',1,0,'C');
+        $this->fpdf->Cell(95,5,utf8_decode('Sub Total: '),0,0,'R');
+        $this->fpdf->Cell(15,5,number_format($this->cabecera[0]['Subtotal'],2,'.',' '),1,1,'C');
+
+        $this->fpdf->Cell(175,5,utf8_decode('Anticipos: '),0,0,'R');
+        $this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
+        $this->fpdf->Cell(175,5,utf8_decode('Descuentos: '),0,0,'R');
+        $this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
+        $this->fpdf->Cell(175,5,utf8_decode('Valor Venta: '),0,0,'R');
+        $this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
+        $this->fpdf->Cell(175,5,utf8_decode('ISC: '),0,0,'R');
+        $this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
+        $this->fpdf->Cell(175,5,utf8_decode('IGV: '),0,0,'R');
+        $this->fpdf->Cell(15,5,number_format($this->cabecera[0]['IGV'],2,'.',' '),'LBR',1,'C');
+
+        $this->fpdf->Cell(15,5,'',0,0,'C');
+        $this->fpdf->SetFont('Arial','B',7);
+        $this->fpdf->Cell(65,5,'SON: ' . strtoupper(NumerosEnLetras::convertir(number_format($this->cabecera[0]['Total'],2,'.',' '),'SOLES',true,'Centavos')),0,0,'L');
+        $this->fpdf->SetFont('Arial','',7);
+        $this->fpdf->Cell(95,5,utf8_decode('Otros Cargos: '),0,0,'R');
+        $this->fpdf->Cell(15,5,'0.00',1,1,'C');
+
+        $this->fpdf->Cell(175,5,utf8_decode('Otros Tributos: '),0,0,'R');
+        $this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
+        $this->fpdf->Cell(175,5,utf8_decode('Importe Total: '),0,0,'R');
+        $this->fpdf->Cell(15,5,number_format($this->cabecera[0]['Total'],2,'.',' '),'LBR',1,'C');
     }
 
     public function pie_factura()

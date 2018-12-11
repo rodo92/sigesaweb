@@ -171,4 +171,12 @@ class Caja extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Obtener_Partidas_Presupuestales()
+    {
+        $result = DB::table('FactPartidasPresupuestales')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
 }

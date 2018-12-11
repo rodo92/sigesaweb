@@ -148,6 +148,7 @@
                         <div class="col-xs-4 text-right">
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
+                            <button type="" class="btn btn-default" v-on:click.prevent="facturar_clasificador"><i class="fa fa-save"></i> FACTURA<br>CLASIFICADOR</button>
                             <button  class="btn btn-warning" v-on:click.prevent="cerrar_caja"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
                             <br>
                             <div class="panel panel-default">
@@ -347,6 +348,7 @@
                 cadena_tipo_documento: '',
                 IdGestionCaja: '',
                 totalcobrado: 0,
+                imprimir_clasificador: 0,
             }
         },
         created: function() {
@@ -711,7 +713,11 @@
                     this.sumarmontos(totalunitario,0,totalunitario);
                 }
             },
-
+            facturar_clasificador: function()
+            {
+                this.imprimir_clasificador = 1;
+                this.registrarfactura();
+            },
             registrarfactura: function()
             {
                 if (this.rucv.length <= 0) {
@@ -776,7 +782,15 @@
             },
             imprimir: function(idorder)
             {
-                var url = 'cajas/generar_pdf/' + idorder;
+                if (this.imprimir_clasificador == 0) {
+                    var url = 'cajas/generar_pdf/' + idorder;
+                }
+
+                else if(this.imprimir_clasificador == 1) {
+                    var url = 'cajas/generar_pdf_partida/' + idorder;
+                }
+
+                
                 // console.log(url);
                 window.open(url,'_blank');
                 /*axios({

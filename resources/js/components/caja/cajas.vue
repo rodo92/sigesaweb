@@ -776,6 +776,7 @@
                     this.observacion_uno = '';
                     this.observacion_dos = '';
                     this.conceptos = '';
+                    this.imprimir_clasificador = 0;
                 }).catch(error => {
                     console.log(error.response.data);
                 });

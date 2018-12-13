@@ -430,7 +430,7 @@
                         this.nroserie_grabar = response.data.data_documento[0].NroSerie;
                         this.nrodocumento_grabar = response.data.data_documento[0].NroDocumento.trim();
                         this.IdGestionCaja = response.data.data_documento[0].IdGestionCaja;
-                        console.log(this.IdGestionCaja);
+                        // console.log(this.nrodocumento_grabar);
                         // console.log(this.nrodocumento_grabar);
                         // console.log(this.nroserie_grabar);
                         // console.log(this.nrodocumento_grabar);
@@ -821,6 +821,9 @@
                 axios.get(url).then(response => {
                     $('#cuerpo_factura').hide();
                     $('#cabecera_factura').fadeIn(400);
+                    this.cadena_tipo_documento = '';
+                    this.nroserie_grabar = '';
+                    this.nrodocumento_grabar = '';
                     toastr.clear();
                     toastr.success('Caja cerrada con exito.','WebSigesa');
                 }).catch(error => {

@@ -46,9 +46,9 @@ class CajaController extends Controller
     	return response()->json(['data' => $data]);
     }
 
-    public function aperturar_caja(/*Request $request*/)
+    public function aperturar_caja(Request $request)
     {
-        /*$messages = [
+        $messages = [
             'idcaja.required'           => 'Debe seleccionar una caja',
             'tipodocumento.required'    => 'Debe seleccionar un tipo de documento'
         ];
@@ -58,15 +58,15 @@ class CajaController extends Controller
             'tipodocumento' => 'required'
         ];
 
-        $this->validate($request,$rules,$messages);*/
+        $this->validate($request,$rules,$messages);
 
         $fechaapertura = date('Y-m-d H:i:s') . '.000';
         $estadolote = 'A';
         $idturno = 1;
         $totalcobrado = 0;
         $idempleado = session()->get('id_empleado');
-        $idcaja = 2;
-        $tipodocumento = 3;
+        $idcaja = $request->idcaja;
+        $tipodocumento = $request->tipodocumento;
 
 
 

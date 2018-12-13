@@ -124,21 +124,21 @@
                                        {{ seguro }}
                                    </td>
                                 </tr>
-                                <!-- <tr>
+                                <tr>
                                     <td width="15%">
                                         <input type="text" id="serie_boleta" class="form-control"  placeholder="SERIE" v-model="serie" >
                                     </td>
                                     <td width="15%" colspan="2">
                                         <input type="text" id="ndocumento_boleta"  class="form-control" placeholder="N° DOCUMENTO" v-on:keyup.13="buscar_boleta" v-model="ndocumento">
                                     </td>
-                                    <td width="10%">
+                                    <!-- <td width="10%">
                                         <label> DOCUMENTO:</label>                                        
                                     </td>
                                     <td width="20%" class="bg-warning">
                                        {{ comprobante }}
-                                   </td>
+                                   </td> -->
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td width="15%">
                                         <input type="text" id="id_orden" class="form-control"  placeholder="N° ORDEN" v-model="idorden" v-on:keyup.13="buscar_boleta_id_orden">
                                     </td>                                    
@@ -151,8 +151,8 @@
                             <button type="" class="btn btn-default" v-on:click.prevent="facturar_clasificador"><i class="fa fa-save"></i> FACTURA<br>CLASIFICADOR</button>
                             <button  class="btn btn-warning" v-on:click.prevent="cerrar_caja"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
                             <br>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="text-transform: uppercase;">
+                            <div>
+                                <div  style="text-transform: uppercase;">
                                     <h4>{{ cadena_tipo_documento }} ELECTR&Oacute;NICA</h4>
                                     <h4>{{ nroserie_grabar }} - {{ nrodocumento_grabar}}</h4>
                                 </div>
@@ -231,13 +231,13 @@
                             <table style="width: 100%;" class="tabla_datos">
                                 <tr >
                                     <td width="33%">
-                                        <textarea name="" class="form-control" rows="5" style="width: 100%;" v-model="conceptos" placeholder="CONCEPTO"></textarea>
+                                        <textarea name="" class="form-control" rows="5" style="width: 100%;text-transform: uppercase;" v-model="conceptos" placeholder="CONCEPTO"></textarea>
                                     </td>
                                     <td width="33%">
-                                        <textarea name="" class="form-control" rows="5" style="width: 100%;" v-model="observacion_uno" placeholder="OBSERVACIÓN 1"></textarea>
+                                        <textarea name="" class="form-control" rows="5" style="width: 100%;text-transform: uppercase;" v-model="observacion_uno" placeholder="OBSERVACIÓN 1"></textarea>
                                     </td>
                                     <td width="33%">
-                                        <textarea name="" class="form-control" rows="5" style="width: 100%;" v-model="observacion_dos" placeholder="OBSERVACIÓN 2"></textarea>
+                                        <textarea name="" class="form-control" rows="5" style="width: 100%;text-transform: uppercase;" v-model="observacion_dos" placeholder="OBSERVACIÓN 2"></textarea>
                                     </td>
                                 </tr>
                             </table>
@@ -284,10 +284,10 @@
                                             <td class="text-center col-xs-1">
                                                 <input type="number" v-bind:id="'codigo_'+producto_temp.Codigo" value="0">
                                             </td>
-                                            <td class="text-center col-xs-2">{{ producto_temp.Precio }}</td>
+                                            <td class="text-center col-xs-2">{{ producto_temp.Subtotal }}</td>
                                             <td class="text-center col-xs-1">
                                                 
-                                                <button class="btn btn-sm btn-primary" v-on:click.prevent="agregarItenm(producto_temp.Codigo,producto_temp.Nombre,producto_temp.Precio,producto_temp.IdPartida,producto_temp.Impuesto,producto_temp.PrecioUnitario)">
+                                                <button class="btn btn-sm btn-primary" v-on:click.prevent="agregarItenm(producto_temp.Codigo,producto_temp.Nombre,producto_temp.Precio,producto_temp.IdPartida,producto_temp.Impuesto,producto_temp.Subtotal)">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </td>
@@ -510,7 +510,7 @@
                     $('#paramatro_busqueda').focus();
                 });
             },
-            /*buscar_boleta: function() {
+            buscar_boleta: function() {
                 var url = 'cajas/detalle_boleta/' + this.serie + '/' + this.ndocumento + '/' + '';
 
                 axios.get(url).then(response => {
@@ -529,7 +529,8 @@
                         this.serie = '';
                         this.ndocumento = '';
                         $('#serie_boleta').focus();
-                        this.paciente = datos.paciente;                        
+                        this.paciente = datos.paciente;   
+                        this.idpaciente = datos.idpaciente;                     
                         this.comprobante = datos.comprobante;
 
                         
@@ -545,7 +546,7 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
-            },*/
+            },
             buscar_boleta_cuenta: function() {
                 var url = 'cajas/detalle_cuenta/' + this.cuenta;
 
@@ -642,18 +643,18 @@
                 this.sumigv = parseFloat(igv) + parseFloat(this.sumigv);
                 this.sumtotal = parseFloat(total) + parseFloat(this.sumtotal);
 
-                this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
-                this.sumigv = Math.round(this.sumigv * 100) / 100;
-                this.sumtotal = Math.round(this.sumtotal * 100) / 100;
+                // this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
+                // this.sumigv = Math.round(this.sumigv * 100) / 100;
+                // this.sumtotal = Math.round(this.sumtotal * 100) / 100;
             },
             restarmontos: function(subtotal,igv,total) {
                 this.sumsubtotal = parseFloat(this.sumsubtotal) - parseFloat(subtotal) ;
                 this.sumigv = parseFloat(this.sumigv) - parseFloat(igv) ;
                 this.sumtotal = parseFloat(this.sumtotal) - parseFloat(total) ;
 
-                this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
-                this.sumigv = Math.round(this.sumigv * 100) / 100;
-                this.sumtotal = Math.round(this.sumtotal * 100) / 100;
+                // this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
+                // this.sumigv = Math.round(this.sumigv * 100) / 100;
+                // this.sumtotal = Math.round(this.sumtotal * 100) / 100;
             },
             buscar_item: function() {
                 if (this.txt_busqueda.length > 2) {
@@ -685,7 +686,7 @@
                     console.log('aun no');
                 }
             },
-            agregarItenm: function(codigo,nombre,precio,idpartida,impuesto,preciounitario)
+            agregarItenm: function(codigo,nombre,precio,idpartida,impuesto,subtotal)
             {   
                 var cantidad = $('#codigo_'+codigo).val();
                 if (cantidad <= 0) {
@@ -693,30 +694,30 @@
                 }
 
                 else{
-                    var totalunitario = parseFloat(cantidad) * parseFloat(precio);
-                    totalunitario = Math.round(totalunitario * 100) / 100;
+                    var totalunitario = parseFloat(cantidad) * parseFloat(subtotal);
+                    // totalunitario = Math.round(totalunitario * 100) / 100;
 
-                    var subtotalunitario = parseFloat(cantidad) * parseFloat(preciounitario);
-                    subtotalunitario = Math.round(subtotalunitario * 100) / 100;
+                    // var subtotalunitario = parseFloat(cantidad) * parseFloat(preciounitario);
+                    // subtotalunitario = Math.round(subtotalunitario * 100) / 100;
 
                     var impuestounitario = parseFloat(cantidad) * parseFloat(impuesto);
-                    impuestounitario = Math.round(impuestounitario * 100) / 100;
+                    // impuestounitario = Math.round(impuestounitario * 100) / 100;
 
                     this.productos.push({
                         Comprobante: codigo,
                         Codigo: codigo,
                         Producto: nombre,
                         Cantidad: cantidad,
-                        Subtotal: totalunitario,
+                        Subtotal: subtotal,
                         Impuesto: impuestounitario,
                         IdPartida: idpartida,
-                        Precio: subtotalunitario,
+                        Precio: precio,
                         TotalUnitario: totalunitario
                     });
                     this.txt_busqueda = '';
                     $('#paramatro_busqueda').focus();
 
-                    this.sumarmontos(subtotalunitario,impuestounitario,totalunitario);
+                    this.sumarmontos(subtotal,impuestounitario,totalunitario);
                 }
             },
             facturar_clasificador: function()
@@ -830,6 +831,9 @@
                     this.cadena_tipo_documento = '';
                     this.nroserie_grabar = '';
                     this.nrodocumento_grabar = '';
+                    this.sumsubtotal = 0;
+                    this.sumigv = 0;
+                    this.sumtotal = 0;
                     toastr.clear();
                     toastr.success('Caja cerrada con exito.','WebSigesa');
                 }).catch(error => {

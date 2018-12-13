@@ -211,8 +211,8 @@ class CajaController extends Controller
                     'Nombre'    => $data[$i]['Nombre'],
                     'Cantidad'  => 0,
                     'IdPartida' => $data[$i]['codPartida'],
-                    'PrecioUnitario'    => number_format($data[$i]['PrecioUnitario'],2,'.',' '),
-                    'Precio'    => number_format($data[$i]['Precio'],2,'.',' '),
+                    'Precio'    => number_format($data[$i]['PrecioUnitario'],2,'.',' '),
+                    'Subtotal'      => number_format($data[$i]['Precio'],2,'.',' ') ,
                     'Impuesto'  => number_format($data[$i]['IGV'],2,'.',' ')
                 );
                 // return response()->json($data[$i]['Codigo']);
@@ -229,6 +229,7 @@ class CajaController extends Controller
 
         if (count($data) > 0) {
             $paciente       = $data[0]['RazonSocial'];
+            $idpaciente     = $data[0]['IdPaciente'];
             $subtotal       = number_format($data[0]['SubTotal'],2,'.',' ');
             $igv            = number_format($data[0]['IGV'],2,'.',' ');
             $total          = number_format($data[0]['Total'],2,'.',' ');
@@ -240,13 +241,17 @@ class CajaController extends Controller
                     'Codigo'        => $data[$i]['Codigo'],
                     'Producto'      => $data[$i]['Producto'],
                     'Cantidad'      => $data[$i]['Cantidad'],
+                    'IdPartida'     => $data[$i]['CodigoPresupuestal'],
                     'Precio'        => number_format($data[$i]['Precio'],2,'.',' '),
+                    'Subtotal'      => number_format($data[$i]['Precio'] * $data[$i]['Cantidad'],2,'.',' ') ,
+                    'Impuesto'      => number_format($data[$i]['IGVUNITARIO'],2,'.',' '),
                     'TotalUnitario' => number_format($data[$i]['TotalUnitario'],2,'.',' ')
                 );
             }
 
             $response = array(
                 'paciente'      => $paciente,
+                'idpaciente'    => $idpaciente,
                 'subtotal'      => $subtotal,
                 'igv'           => $igv,
                 'total'         => $total,
@@ -290,7 +295,7 @@ class CajaController extends Controller
                         'Cantidad'          => $data_detalle[$i]['cantidad'],
                         'IdPartida'         => $data_detalle[$i]['codPartida'],
                         'Precio'            => number_format($data_detalle[$i]['PrecioUnitario'],2,'.',' '),
-                        'SubTotal'          => number_format($data_detalle[$i]['SubTotal'],2,'.',' '),
+                        'SubTotal'          => number_format($data_detalle[$i]['PrecioUnitario'],2,'.',' '),
                         'Impuesto'          => number_format($data_detalle[$i]['Impuesto'],2,'.',' '),
                         'TotalUnitario'     => number_format($data_detalle[$i]['Total'],2,'.',' ')
                     );

@@ -178,8 +178,9 @@ class PDFComprobantesController extends Controller
     	$this->fpdf->Cell(30,4,utf8_decode('OBSERVACIÓN 2:'),0,0,'L');
     	$this->fpdf->MultiCell(160,4,utf8_decode($this->cabecera[0]['Observacion2']),0,'L',false);
 
-        $this->fpdf->Cell(30,4,utf8_decode('CONCEPTO: '),0,0,'L');
-        $this->fpdf->MultiCell(160,4,utf8_decode($this->cabecera[0]['Concepto']),0,'L',false);
+        // $this->fpdf->SetXY(150,5);
+        // $this->fpdf->Cell(30,4,utf8_decode('CONCEPTO: '),0,0,'L');
+        // $this->fpdf->MultiCell(160,4,utf8_decode($this->cabecera[0]['Concepto']),0,'L',false);
     	// $this->fpdf->Cell(30,5,utf8_decode('C.I.I.U NRO:'),1,0,'L');
     	// $this->fpdf->Cell(20,5,utf8_decode('85111'),1,1,'L');
     }
@@ -251,6 +252,15 @@ class PDFComprobantesController extends Controller
 		$this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
 		$this->fpdf->Cell(175,5,utf8_decode('Importe Total: '),0,0,'R');
 		$this->fpdf->Cell(15,5,number_format($this->cabecera[0]['Total'],2,'.',' '),'LBR',1,'C');
+
+        
+        $this->fpdf->Ln(10);
+        $this->fpdf->SetFont('Arial','B',7);
+        $this->fpdf->Cell(15,5,'',0,0,'C');
+        $this->fpdf->Cell(30,4,utf8_decode('POR CONCEPTO: '),0,1,'L');
+        $this->fpdf->SetFont('Arial','',7);
+        $this->fpdf->Cell(15,5,'',0,0,'C');
+        $this->fpdf->MultiCell(120,4,utf8_decode($this->cabecera[0]['Concepto']),0,'L',false);
     }
 
     public function detalle_factura_partida()
@@ -320,6 +330,14 @@ class PDFComprobantesController extends Controller
         $this->fpdf->Cell(15,5,'0.00','LBR',1,'C');
         $this->fpdf->Cell(175,5,utf8_decode('Importe Total: '),0,0,'R');
         $this->fpdf->Cell(15,5,number_format($this->cabecera[0]['Total'],2,'.',' '),'LBR',1,'C');
+
+        $this->fpdf->Ln(10);
+        $this->fpdf->SetFont('Arial','B',7);
+        $this->fpdf->Cell(15,5,'',0,0,'C');
+        $this->fpdf->Cell(30,4,utf8_decode('POR CONCEPTO: '),0,1,'L');
+        $this->fpdf->SetFont('Arial','',7);
+        $this->fpdf->Cell(15,5,'',0,0,'C');
+        $this->fpdf->MultiCell(120,4,utf8_decode($this->cabecera[0]['Concepto']),0,'L',false);
     }
 
     public function pie_factura()

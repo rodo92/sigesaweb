@@ -284,10 +284,10 @@
                                             <td class="text-center col-xs-1">
                                                 <input type="number" v-bind:id="'codigo_'+producto_temp.Codigo" value="0">
                                             </td>
-                                            <td class="text-center col-xs-2">{{ producto_temp.Precio }}</td>
+                                            <td class="text-center col-xs-2">{{ producto_temp.PrecioUnitario }}</td>
                                             <td class="text-center col-xs-1">
                                                 
-                                                <button class="btn btn-sm btn-primary" v-on:click.prevent="agregarItenm(producto_temp.Codigo,producto_temp.Nombre,producto_temp.Precio,producto_temp.IdPartida)">
+                                                <button class="btn btn-sm btn-primary" v-on:click.prevent="agregarItenm(producto_temp.Codigo,producto_temp.Nombre,producto_temp.Precio,producto_temp.IdPartida,producto_temp.Impuesto)">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </td>
@@ -685,7 +685,7 @@
                     console.log('aun no');
                 }
             },
-            agregarItenm: function(codigo,nombre,precio,idpartida)
+            agregarItenm: function(codigo,nombre,precio,idpartida,impuesto)
             {   
                 var cantidad = $('#codigo_'+codigo).val();
                 if (cantidad <= 0) {
@@ -702,7 +702,7 @@
                         Producto: nombre,
                         Cantidad: cantidad,
                         Subtotal: totalunitario,
-                        Impuesto: 0,
+                        Impuesto: impuesto,
                         IdPartida: idpartida,
                         Precio: precio,
                         TotalUnitario: totalunitario

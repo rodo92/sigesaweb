@@ -174,24 +174,26 @@ class CajaController extends Controller
 
             $data = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[0],$filtro);
             //echo $filtro;exit();
-
-            if (count($data) == 0) {
+            
+            if (count($data) <= 0) {
                 $data = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[1],$parametro);
             }
-            else{
-                $data2 = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[1],$parametro);
-                $data = array_merge($data, $data2);
-
-            }         
+            // else{
+            //     $data2 = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[1],$parametro);
+            //     // $data = array_merge($data, $data2);
+            //     if (count($data2) <= 0) {
+            //         # code...
+            //     }
+            // }         
         }
         else{
             $TipoBusqueda = [1,3];
             $filtro = "and FactCatalogoServiciosHosp.IdTipoFinanciamiento = " . $seguro . " and FactCatalogoServicios.Codigo = '" . $parametro . "'";
 
             $data = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[0],$filtro);
-            if (count($data) == 0) {
-                $data = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[1],$parametro);
-            }
+            // if (count($data) == 0) {
+            //     $data = $caja->Medicamentos_Servicios_Filtrados($TipoBusqueda[1],$parametro);
+            // }
         }
 
 
@@ -209,7 +211,9 @@ class CajaController extends Controller
                     'Nombre'    => $data[$i]['Nombre'],
                     'Cantidad'  => 0,
                     'IdPartida' => $data[$i]['codPartida'],
-                    'Precio'    => number_format($data[$i]['Precio'],4,'.',' ')
+                    'PrecioUnitario'    => number_format($data[$i]['PrecioUnitario'],4,'.',' '),
+                    'Precio'    => number_format($data[$i]['Precio'],4,'.',' '),
+                    'Impuesto'  => number_format($data[$i]['IGV'],4,'.',' ')
                 );
                 // return response()->json($data[$i]['Codigo']);
             }

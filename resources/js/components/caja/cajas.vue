@@ -400,7 +400,7 @@
                         this.restarmontos(this.productos[indice]['Subtotal'],this.productos[indice]['Impuesto'],this.productos[indice]['TotalUnitario']);
                         /*impus = parseFloat(this.productos[indice]['Impuesto']) + parseFloat(impus);
                         impus = Math.round(impus * 100) / 100;*/
-                        //console.log(this.productos[indice]['TotalUnitario']);
+                        console.log(this.productos[indice]['Subtotal']+'|'+this.productos[indice]['Impuesto']+'|'+this.productos[indice]['TotalUnitario']);
                     }  
                     this.productos.splice(aborrar[0],aborrar.length);
                     
@@ -643,28 +643,28 @@
                 this.sumigv = parseFloat(igv) + parseFloat(this.sumigv);
                 this.sumtotal = parseFloat(total) + parseFloat(this.sumtotal);
 
-                // this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
-                // this.sumigv = Math.round(this.sumigv * 100) / 100;
-                // this.sumtotal = Math.round(this.sumtotal * 100) / 100;
+                this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
+                this.sumigv = Math.round(this.sumigv * 100) / 100;
+                this.sumtotal = Math.round(this.sumtotal * 100) / 100;
             },
             restarmontos: function(subtotal,igv,total) {
                 this.sumsubtotal = parseFloat(this.sumsubtotal) - parseFloat(subtotal) ;
                 this.sumigv = parseFloat(this.sumigv) - parseFloat(igv) ;
                 this.sumtotal = parseFloat(this.sumtotal) - parseFloat(total) ;
 
-                // this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
-                // this.sumigv = Math.round(this.sumigv * 100) / 100;
-                // this.sumtotal = Math.round(this.sumtotal * 100) / 100;
+                this.sumsubtotal = Math.round(this.sumsubtotal * 100) / 100;
+                this.sumigv = Math.round(this.sumigv * 100) / 100;
+                this.sumtotal = Math.round(this.sumtotal * 100) / 100;
             },
             buscar_item: function() {
                 if (this.txt_busqueda.length > 2) {
                    // hacer busqueda
                     if (this.idTipoFinanciamiento == '') {
                         this.idTipoFinanciamiento = 1;
-                        console.log(this.idTipoFinanciamiento);
+                        // console.log(this.idTipoFinanciamiento);
                     }
                     var url = 'cajas/servicios_medicamentos/' + this.idTipoFinanciamiento + '/' + this.txt_busqueda; 
-                    console.log(this.idTipoFinanciamiento);
+                    // console.log(this.idTipoFinanciamiento);
                     axios.get(url).then(response => {
                         if (response.data.data == 'sindatos') {
 
@@ -697,7 +697,7 @@
                     var totalunitario = parseFloat(cantidad) * parseFloat(subtotal);
                     // totalunitario = Math.round(totalunitario * 100) / 100;
 
-                    // var subtotalunitario = parseFloat(cantidad) * parseFloat(preciounitario);
+                    var subtotalunitario = parseFloat(cantidad) * parseFloat(precio);
                     // subtotalunitario = Math.round(subtotalunitario * 100) / 100;
 
                     var impuestounitario = parseFloat(cantidad) * parseFloat(impuesto);
@@ -708,7 +708,7 @@
                         Codigo: codigo,
                         Producto: nombre,
                         Cantidad: cantidad,
-                        Subtotal: subtotal,
+                        Subtotal: subtotalunitario,
                         Impuesto: impuestounitario,
                         IdPartida: idpartida,
                         Precio: precio,
@@ -717,7 +717,7 @@
                     this.txt_busqueda = '';
                     $('#paramatro_busqueda').focus();
 
-                    this.sumarmontos(subtotal,impuestounitario,totalunitario);
+                    this.sumarmontos(subtotalunitario,impuestounitario,totalunitario);
                 }
             },
             facturar_clasificador: function()
@@ -828,12 +828,34 @@
                 axios.get(url).then(response => {
                     $('#cuerpo_factura').hide();
                     $('#cabecera_factura').fadeIn(400);
-                    this.cadena_tipo_documento = '';
-                    this.nroserie_grabar = '';
-                    this.nrodocumento_grabar = '';
+                    this.ruc = '';
+                    this.rucv = '';
+                    this.razonsocial = '';
+                    this.direccion ='';
+                    this.dni = '';
+                    this.paciente = '';
+                    this.idpaciente = '';
+                    this.seguro = '';
+                    this.serie = null;
                     this.sumsubtotal = 0;
                     this.sumigv = 0;
                     this.sumtotal = 0;
+                    this.comprobante = '';
+                    this.productos = [];
+                    this.productos_temp = [];
+                    this.txt_busqueda = '';
+                    this.idTipoFinanciamiento = '';
+                    this.ndocumento = null;
+                    this.idorden = null;
+                    this.cuenta = '';
+                    this.cuenta_grabar = '';
+                    this.observacion_uno = '';
+                    this.observacion_dos = '';
+                    this.conceptos = '';
+                    this.imprimir_clasificador = 0;
+                    this.cadena_tipo_documento = '';
+                    this.nroserie_grabar = '';
+                    this.nrodocumento_grabar = '';
                     toastr.clear();
                     toastr.success('Caja cerrada con exito.','WebSigesa');
                 }).catch(error => {

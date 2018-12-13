@@ -54,6 +54,7 @@ class PDFComprobantesController extends Controller
                         'Nombre'    => $partidas_temp[$i]['Descripcion'],
                         'Cantidad'  => 1,
                         'Precio'    => 0,
+                        'IGV'    => 0,
                         'SubTotal'  => 0
                     );
                     // echo $partidas_temp[$i]['Codigo'] . '-' . $this->detalle[$j]['IdPartida'] . '<br>';
@@ -69,6 +70,7 @@ class PDFComprobantesController extends Controller
                     // $this->partidas[$j]['Cantidad'] = $this->partidas[$j]['Cantidad'] + $this->detalle[$i]['Cantidad'];
                     $this->partidas[$j]['Precio'] = $this->partidas[$j]['Precio'] + $this->detalle[$i]['ValorUnitario'];
                     $this->partidas[$j]['SubTotal'] = $this->partidas[$j]['SubTotal'] + $this->detalle[$i]['SubTotal'];
+                    $this->partidas[$j]['IGV'] = $this->partidas[$j]['IGV'] + $this->detalle[$i]['IGV'];
                 }
             }
         }
@@ -186,10 +188,11 @@ class PDFComprobantesController extends Controller
     {
     	$this->fpdf->Ln(2);
     	$this->fpdf->SetFont('Arial','',7);
-		$this->fpdf->Cell(15,5,utf8_decode('CANTIDAD'),1,0,'C');
-		$this->fpdf->Cell(15,5,utf8_decode('CÓDIGO'),1,0,'C');
-		$this->fpdf->Cell(130,5,utf8_decode('DESCRIPCIÓN'),1,0,'L');
-		$this->fpdf->Cell(15,5,utf8_decode('PRECIO'),1,0,'C');
+		$this->fpdf->Cell(15,5,utf8_decode('CANTIDAD'),'TLB',0,'C');
+		$this->fpdf->Cell(15,5,utf8_decode('CÓDIGO'),'TLB',0,'C');
+		$this->fpdf->Cell(115,5,utf8_decode('DESCRIPCIÓN'),'TLB',0,'L');
+        $this->fpdf->Cell(15,5,utf8_decode('PRECIO'),'TLB',0,'C');
+		$this->fpdf->Cell(15,5,utf8_decode('IMPUESTO'),'TLB',0,'C');
 		$this->fpdf->Cell(15,5,utf8_decode('SUBTOTAL'),1,1,'C');
 
 		$h = 0;
@@ -200,8 +203,9 @@ class PDFComprobantesController extends Controller
 
 			$this->fpdf->Cell(15,5,$this->detalle[$i]['Cantidad'],'L',0,'C');
 			$this->fpdf->Cell(15,5,trim($this->detalle[$i]['Codigo']),'L',0,'C');
-			$this->fpdf->Cell(130,5,utf8_decode(' '.$this->detalle[$i]['IdPartida'] . ' ' . $this->detalle[$i]['Descripcion']),'L',0,'L');
-			$this->fpdf->Cell(15,5,number_format($this->detalle[$i]['ValorUnitario'],2,'.',' '),'L',0,'C');
+			$this->fpdf->Cell(115,5,utf8_decode(' '.$this->detalle[$i]['IdPartida'] . ' ' . $this->detalle[$i]['Descripcion']),'L',0,'L');
+            $this->fpdf->Cell(15,5,number_format($this->detalle[$i]['ValorUnitario'],2,'.',' '),'L',0,'C');
+			$this->fpdf->Cell(15,5,number_format($this->detalle[$i]['IGV'],2,'.',' '),'L',0,'C');
 			$this->fpdf->Cell(15,5,number_format($this->detalle[$i]['SubTotal'],2,'.',' '),'LR',1,'C');
 
 			if ($h == 39) {
@@ -211,7 +215,8 @@ class PDFComprobantesController extends Controller
 
 		$this->fpdf->Cell(15,5,"",'LB',0,'C');
 		$this->fpdf->Cell(15,5,"",'LB',0,'C');
-		$this->fpdf->Cell(130,5,"",'LB',0,'L');
+		$this->fpdf->Cell(115,5,"",'LB',0,'L');
+        $this->fpdf->Cell(15,5,"",'LB',0,'C');
 		$this->fpdf->Cell(15,5,"",'LB',0,'C');
 		$this->fpdf->Cell(15,5,"",'LBR',1,'C');
 
@@ -252,10 +257,11 @@ class PDFComprobantesController extends Controller
     {
         $this->fpdf->Ln(2);
         $this->fpdf->SetFont('Arial','',7);
-        $this->fpdf->Cell(15,5,utf8_decode('CANTIDAD'),1,0,'C');
-        $this->fpdf->Cell(15,5,utf8_decode('CÓDIGO'),1,0,'C');
-        $this->fpdf->Cell(130,5,utf8_decode('DESCRIPCIÓN'),1,0,'L');
-        $this->fpdf->Cell(15,5,utf8_decode('PRECIO'),1,0,'C');
+        $this->fpdf->Cell(15,5,utf8_decode('CANTIDAD'),'TLB',0,'C');
+        $this->fpdf->Cell(15,5,utf8_decode('CÓDIGO'),'TLB',0,'C');
+        $this->fpdf->Cell(115,5,utf8_decode('DESCRIPCIÓN'),'TLB',0,'L');
+        $this->fpdf->Cell(15,5,utf8_decode('PRECIO'),'TLB',0,'C');
+        $this->fpdf->Cell(15,5,utf8_decode('IMPUESTO'),'TLB',0,'C');
         $this->fpdf->Cell(15,5,utf8_decode('SUBTOTAL'),1,1,'C');
 
         $h = 0;
@@ -266,8 +272,9 @@ class PDFComprobantesController extends Controller
 
             $this->fpdf->Cell(15,5,$this->partidas[$i]['Cantidad'],'L',0,'C');
             $this->fpdf->Cell(15,5,trim($this->partidas[$i]['Codigo']),'L',0,'C');
-            $this->fpdf->Cell(130,5,strtoupper(utf8_decode($this->partidas[$i]['Nombre'])),'L',0,'L');
+            $this->fpdf->Cell(115,5,strtoupper(utf8_decode($this->partidas[$i]['Nombre'])),'L',0,'L');
             $this->fpdf->Cell(15,5,number_format($this->partidas[$i]['Precio'],2,'.',' '),'L',0,'C');
+            $this->fpdf->Cell(15,5,number_format($this->partidas[$i]['IGV'],2,'.',' '),'L',0,'C');
             $this->fpdf->Cell(15,5,number_format($this->partidas[$i]['SubTotal'],2,'.',' '),'LR',1,'C');
 
             if ($h == 39) {
@@ -277,7 +284,8 @@ class PDFComprobantesController extends Controller
 
         $this->fpdf->Cell(15,5,"",'LB',0,'C');
         $this->fpdf->Cell(15,5,"",'LB',0,'C');
-        $this->fpdf->Cell(130,5,"",'LB',0,'L');
+        $this->fpdf->Cell(115,5,"",'LB',0,'L');
+        $this->fpdf->Cell(15,5,"",'LB',0,'C');
         $this->fpdf->Cell(15,5,"",'LB',0,'C');
         $this->fpdf->Cell(15,5,"",'LBR',1,'C');
 

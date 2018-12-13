@@ -211,9 +211,9 @@ class CajaController extends Controller
                     'Nombre'    => $data[$i]['Nombre'],
                     'Cantidad'  => 0,
                     'IdPartida' => $data[$i]['codPartida'],
-                    'PrecioUnitario'    => number_format($data[$i]['PrecioUnitario'],4,'.',' '),
-                    'Precio'    => number_format($data[$i]['Precio'],4,'.',' '),
-                    'Impuesto'  => number_format($data[$i]['IGV'],4,'.',' ')
+                    'PrecioUnitario'    => number_format($data[$i]['PrecioUnitario'],2,'.',' '),
+                    'Precio'    => number_format($data[$i]['Precio'],2,'.',' '),
+                    'Impuesto'  => number_format($data[$i]['IGV'],2,'.',' ')
                 );
                 // return response()->json($data[$i]['Codigo']);
             }
@@ -229,9 +229,9 @@ class CajaController extends Controller
 
         if (count($data) > 0) {
             $paciente       = $data[0]['RazonSocial'];
-            $subtotal       = number_format($data[0]['SubTotal'],4,'.',' ');
-            $igv            = number_format($data[0]['IGV'],4,'.',' ');
-            $total          = number_format($data[0]['Total'],4,'.',' ');
+            $subtotal       = number_format($data[0]['SubTotal'],2,'.',' ');
+            $igv            = number_format($data[0]['IGV'],2,'.',' ');
+            $total          = number_format($data[0]['Total'],2,'.',' ');
             $comprobante    = $data[0]['Comprobante'];
 
             for ($i=0; $i < count($data); $i++) { 
@@ -240,8 +240,8 @@ class CajaController extends Controller
                     'Codigo'        => $data[$i]['Codigo'],
                     'Producto'      => $data[$i]['Producto'],
                     'Cantidad'      => $data[$i]['Cantidad'],
-                    'Precio'        => number_format($data[$i]['Precio'],4,'.',' '),
-                    'TotalUnitario' => number_format($data[$i]['TotalUnitario'],4,'.',' ')
+                    'Precio'        => number_format($data[$i]['Precio'],2,'.',' '),
+                    'TotalUnitario' => number_format($data[$i]['TotalUnitario'],2,'.',' ')
                 );
             }
 
@@ -289,10 +289,10 @@ class CajaController extends Controller
                         'Producto'          => strtoupper($data_detalle[$i]['Nombre']),
                         'Cantidad'          => $data_detalle[$i]['cantidad'],
                         'IdPartida'         => $data_detalle[$i]['codPartida'],
-                        'Precio'            => number_format($data_detalle[$i]['PrecioUnitario'],4,'.',' '),
-                        'SubTotal'          => number_format($data_detalle[$i]['SubTotal'],4,'.',' '),
-                        'Impuesto'          => number_format($data_detalle[$i]['Impuesto'],4,'.',' '),
-                        'TotalUnitario'     => number_format($data_detalle[$i]['Total'],4,'.',' ')
+                        'Precio'            => number_format($data_detalle[$i]['PrecioUnitario'],2,'.',' '),
+                        'SubTotal'          => number_format($data_detalle[$i]['SubTotal'],2,'.',' '),
+                        'Impuesto'          => number_format($data_detalle[$i]['Impuesto'],2,'.',' '),
+                        'TotalUnitario'     => number_format($data_detalle[$i]['Total'],2,'.',' ')
                     );
                 }
 

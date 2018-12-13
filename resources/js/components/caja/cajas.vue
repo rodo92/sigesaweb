@@ -284,10 +284,10 @@
                                             <td class="text-center col-xs-1">
                                                 <input type="number" v-bind:id="'codigo_'+producto_temp.Codigo" value="0">
                                             </td>
-                                            <td class="text-center col-xs-2">{{ producto_temp.PrecioUnitario }}</td>
+                                            <td class="text-center col-xs-2">{{ producto_temp.Precio }}</td>
                                             <td class="text-center col-xs-1">
                                                 
-                                                <button class="btn btn-sm btn-primary" v-on:click.prevent="agregarItenm(producto_temp.Codigo,producto_temp.Nombre,producto_temp.Precio,producto_temp.IdPartida,producto_temp.Impuesto)">
+                                                <button class="btn btn-sm btn-primary" v-on:click.prevent="agregarItenm(producto_temp.Codigo,producto_temp.Nombre,producto_temp.Precio,producto_temp.IdPartida,producto_temp.Impuesto,producto_temp.PrecioUnitario)">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </td>
@@ -685,7 +685,7 @@
                     console.log('aun no');
                 }
             },
-            agregarItenm: function(codigo,nombre,precio,idpartida,impuesto)
+            agregarItenm: function(codigo,nombre,precio,idpartida,impuesto,preciounitario)
             {   
                 var cantidad = $('#codigo_'+codigo).val();
                 if (cantidad <= 0) {
@@ -696,21 +696,27 @@
                     var totalunitario = parseFloat(cantidad) * parseFloat(precio);
                     totalunitario = Math.round(totalunitario * 100) / 100;
 
+                    var subtotalunitario = parseFloat(cantidad) * parseFloat(preciounitario);
+                    subtotalunitario = Math.round(subtotalunitario * 100) / 100;
+
+                    var impuestounitario = parseFloat(cantidad) * parseFloat(impuesto);
+                    impuestounitario = Math.round(impuestounitario * 100) / 100;
+
                     this.productos.push({
                         Comprobante: codigo,
                         Codigo: codigo,
                         Producto: nombre,
                         Cantidad: cantidad,
                         Subtotal: totalunitario,
-                        Impuesto: impuesto,
+                        Impuesto: impuestounitario,
                         IdPartida: idpartida,
-                        Precio: precio,
+                        Precio: subtotalunitario,
                         TotalUnitario: totalunitario
                     });
                     this.txt_busqueda = '';
                     $('#paramatro_busqueda').focus();
 
-                    this.sumarmontos(totalunitario,0,totalunitario);
+                    this.sumarmontos(subtotalunitario,impuestounitario,totalunitario);
                 }
             },
             facturar_clasificador: function()

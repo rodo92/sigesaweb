@@ -146,17 +146,16 @@
                             </table>
                         </div>
                         <div class="col-xs-4 text-right">
+                            <div class="col-xs-8 col-xs-offset-2 bg-warning" style="margin-bottom: 2%;">
+                                <div  style="text-transform: uppercase;padding: 2%;" class="text-center">
+                                    <b><h5>{{ cadena_tipo_documento }} ELECTR&Oacute;NICA 
+                                    <br>{{ nroserie_grabar }} - {{ nrodocumento_grabar}}</h5></b>
+                                </div>
+                            </div>
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
                             <button type="" class="btn btn-default" v-on:click.prevent="facturar_clasificador"><i class="fa fa-save"></i> FACTURA<br>CLASIFICADOR</button>
                             <button  class="btn btn-warning" v-on:click.prevent="cerrar_caja"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
-                            <br>
-                            <div>
-                                <div  style="text-transform: uppercase;">
-                                    <h4>{{ cadena_tipo_documento }} ELECTR&Oacute;NICA</h4>
-                                    <h4>{{ nroserie_grabar }} - {{ nrodocumento_grabar}}</h4>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <hr>

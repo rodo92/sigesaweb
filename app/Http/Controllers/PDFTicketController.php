@@ -44,6 +44,7 @@ class PDFTicketController extends Controller
         $this->fecha_emision = $dia."/".$mes."/".$anio;
     	$this->fpdf = new Fpdf();
         $this->fpdf->SetAutoPageBreak(true, 1);
+        $this->fpdf->SetMargins(0, 0 , 0); 
         $this->fpdf->AddPage('P',array(74,150));
         $this->cabecera_ticket();
         $this->datos_receptor();
@@ -99,7 +100,7 @@ class PDFTicketController extends Controller
 		$this->fpdf->Cell(7,5,utf8_decode('PT'),0,1,'C');
 
 		$h = 0;
-		$this->fpdf->SetFont('Arial','',7);
+		$this->fpdf->SetFont('Arial','',6);
 		for ($i=0; $i < count($this->detalle); $i++) { 
 
 			$h =  $h + 1;

@@ -17,6 +17,7 @@ class PDFComprobantesController extends Controller
     private $cabecera;
     private $nombre;
     private $data_proveedor;
+    private $direccion_proveedor;
     private $fecha_emision;
     private $partidas = [];
 
@@ -39,6 +40,15 @@ class PDFComprobantesController extends Controller
 
         $Sistema = new Sistema();
         $this->data_proveedor = $Sistema->Obtener_Proveedor($this->cabecera[0]['Ruc']);
+
+        if (count($this->data_proveedor) > 0) {
+            $this->direccion_proveedor = $this->data_proveedor[0]['Direccion'];
+        }
+        else{
+            $this->direccion_proveedor = null;
+        }
+
+        
 
         $this->fecha_emision = substr($this->cabecera[0]['FechaCobranza'], 0,10);
         list($anio, $mes, $dia) = explode("-", $this->fecha_emision);
@@ -107,6 +117,12 @@ class PDFComprobantesController extends Controller
 
         $Sistema = new Sistema();
         $this->data_proveedor = $Sistema->Obtener_Proveedor($this->cabecera[0]['Ruc']);
+        if (count($this->data_proveedor) > 0) {
+            $this->direccion_proveedor = $this->data_proveedor[0]['Direccion'];
+        }
+        else{
+            $this->direccion_proveedor = null;
+        }
 
         $this->fecha_emision = substr($this->cabecera[0]['FechaCobranza'], 0,10);
         list($anio, $mes, $dia) = explode("-", $this->fecha_emision);
@@ -160,7 +176,7 @@ class PDFComprobantesController extends Controller
 
     	$this->fpdf->Cell(30,4,utf8_decode('DIRECCIÓN:'),0,0,'L');
     	$this->fpdf->SetFont('Arial','B',7);
-    	$this->fpdf->MultiCell(110,4,utf8_decode($this->data_proveedor[0]['Direccion']),0,'L');
+    	$this->fpdf->MultiCell(110,4,utf8_decode($this->direccion_proveedor),0,'L');
     	// $this->fpdf->Cell(30,4,utf8_decode('C.I.I.U NRO:'),1,0,'L');
     	// $this->fpdf->Cell(20,4,utf8_decode('85111'),1,1,'L');
 

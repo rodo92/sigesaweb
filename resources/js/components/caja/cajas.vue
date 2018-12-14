@@ -61,7 +61,7 @@
                     <div class="row">
                         <div class="col-xs-8">
                             <table style="width: 100%" class="tabla_datos">
-                                <tr>
+                                <tr id="oculto_1">
                                     <td width="15%">
                                         <input type="text" class="form-control" placeholder="RUC" v-on:keyup.13="buscar_proveedor" v-model="ruc" id="ruc_bus" maxlength="11">
                                     </td>
@@ -73,7 +73,7 @@
                                     </td>
                                    
                                 </tr>
-                                <tr>
+                                <tr id="oculto_2">
                                     <td width="15%">
                                         
                                     </td>
@@ -88,10 +88,10 @@
                                     <td>
                                         
                                     </td>
-                                    <td>
+                                    <td id="oculto_3">
                                          <label>RUC: </label>
                                     </td>
-                                    <td class="bg-warning">
+                                    <td class="bg-warning" id="oculto_4">
                                         {{ rucv }}
                                     </td>
                                     <td width="10%">
@@ -433,6 +433,20 @@
                         // console.log(this.nrodocumento_grabar);
                         // console.log(this.nroserie_grabar);
                         // console.log(this.nrodocumento_grabar);
+                        if(this.idTIpoDocumento == 2)
+                        {
+                            $('#oculto_1').show();
+                            $('#oculto_2').show();
+                            $('#oculto_3').show();
+                            $('#oculto_4').show();
+                        }
+                        if(this.idTIpoDocumento == 3)
+                        {
+                            $('#oculto_1').hide();
+                            $('#oculto_2').hide();
+                            $('#oculto_3').hide();
+                            $('#oculto_4').hide();  
+                        }
                     } else {
                         toastr.error('Hubo un error en la apertura de caja. Intentelo nuevamente.', 'WebSigesa');
                     } 
@@ -726,9 +740,11 @@
             },
             registrarfactura: function()
             {
-                if (this.rucv.length <= 0) {
-                    toastr.error('Debe ingresar un RUC');
-                    return false;
+                if (this.idTIpoDocumento == 2) {
+                    if (this.rucv.length <= 0 ) {
+                        toastr.error('Debe ingresar un RUC');
+                        return false;
+                    }
                 }
 
                 var url = 'cajas/registro_factura';

@@ -47,16 +47,16 @@ class PDFTicketController extends Controller
     						font-size: 11px;
     						margin: 0px;
     						padding: 0px;
-    						height-max: 17cm;
-    						width-max: 3cm;
+    						/*height-max: 17cm;*/
+    						width: 6.4cm;
     					}
     					@media print {
     						font-family: "CALIBRI";
     						font-size: 11px;
     						margin: 0px;
     						padding: 0px;
-    						height-max: 17cm;
-    						width-max: 3cm;
+    						/*height-max: 17cm;*/
+    						width: 6.4cm;
     					}
     					</style></head><body>';
 
@@ -69,7 +69,7 @@ class PDFTicketController extends Controller
 
     public function cabecera_ticket()
     {
-    	$this->html .= '<div style="text-align: left;">';
+    	$this->html .= '<div style="text-align: center;">';
     	$this->html .= '<h1>HOSPITAL NACIONAL ARZOBISPO LOAYZA</h1>';
     	$this->html .= '<p>AV. ALFONSO UGARTE 848 - TELEFONO 6144646</p>';
     	$this->html .= '<p>RUC: 20154996991</p>';
@@ -87,6 +87,8 @@ class PDFTicketController extends Controller
 		$this->html .= '<tr>';
     	$this->html .= '<td>N° DOC: </td>';
     	$this->html .= '<td>' . $this->cabecera[0]['NroSerie'] . "-" . $this->cabecera[0]['NroDocumento'] . '</td>';
+        $this->html .= '</tr>';
+        $this->html .= '<tr>';
     	$this->html .= '<td>FECHA: </td>';
     	$this->html .= '<td>' . $this->fecha_emision . '</td>';
     	$this->html .= '</tr>';
@@ -95,38 +97,38 @@ class PDFTicketController extends Controller
     	$this->html .= '<td colspan="2">' . $this->cabecera[0]['ApellidoPaterno'] . ' ' . $this->cabecera[0]['ApellidoMaterno'] . ' ' . $this->cabecera[0]['PrimerNombre'] . '</td>';
     	$this->html .= '</tr>';
     	$this->html .= '</table>';
-    	$this->html .= '<div>';
+    	$this->html .= '<div><BR>';
     }
 
     public function detalle_factura()
     {
     	$this->html .= '<div style="text-align: left;">';
-		$this->html .= '<table>';
+		$this->html .= '<table style="width: 100%;">';
 			$this->html .= '<tr>';
-				$this->html .= '<th>COD</th>';
-				$this->html .= '<th>DESCRIPCIÓN</th>';
-				$this->html .= '<th>CANT</th>';
-				$this->html .= '<th>PU</th>';
-				$this->html .= '<th>PT</th>';
+				$this->html .= '<th align="center" style="border-bottom:1px solid black;">COD</th>';
+				$this->html .= '<th align="left" style="border-bottom:1px solid black;">DESCRIPCIÓN</th>';
+				$this->html .= '<th align="center" style="border-bottom:1px solid black;">CANT</th>';
+				$this->html .= '<th align="center" style="border-bottom:1px solid black;">PU</th>';
+				$this->html .= '<th align="center" style="border-bottom:1px solid black;">PT</th>';
 			$this->html .= '</tr>';
 
 		for ($i=0; $i < count($this->detalle); $i++) {
 			$this->html .= '<tr>';
-				$this->html .= '<td>' . $this->detalle[$i]['Codigo'] . '</td>';
-				$this->html .= '<td>' . $this->detalle[$i]['Descripcion'] . '</td>';
-				$this->html .= '<td>' . $this->detalle[$i]['Cantidad'] . '</td>';
-				$this->html .= '<td>' . number_format($this->detalle[$i]['ValorUnitario'],2,'.',' ') . '</td>';
-				$this->html .= '<td>' . number_format($this->detalle[$i]['SubTotal'],2,'.',' ') . '</td>';
+				$this->html .= '<td align="center">' . $this->detalle[$i]['Codigo'] . '</td>';
+				$this->html .= '<td align="left">' . $this->detalle[$i]['Descripcion'] . '</td>';
+				$this->html .= '<td align="center">' . $this->detalle[$i]['Cantidad'] . '</td>';
+				$this->html .= '<td align="center">' . number_format($this->detalle[$i]['ValorUnitario'],2,'.',' ') . '</td>';
+				$this->html .= '<td align="center">' . number_format($this->detalle[$i]['SubTotal'],2,'.',' ') . '</td>';
 			$this->html .= '</tr>';
 		}
 
     	
 			$this->html .= '<tr>';
-				$this->html .= '<td></td>';
-				$this->html .= '<td></td>';
-				$this->html .= '<td></td>';
-				$this->html .= '<td>SUB TOTAL</td>';
-				$this->html .= '<td>' . number_format($this->cabecera[0]['Subtotal'],2,'.',' ') . '</td>';
+				$this->html .= '<td style="border-top:1px solid black;"></td>';
+				$this->html .= '<td style="border-top:1px solid black;"></td>';
+				$this->html .= '<td style="border-top:1px solid black;"></td>';
+				$this->html .= '<td style="border-top:1px solid black;">SUB TOTAL</td>';
+				$this->html .= '<td style="border-top:1px solid black;">' . number_format($this->cabecera[0]['Subtotal'],2,'.',' ') . '</td>';
 			$this->html .= '</tr>';
 			$this->html .= '<tr>';
 				$this->html .= '<td></td>';
@@ -150,12 +152,13 @@ class PDFTicketController extends Controller
     	 $codigo = $this->cabecera[0]['Ruc'] . '|' . $this->cabecera[0]['NroSerie'] . '|' . trim($this->cabecera[0]['NroDocumento']) . '|' . $this->cabecera[0]['Subtotal'] . '|' . $this->cabecera[0]['IGV'] . '|' . $this->cabecera[0]['Total'];
 
 
-    	$this->html .= '<div style="margin-top: 5%;">';
-	    	$this->html .= '<img src="' . route('qrsimple',$codigo) . trim($codigo) . '" height="90" width="90">';
+    	$this->html .= '<div style="margin-top: 50%;text-align: center;">';
+	    	$this->html .= '<img src="' . route('qrsimple',$codigo) . trim($codigo) . '" style="width: 50%;">';
+        $this->html .= '</div>';
 	    	$this->html .= '<p>Resolucion: Nro. 0340050010017/SUNAT</p>';
 	    	$this->html .= '<p>Consulta en: https://escondatagafe.page.link/bon</p>';
 	    	$this->html .= '<p>Gracias por su visita</p>';
-    	$this->html .= '</div>';
+    	
     	$this->html .= '</body></html>';
     }
 

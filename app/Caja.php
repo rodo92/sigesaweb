@@ -179,4 +179,18 @@ class Caja extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Datos_x_orden_cabecera($idOrden)
+    {
+        $result = DB::select('exec SIGESA_farmPreVentaSeleccionarPorId ?', [$idOrden]);
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Datos_x_orden_detalle($idOrden)
+    {
+        $result = DB::select('exec SIGESA_FarmPreVentaDetalleDevuelveTodosItems ?', [$idOrden]);
+
+        return json_decode(json_encode($result), true);
+    }
 }

@@ -134,7 +134,7 @@
                                 </tr>
                                 <tr>
                                     <td width="15%">
-                                        <input type="text" id="id_orden" class="form-control"  placeholder="N° ORDEN" v-model="idorden" >
+                                        <input type="text" id="id_orden" class="form-control"  placeholder="N° ORDEN" v-model="idorden" v-on:keyup.13="buscar_boleta_id_orden">
                                     </td>
                                     <!-- <td width="15%" colspan="2">
                                         <input type="text" id="ndocumento_boleta"  class="form-control" placeholder="N° DOCUMENTO" v-on:keyup.13="buscar_boleta" v-model="ndocumento">
@@ -616,8 +616,9 @@
                     console.log(error.response.data);
                 });
             },
-            /*buscar_boleta_id_orden: function() {
-                var url = 'cajas/detalle_boleta/' + null + '/' + null + '/' + this.idorden;
+            buscar_boleta_id_orden: function() {
+
+                var url = 'cajas/detalle_orden/' + this.idorden;
                 // console.log(url);
 
                 axios.get(url).then(response => {
@@ -660,7 +661,7 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
-            },*/
+            },
             sumarmontos: function(subtotal,igv,total) {
                 this.sumsubtotal = parseFloat(subtotal) + parseFloat(this.sumsubtotal);
                 this.sumigv = parseFloat(igv) + parseFloat(this.sumigv);

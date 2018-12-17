@@ -36,7 +36,7 @@ Route::get('reporalmacen', 'FarmaciaController@reporalmacen');
 Route::get('farmacia/almacenes', 'FarmaciaController@almacenes');
 
 // Reportes Gestion
-Route::post('reporteici/generar_dbf', 'ReporteICIController@generar_dbf');
+Route::get('reporteici/generar_dbf', 'ReporteICIController@generar_dbf');
 Route::get('descargar_dbf_ici/{nombre}', 'ReporteICIController@descargar_dbf');
 
 // Reportes Almaces
@@ -65,3 +65,6 @@ Route::post('cajas/registro_factura','CajaController@registro_factura');
 Route::get('cajas/generar_pdf/{idorden}','PDFComprobantesController@generar');
 Route::get('cajas/generar_pdf_partida/{idorden}','PDFComprobantesController@generar_partida');
 Route::get('cajas/generar_ticket/{idorden}','PDFTicketController@generar');
+
+// Caja central
+Route::get('cajasc','CajaController@cajas_central');

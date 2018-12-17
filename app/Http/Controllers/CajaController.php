@@ -13,7 +13,12 @@ class CajaController extends Controller
 {
     public function cajas()
     {
-    	return view('caja.cajas');
+    	return view('caja.cajasc');
+    }
+
+    public function cajas_central()
+    {
+        return view('caja.cajas');
     }
 
     public function listar_cajas()

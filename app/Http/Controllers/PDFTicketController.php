@@ -44,19 +44,19 @@ class PDFTicketController extends Controller
     	$this->html = '<html><head><style type="text/css">
     					* {
     						font-family: "CALIBRI";
-    						font-size: 11px;
+    						font-size: 12px;
     						margin: 0px;
     						padding: 0px;
     						/*height-max: 17cm;*/
-    						width: 6.4cm;
+    						width: 7cm;
     					}
     					@media print {
     						font-family: "CALIBRI";
-    						font-size: 11px;
+    						font-size: 12px;
     						margin: 0px;
     						padding: 0px;
     						/*height-max: 17cm;*/
-    						width: 6.4cm;
+    						width: 7cm;
     					}
     					</style></head><body>';
 
@@ -105,44 +105,57 @@ class PDFTicketController extends Controller
     	$this->html .= '<div style="text-align: left;">';
 		$this->html .= '<table style="width: 100%;">';
 			$this->html .= '<tr>';
-				$this->html .= '<th align="center" style="border-bottom:1px solid black;">COD</th>';
-				$this->html .= '<th align="left" style="border-bottom:1px solid black;">DESCRIPCIÓN</th>';
-				$this->html .= '<th align="center" style="border-bottom:1px solid black;">CANT</th>';
-				$this->html .= '<th align="center" style="border-bottom:1px solid black;">PU</th>';
-				$this->html .= '<th align="center" style="border-bottom:1px solid black;">PT</th>';
+				$this->html .= '<th align="center" style="border-bottom:1px solid black; width: 15%;">COD</th>';
+				$this->html .= '<th align="left" style="border-bottom:1px solid black; width: 45%;">DESCRIPCIÓN</th>';
+				$this->html .= '<th align="center" style="border-bottom:1px solid black; width: 10%;">CANT</th>';
+				$this->html .= '<th align="center" style="border-bottom:1px solid black; width: 15%;">PU</th>';
+				$this->html .= '<th align="center" style="border-bottom:1px solid black; width: 15%;">PT</th>';
 			$this->html .= '</tr>';
 
 		for ($i=0; $i < count($this->detalle); $i++) {
 			$this->html .= '<tr>';
-				$this->html .= '<td align="center">' . $this->detalle[$i]['Codigo'] . '</td>';
-				$this->html .= '<td align="left">' . $this->detalle[$i]['Descripcion'] . '</td>';
-				$this->html .= '<td align="center">' . $this->detalle[$i]['Cantidad'] . '</td>';
-				$this->html .= '<td align="center">' . number_format($this->detalle[$i]['ValorUnitario'],2,'.',' ') . '</td>';
-				$this->html .= '<td align="center">' . number_format($this->detalle[$i]['SubTotal'],2,'.',' ') . '</td>';
+				$this->html .= '<td align="center" style="width: 15%;">' . $this->detalle[$i]['Codigo'] . '</td>';
+				$this->html .= '<td align="left" style="width: 45%;">' . $this->detalle[$i]['Descripcion'] . '</td>';
+				$this->html .= '<td align="center" style="width: 10%;">' . $this->detalle[$i]['Cantidad'] . '</td>';
+				$this->html .= '<td align="center" style="width: 15%;">' . number_format($this->detalle[$i]['ValorUnitario'],2,'.',' ') . '</td>';
+				$this->html .= '<td align="center" style="width: 15%;">' . number_format($this->detalle[$i]['SubTotal'],2,'.',' ') . '</td>';
 			$this->html .= '</tr>';
 		}
-
     	
 			$this->html .= '<tr>';
-				$this->html .= '<td style="border-top:1px solid black;"></td>';
-				$this->html .= '<td style="border-top:1px solid black;"></td>';
-				$this->html .= '<td style="border-top:1px solid black;"></td>';
-				$this->html .= '<td style="border-top:1px solid black;">SUB TOTAL</td>';
-				$this->html .= '<td style="border-top:1px solid black;">' . number_format($this->cabecera[0]['Subtotal'],2,'.',' ') . '</td>';
+				$this->html .= '<td style="border-top:1px solid black; width: 15%;"></td>';
+				$this->html .= '<td style="border-top:1px solid black; width: 45%;"></td>';
+				$this->html .= '<td style="border-top:1px solid black; width: 10%;"></td>';
+				$this->html .= '<td style="border-top:1px solid black; width: 15%;"></td>';
+				$this->html .= '<td style="border-top:1px solid black; width: 15%;"></td>';
 			$this->html .= '</tr>';
 			$this->html .= '<tr>';
-				$this->html .= '<td></td>';
-				$this->html .= '<td></td>';
-				$this->html .= '<td></td>';
-				$this->html .= '<td>IGV</td>';
-				$this->html .= '<td></td>';
+				$this->html .= '<td style="width: 15%;">&nbsp;</td>';
+				$this->html .= '<td style="width: 45%;">&nbsp;</td>';
+				$this->html .= '<td style="width: 10%;">&nbsp;</td>';
+				$this->html .= '<td style="width: 15%;">&nbsp;</td>';
+				$this->html .= '<td style="width: 15%;">&nbsp;</td>';
 			$this->html .= '</tr>';
 			$this->html .= '<tr>';
-				$this->html .= '<td></td>';
-				$this->html .= '<td></td>';
-				$this->html .= '<td></td>';
-				$this->html .= '<td>TOTAL</td>';
-				$this->html .= '<td>' . number_format($this->cabecera[0]['Total'],2,'.',' ') . '</td>';
+				$this->html .= '<td style="width: 15%;"></td>';
+				$this->html .= '<td style="width: 45%;"></td>';
+				$this->html .= '<td style="width: 10%;"></td>';
+				$this->html .= '<td style="width: 15%;">SUB TOTAL</td>';
+				$this->html .= '<td style="width: 15%;">' . number_format($this->cabecera[0]['Subtotal'],2,'.',' ') . '</td>';
+			$this->html .= '</tr>';
+			$this->html .= '<tr>';
+				$this->html .= '<td style="width: 15%;"></td>';
+				$this->html .= '<td style="width: 45%;"></td>';
+				$this->html .= '<td style="width: 10%;"></td>';
+				$this->html .= '<td style="width: 15%;">IGV</td>';
+				$this->html .= '<td style="width: 15%;"></td>';
+			$this->html .= '</tr>';
+			$this->html .= '<tr>';
+				$this->html .= '<td style="width: 15%;"></td>';
+				$this->html .= '<td style="width: 45%;"></td>';
+				$this->html .= '<td style="width: 10%;"></td>';
+				$this->html .= '<td style="width: 15%;">TOTAL</td>';
+				$this->html .= '<td style="width: 15%;">' . number_format($this->cabecera[0]['Total'],2,'.',' ') . '</td>';
 			$this->html .= '</tr>';
     	$this->html .= '</table>';
     }
@@ -152,17 +165,17 @@ class PDFTicketController extends Controller
     	 $codigo = $this->cabecera[0]['Ruc'] . '|' . $this->cabecera[0]['NroSerie'] . '|' . trim($this->cabecera[0]['NroDocumento']) . '|' . $this->cabecera[0]['Subtotal'] . '|' . $this->cabecera[0]['IGV'] . '|' . $this->cabecera[0]['Total'];
 
 
-    	$this->html .= '<div style="margin-top: 50%;text-align: center;">';
+    	$this->html .= '<div style="margin-top: 10%;text-align: center;">';
 	    	$this->html .= '<img src="' . route('qrsimple',$codigo) . trim($codigo) . '" style="width: 50%;">';
         $this->html .= '</div>';
-	    	$this->html .= '<p>Resolucion: Nro. 0340050010017/SUNAT</p>';
+	    	$this->html .= '<hr><p>Resolucion: Nro. 0340050010017/SUNAT</p>';
 	    	$this->html .= '<p>Consulta en: https://escondatagafe.page.link/bon</p>';
-	    	$this->html .= '<p>Gracias por su visita</p>';
+	    	$this->html .= '<h1>GRACIAS POR SU VISITA</h1>';
     	
     	$this->html .= '</body></html>';
     }
 
-
+/*
     public function generar_ticket($idorden)
     {
         $this->idorden = $idorden;
@@ -298,5 +311,5 @@ class PDFTicketController extends Controller
 		$this->fpdf->SetX(0);
 		$this->fpdf->SetFont('Courier','B',8);
 		$this->fpdf->Cell(40,4,'Gracias por su visita',0, 0, 'L', True);
-	}
+	}*/
 }

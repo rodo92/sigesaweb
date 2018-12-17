@@ -153,8 +153,8 @@
                                 </div>
                             </div>
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
-                            <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>FACTURA</button>
-                            <button type="" class="btn btn-default" v-on:click.prevent="facturar_clasificador"><i class="fa fa-save"></i> FACTURA<br>CLASIFICADOR</button>
+                            <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>COMPROBANTE</button>
+                            <button type="" class="btn btn-default" v-on:click.prevent="facturar_clasificador"><i class="fa fa-save"></i> CON<br>CLASIFICADOR</button>
                             <button  class="btn btn-warning" v-on:click.prevent="cerrar_caja"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
                         </div>
                     </div>
@@ -444,8 +444,8 @@
                         {
                             $('#oculto_1').hide();
                             $('#oculto_2').hide();
-                            $('#oculto_3').hide();
-                            $('#oculto_4').hide();  
+                            $('#oculto_3').hidden();
+                            $('#oculto_4').hidden();  
                         }
                     } else {
                         toastr.error('Hubo un error en la apertura de caja. Intentelo nuevamente.', 'WebSigesa');

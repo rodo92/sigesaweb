@@ -620,7 +620,7 @@
 
                 if (this.idorden.charAt(this.idorden.length-1).toUpperCase() !== 'F') {
                     toastr.clear();
-                    toastr.error(this.idorden.charAt(this.idorden.length-1).toUpperCase(), 'WebSigesa');
+                    toastr.error('Orden no válida para Farmacia.', 'WebSigesa');
                     // return false;
                 }
 

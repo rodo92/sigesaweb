@@ -9,12 +9,9 @@
 </style>
 <template>    
     <div>
-        <div>
-                        <frame id="pdf_cuerpo" name="pdf_cuerpo"></frame>
-                    </div>
         <section class="content-header">
             <h1>
-                Cajas Central
+                Cajas
                 <small>Caja</small>
             </h1>
             <ol class="breadcrumb">
@@ -106,6 +103,17 @@
                                     <td>
                                        <input type="text" id="id_cuenta" class="form-control"  placeholder="N° CUENTA" v-model="cuenta" v-on:keyup.13="buscar_boleta_cuenta"> 
                                     </td>
+                                    <!-- <td></td>
+                                    <td>
+                                        
+                                    </td>
+                                    <td width="10%">
+                                        <label>FECHA: </label>
+                                        
+                                    </td>
+                                    <td width="20%" class="bg-warning">
+                                        {{ new Date().getDate() + "/" + (new Date().getMonth() +1) + "/" + new Date().getFullYear() }}
+                                    </td> -->
                                 </tr>
                                 <tr>
                                     <td width="15%">
@@ -126,12 +134,12 @@
                                 </tr>
                                 <tr>
                                     <td width="15%">
-                                        <input type="text" id="serie_boleta" class="form-control"  placeholder="SERIE" v-model="serie" >
+                                        <input type="text" id="id_orden" class="form-control"  placeholder="N° ORDEN" v-model="idorden" v-on:keyup.13="buscar_boleta_id_orden">
                                     </td>
-                                    <td width="15%" colspan="2">
+                                    <!-- <td width="15%" colspan="2">
                                         <input type="text" id="ndocumento_boleta"  class="form-control" placeholder="N° DOCUMENTO" v-on:keyup.13="buscar_boleta" v-model="ndocumento">
                                     </td>
-                                    <!-- <td width="10%">
+                                    <td width="10%">
                                         <label> DOCUMENTO:</label>                                        
                                     </td>
                                     <td width="20%" class="bg-warning">
@@ -154,7 +162,7 @@
                             </div>
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>COMPROBANTE</button>
-                            <button type="" class="btn btn-default" v-on:click.prevent="facturar_clasificador"><i class="fa fa-save"></i> CON<br>CLASIFICADOR</button>
+                            <!-- <button type="" class="btn btn-default" v-on:click.prevent="facturar_clasificador"><i class="fa fa-save"></i> CON<br>CLASIFICADOR</button> -->
                             <button  class="btn btn-warning" v-on:click.prevent="cerrar_caja"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
                         </div>
                     </div>
@@ -424,7 +432,7 @@
                         toastr.success('Apertura de caja correcta.', 'WebSigesa');
                         $('#cabecera_factura').hide();
                         $('#cuerpo_factura').fadeIn(400);
-                        $('#ruc_bus').focus();
+                        // $('#ruc_bus').focus();
                         this.cadena_tipo_documento = $('#tipo_documento_id option:selected').text().trim();
                         this.nroserie_grabar = response.data.data_documento[0].NroSerie;
                         this.nrodocumento_grabar = response.data.data_documento[0].NroDocumento.trim();
@@ -439,6 +447,7 @@
                             $('#oculto_2').show();
                             $('#oculto_3').show();
                             $('#oculto_4').show();
+                            $('#ruc_bus').focus();
                         }
                         if(this.idTIpoDocumento == 3)
                         {
@@ -446,6 +455,7 @@
                             $('#oculto_2').hide();
                             $('#oculto_3').hide();
                             $('#oculto_4').hide();  
+                            $('#dni_bus').focus();
                         }
                     } else {
                         toastr.error('Hubo un error en la apertura de caja. Intentelo nuevamente.', 'WebSigesa');
@@ -606,8 +616,9 @@
                     console.log(error.response.data);
                 });
             },
-            /*buscar_boleta_id_orden: function() {
-                var url = 'cajas/detalle_boleta/' + null + '/' + null + '/' + this.idorden;
+            buscar_boleta_id_orden: function() {
+
+                var url = 'cajas/detalle_orden/' + this.idorden;
                 // console.log(url);
 
                 axios.get(url).then(response => {
@@ -650,7 +661,7 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
-            },*/
+            },
             sumarmontos: function(subtotal,igv,total) {
                 this.sumsubtotal = parseFloat(subtotal) + parseFloat(this.sumsubtotal);
                 this.sumigv = parseFloat(igv) + parseFloat(this.sumigv);
@@ -805,36 +816,21 @@
             },
             imprimir: function(idorder)
             {
-                if (this.imprimir_clasificador == 0) {
-                    var url = 'cajas/generar_pdf/' + idorder;
-                }
+                var url = 'cajas/generar_ticket/' + idorder;
+                axios.get(url).then(response => {
+                    // console.log(response.data);
+                    var ventana = window.open('', 'PRINT', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,height=50,width=50');
+                    ventana.document.write(response.data);
+                    ventana.document.close();
+                    ventana.focus();
+                    ventana.onload = function() {
+                        ventana.print();
+                        ventana.close();
+                    };
+                    return true;
+                }).catch(error => {
 
-                else if(this.imprimir_clasificador == 1) {
-                    var url = 'cajas/generar_pdf_partida/' + idorder;
-                }
-
-                
-                // console.log(url);
-                window.open(url,'_blank');
-                /*axios({
-                    url: urls,
-                    method: 'GET',
-                    responseType: 'blob', // important
-                }).then((response) => {
-                    const url = window.URL.createObjectURL(new Blob([response.data]));
-                    window.open(url,'WebSigesa', 'width=500,height=700,toolbar=0')
-                    const link = document.createElement('a');
-                    // const iframe = document.createElement('frame')
-                    link.href = url;
-                    // iframe.src = url;
-                    link.setAttribute('target','_blank');
-                    // link.setAttribute('onclick', "w=window.open('" + url + "'); w.print(); w.close();"); //or any other extension
-                    link.appendChild(iframe);
-                    document.body.appendChild(link);
-                    // w.print();
-                    link.click();
-
-                });*/
+                });
             },
             cerrar_caja: function()
             {

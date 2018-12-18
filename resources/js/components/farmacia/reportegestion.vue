@@ -151,7 +151,7 @@
                         toastr.clear();
                         toastr.error('Hubo un error al procesar la información.', 'WebSigesa');
                     }
-
+                    console.log(response.data);
                 }).catch(error => {
                     toastr.clear();
                     this.errores = error.response.data.errors;

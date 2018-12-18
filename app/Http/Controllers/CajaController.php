@@ -391,11 +391,14 @@ class CajaController extends Controller
         $Caja->Cierre_Caja($IdGestionCaja,$EstadoLote,$FechaCierreServer,$TotalCobrado);
     }
 
-    public function datos_orden($idorder)
+    public function datos_orden_farmacia($idorder)
     {
+        
+        $idorder = substr($idorder, 0, -1);
+
         $Caja =new Caja();
-        $data_cabecera = $Caja->Datos_x_orden_cabecera($idorder);
-        $data_detalle = $Caja->Datos_x_orden_detalle($idorder);
+        $data_cabecera = $Caja->Datos_farmacia_x_orden_cabecera($idorder);
+        $data_detalle = $Caja->Datos_farmacia_x_orden_detalle($idorder);
 
         if (count($data_cabecera) > 0) 
         { 
@@ -415,14 +418,14 @@ class CajaController extends Controller
                     'Cantidad'          => $data_detalle[$i]['Cantidad'],
                     'IdPartida'         => '',
                     'Precio'            => number_format($data_detalle[$i]['Precio'],2,'.',' '),
-                    'SubTotal'          => number_format($data_detalle[$i]['Importe'] / 1.18,2,'.',' '),
-                    'Impuesto'          => number_format($data_detalle[$i]['Importe'] * 0.18,2,'.',' '),
-                    'TotalUnitario'     => number_format(($data_detalle[$i]['Importe'] / 1.18) + ($data_detalle[$i]['Importe'] * 0.18),2,'.',' ')
+                    'Impuesto'          => number_format(($data_detalle[$i]['Precio'] - ($data_detalle[$i]['Precio'] / 1.18)) * $data_detalle[$i]['Cantidad'],2,'.',' '),
+                    'SubTotal'          => number_format(($data_detalle[$i]['Precio'] / 1.18) * $data_detalle[$i]['Cantidad'],2,'.',' '),
+                    'TotalUnitario'     => number_format($data_detalle[$i]['Importe'],2,'.',' ')
                 );
 
-                $subtotal_temp = number_format($data_detalle[$i]['Importe'] / 1.18,2,'.',' ');
-                $igv_temp = number_format($data_detalle[$i]['Importe'] * 0.18,2,'.',' ');
-                $total_temp = number_format(($data_detalle[$i]['Importe'] / 1.18) + ($data_detalle[$i]['Importe'] * 0.18),2,'.',' ');
+                $subtotal_temp = number_format(($data_detalle[$i]['Precio'] / 1.18) * $data_detalle[$i]['Cantidad'],2,'.',' ');
+                $igv_temp = number_format(($data_detalle[$i]['Precio'] - ($data_detalle[$i]['Precio'] / 1.18)) * $data_detalle[$i]['Cantidad'],2,'.',' ');
+                $total_temp = number_format($data_detalle[$i]['Importe'],2,'.',' ');
 
                 $subtotal = $subtotal + $subtotal_temp;
                 $igv = $igv + $igv_temp;

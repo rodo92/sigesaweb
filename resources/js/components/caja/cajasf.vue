@@ -134,7 +134,7 @@
                                 </tr>
                                 <tr>
                                     <td width="15%">
-                                        <input type="text" id="id_orden" class="form-control"  placeholder="N° ORDEN" v-model="idorden" v-on:keyup.13="buscar_boleta_id_orden">
+                                        <input type="text" id="id_orden" class="form-control"  placeholder="N° ORDEN" v-model="idorden" v-on:keyup.13="buscar_boleta_id_orden" style="text-transform: uppercase;">
                                     </td>
                                     <!-- <td width="15%" colspan="2">
                                         <input type="text" id="ndocumento_boleta"  class="form-control" placeholder="N° DOCUMENTO" v-on:keyup.13="buscar_boleta" v-model="ndocumento">
@@ -570,7 +570,7 @@
                     console.log(error.response.data);
                 });
             },
-            buscar_boleta_cuenta: function() {
+            /*buscar_boleta_cuenta: function() {
                 var url = 'cajas/detalle_cuenta/' + this.cuenta;
 
                 axios.get(url).then(response => {
@@ -615,52 +615,67 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
-            },
+            },*/
             buscar_boleta_id_orden: function() {
 
-                var url = 'cajas/detalle_orden/' + this.idorden;
-                // console.log(url);
+                if (this.idorden.charAt(this.idorden.length-1).toUpperCase() !== 'F') {
+                    toastr.clear();
+                    toastr.error(this.idorden.charAt(this.idorden.length-1).toUpperCase(), 'WebSigesa');
+                    // return false;
+                }
 
-                axios.get(url).then(response => {
-                    var datos = response.data.data;
-                    // console.log(datos)
+                else {
+                    var url = 'cajas/detalle_orden/' + this.idorden;
+                    // console.log(url);
 
-                    if (datos == 'sindatos') {
-                        toastr.error('No se encontraron datos asociados a este numero de orden', 'WebSigesa');
-                        this.idorden = '';
-                        this.serie = '';
-                        this.ndocumento = '';
-                        $('#id_orden').focus();
-                    }
-                    else{
-                        this.idorden = '';
-                        this.serie = '';
-                        this.ndocumento = '';
-                        $('#id_orden').focus();
-                        this.paciente = datos.paciente;                        
-                        // this.comprobante = datos.comprobante;
+                    axios.get(url).then(response => {
+                        var datos = response.data.data;
+                        // console.log(datos)
 
-                        
-                        // console.log(datos.productos[0].Codigo);
-                        
-                        for (var i = 0; i < datos.productos.length; i++) {
-                            this.productos.push({
-                                Comprobante: datos.productos[i].Codigo,
-                                Codigo: datos.productos[i].Codigo,
-                                Producto: datos.productos[i].Producto,
-                                Cantidad: datos.productos[i].Cantidad,
-                                Precio: datos.productos[i].Precio,
-                                TotalUnitario: datos.productos[i].TotalUnitario
-                            });
+                        if (datos == 'sindatos') {
+                            toastr.error('No se encontraron datos asociados a este numero de orden', 'WebSigesa');
+                            this.idorden = '';
+                            this.serie = '';
+                            this.ndocumento = '';
+                            $('#id_orden').focus();
+                        }
+                        else{
+                            this.idorden = '';
+                            this.serie = '';
+                            this.ndocumento = '';
+                            $('#id_orden').focus();
+                            this.paciente = datos.paciente;                        
+                            // this.comprobante = datos.comprobante;
+
+                            
+                            // console.log(datos.productos[0].Codigo);
+                            
+                            for (var i = 0; i < datos.productos.length; i++) {
+                                this.productos.push({
+                                    Comprobante: datos.productos[i].Comprobante,
+                                    Codigo: datos.productos[i].Codigo,
+                                    Producto: datos.productos[i].Producto,
+                                    Cantidad: datos.productos[i].Cantidad,
+                                    Impuesto: datos.productos[i].Impuesto,
+                                    IdPartida: datos.productos[i].IdPartida,
+                                    Precio: datos.productos[i].Precio,
+                                    Subtotal: datos.productos[i].SubTotal,
+                                    TotalUnitario: datos.productos[i].TotalUnitario
+                                });
+                                
+                            }
+                            this.sumarmontos(datos.subtotal,datos.igv,datos.total);
                             
                         }
-                        this.sumarmontos(datos.subtotal,datos.igv,datos.total);
                         
-                    }
-                    
-                }).catch(error => {
-                    console.log(error.response.data);
-                });
+                    }).catch(error => {
+                        console.log(error.response.data);
+                    });
+                }
+
+                
+
+                
             },
             sumarmontos: function(subtotal,igv,total) {
                 this.sumsubtotal = parseFloat(subtotal) + parseFloat(this.sumsubtotal);

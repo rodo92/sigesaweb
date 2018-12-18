@@ -99,11 +99,11 @@
                                         {{ new Date().getDate() + "/" + (new Date().getMonth() +1) + "/" + new Date().getFullYear() }}
                                     </td>
                                 </tr>
-                                <!-- <tr>
+                                <tr>
                                     <td>
                                        <input type="text" id="id_cuenta" class="form-control"  placeholder="N° CUENTA" v-model="cuenta" v-on:keyup.13="buscar_boleta_cuenta"> 
                                     </td>
-                                    <td></td>
+                                    <!-- <td></td>
                                     <td>
                                         
                                     </td>
@@ -113,8 +113,8 @@
                                     </td>
                                     <td width="20%" class="bg-warning">
                                         {{ new Date().getDate() + "/" + (new Date().getMonth() +1) + "/" + new Date().getFullYear() }}
-                                    </td>
-                                </tr> -->
+                                    </td> -->
+                                </tr>
                                 <tr>
                                     <td width="15%">
                                         <input type="text" class="form-control" placeholder="DNI" v-on:keyup.13="buscar_paciente" v-model="dni" id="dni_bus" maxlength="8">

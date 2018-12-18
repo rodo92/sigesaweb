@@ -21,6 +21,11 @@ class CajaController extends Controller
         return view('caja.cajas');
     }
 
+    public function cajas_farmacia()
+    {
+        return view('caja.cajasf');
+    }
+
     public function listar_cajas()
     {
     	$Caja = new Caja();

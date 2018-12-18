@@ -22,6 +22,7 @@ Vue.component('reporalmacen', require('./components/farmacia/reporalmacen.vue'))
 // Caja
 Vue.component('caja', require('./components/caja/cajas.vue'));
 Vue.component('cajacentral', require('./components/caja/cajasc.vue'));
+Vue.component('cajafarmacia', require('./components/caja/cajasf.vue'));
 
 const app = new Vue({
     el: '#app'

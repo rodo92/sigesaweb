@@ -533,7 +533,7 @@
                     $('#paramatro_busqueda').focus();
                 });
             },
-            buscar_boleta: function() {
+            /*buscar_boleta: function() {
                 var url = 'cajas/detalle_boleta/' + this.serie + '/' + this.ndocumento + '/' + '';
 
                 axios.get(url).then(response => {
@@ -615,17 +615,16 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
-            },
+            },*/
             buscar_boleta_id_orden: function() {
 
-                var url = 'cajas/detalle_orden/' + this.idorden;
-                // console.log(url);
+                var url = 'cajascajeros/orden/' + this.idorden;
 
                 axios.get(url).then(response => {
                     var datos = response.data.data;
-                    // console.log(datos)
+                    //console.log(datos);return false;
 
-                    if (datos == 'sindatos') {
+                    if (datos == 'sindato') {
                         toastr.error('No se encontraron datos asociados a este numero de orden', 'WebSigesa');
                         this.idorden = '';
                         this.serie = '';
@@ -645,16 +644,19 @@
                         
                         for (var i = 0; i < datos.productos.length; i++) {
                             this.productos.push({
-                                Comprobante: datos.productos[i].Codigo,
+                                Comprobante: datos.productos[i].Comprobante,
                                 Codigo: datos.productos[i].Codigo,
                                 Producto: datos.productos[i].Producto,
                                 Cantidad: datos.productos[i].Cantidad,
+                                Impuesto: datos.productos[i].Impuesto,
+                                IdPartida: datos.productos[i].IdPartida,
                                 Precio: datos.productos[i].Precio,
+                                Subtotal: datos.productos[i].SubTotal,
                                 TotalUnitario: datos.productos[i].TotalUnitario
                             });
+                            this.sumarmontos(datos.productos[i].SubTotal,datos.productos[i].Impuesto,datos.productos[i].TotalUnitario);
                             
                         }
-                        this.sumarmontos(datos.subtotal,datos.igv,datos.total);
                         
                     }
                     

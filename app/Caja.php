@@ -193,4 +193,11 @@ class Caja extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Datos_Cajas_x_Orden($idorden,$tipo)
+    {
+        $result = DB::select('exec SIGESA_CAJA_DATOS_X_ORDEN ?,?', [$idorden,$tipo]);
+
+        return json_decode(json_encode($result), true);
+    }
 }

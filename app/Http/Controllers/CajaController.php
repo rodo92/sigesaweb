@@ -447,9 +447,59 @@ class CajaController extends Controller
         else {
             return response()->json(['data' => 'sindatos']);
         }
+    }
 
-        
+    public function datos_orden_caja($idorden)
+    {
+        $Caja =new Caja();
+        $data_cabecera = $Caja->Datos_Cajas_x_Orden($idorden,'0');
+        $data_detalle = $Caja->Datos_Cajas_x_Orden($idorden,'1');
 
-        return response()->json($productos);
+        if (count($data_cabecera) > 0) 
+        {
+            $paciente       = $data_cabecera[0]['nombpaciente'];
+            $idpaciente     = $data_cabecera[0]['idPaciente'];
+            $subtotal       = number_format(0,2,'.',' ');
+            $igv            = number_format(0,2,'.',' ');
+            $total          = number_format(0,2,'.',' ');
+            $comprobante    = $data_cabecera[0]['idOrdenPago'];
+
+            for ($i=0; $i < count($data_detalle); $i++) { 
+                $productos[] = array(
+                    'Comprobante'       => $data_detalle[$i]['idOrdenPago'],
+                    'Codigo'            => $data_detalle[$i]['Codigo'],
+                    'Producto'          => strtoupper($data_detalle[$i]['Nombre']),
+                    'Cantidad'          => $data_detalle[$i]['Cantidad'],
+                    'IdPartida'         => '',
+                    'Precio'            => number_format($data_detalle[$i]['Precio'],2,'.',' '),
+                    'Impuesto'          => number_format(0,2,'.',' '),
+                    'SubTotal'          => number_format($data_detalle[$i]['Precio'] * $data_detalle[$i]['Cantidad'],2,'.',' '),
+                    'TotalUnitario'     => number_format($data_detalle[$i]['Total'],2,'.',' ')
+                );
+
+                $subtotal_temp = number_format($data_detalle[$i]['Precio'] * $data_detalle[$i]['Cantidad'],2,'.',' ');
+                $igv_temp = number_format(0,2,'.',' ');
+                $total_temp = number_format($data_detalle[$i]['Total'],2,'.',' ');
+
+                $subtotal = $subtotal + $subtotal_temp;
+                $igv = $igv + $igv_temp;
+                $total = $total + $total_temp;
+            }
+
+            $response = array(
+                'paciente'      => $paciente,
+                'idpaciente'    => $idpaciente,
+                'subtotal'      => number_format($subtotal,2,'.',' '),
+                'igv'           => number_format($igv,2,'.',' '),
+                'total'         => number_format($total,2,'.',' '),
+                'comprobante'   => $comprobante,
+                'productos'     => $productos
+            );
+
+            return response()->json(['data' => $response]);
+
+        } else {
+            return response()->json(['data' => 'sindato']);
+        }
     }
 }

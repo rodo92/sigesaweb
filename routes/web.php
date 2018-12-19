@@ -72,3 +72,6 @@ Route::get('cajasc','CajaController@cajas_central');
 // Cajas Farmacia
 Route::get('cajasf','CajaController@cajas_farmacia');
 Route::get('cajas/detalle_orden/{idorden}','CajaController@datos_orden_farmacia');
+
+// Cajeros
+Route::get('cajascajeros/orden/{idorder}','CajaController@datos_orden_caja');

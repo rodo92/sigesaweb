@@ -569,7 +569,7 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
-            },
+            },*/
             buscar_boleta_cuenta: function() {
                 var url = 'cajas/detalle_cuenta/' + this.cuenta;
 
@@ -615,7 +615,7 @@
                 }).catch(error => {
                     console.log(error.response.data);
                 });
-            },*/
+            },
             buscar_boleta_id_orden: function() {
 
                 var url = 'cajascajeros/orden/' + this.idorden;

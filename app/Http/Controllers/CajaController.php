@@ -377,7 +377,11 @@ class CajaController extends Controller
             // se genera el detalle
             for ($i=0; $i < count($productos); $i++) { 
                 // $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$IdPartida,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
-                $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$productos[$i]['IdPartida'],$productos[$i]['Codigo'],$productos[$i]['Producto'],$productos[$i]['Cantidad'],$productos[$i]['Precio'],$productos[$i]['Subtotal'],$productos[$i]['Impuesto'],$productos[$i]['TotalUnitario'],$productos[$i]['Comprobante']);
+
+                if($productos[$i]['Codigo'] == $productos[$i]['Comprobante']) {$comprobante_dp = '';}
+                else {$comprobante_dp = $productos[$i]['Comprobante'];}
+
+                $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$productos[$i]['IdPartida'],$productos[$i]['Codigo'],$productos[$i]['Producto'],$productos[$i]['Cantidad'],$productos[$i]['Precio'],$productos[$i]['Subtotal'],$productos[$i]['Impuesto'],$productos[$i]['TotalUnitario'],$comprobante_dp);
             }
 
             // se actualiza Número de Documento

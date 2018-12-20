@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use WebSigesa\Caja;
 use WebSigesa\Paciente;
 use WebSigesa\Sistema;
+use WebSigesa\Mantenimiento;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use WebSigesa\Http\Controllers\PDFComprobantesController;
 
@@ -501,5 +502,49 @@ class CajaController extends Controller
         } else {
             return response()->json(['data' => 'sindato']);
         }
+    }
+
+    public function nuevo_protocolo($nombre,$precio)
+    {
+        $mantenimiento = new Mantenimiento();
+        $data = $mantenimiento->Obtener_Ultimo_Protocolo();
+
+        $ultimo_codigo_protocolo = str_replace('PRT', '', $data[0]['Codigo']);
+        $nuevo_codigo_protocolo = $ultimo_codigo_protocolo + 1;
+        $nuevo_codigo_protocolo = 'PRT' . $nuevo_codigo_protocolo;
+
+        // echo $nuevo_codigo_protocolo . ' | ' . strtoupper($nombre);exit();
+
+        $data_cabecera = $mantenimiento->Nuevo_Protocolo_Cabecera($nuevo_codigo_protocolo,strtoupper($nombre));
+
+        if ($data_cabecera > 1) {
+            $data_detalle = $mantenimiento->Nuevo_Protocolo_Detalle($data_cabecera,$precio);
+
+            if ($data_detalle > 1) {
+                return response()->json(
+                    [
+                        'data'      => 'Protocolo registrado con éxito.',
+                        'codigo'    => 1
+                    ]
+                );
+            } else {
+                return response()->json(
+                    [
+                        'data'      => 'No se pudo registrar precio, contacte a sistemas por favor <br> CODIGO: ' . $data_cabecera,
+                        'codigo'    => 2
+                    ]
+                );
+            }
+        }
+        else {
+            return response()->json(
+                [
+                    'data'      => 'No se pudo registrar, intentenlo nuevamente.',
+                    'codigo'    => 2
+                ]
+            );
+        }
+
+        
     }
 }

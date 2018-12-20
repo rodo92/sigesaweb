@@ -246,6 +246,7 @@
             </div>
         </section>
 
+       
         <!-- busqueda de poductas -->
         <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="modal_ingresos_productos">
             <div class="modal-dialog modal-lg" role="document">
@@ -261,6 +262,15 @@
                             </div>
                             <div class="col-xs-4">
                                 <button class="btn btn-default"><i class="fa fa-search"></i> BUSCAR</button>
+                                <button class="btn btn-default" v-on:click.prevent="mostrar_modal_nuevo"><i class="fa fa-plus"></i> NUEVO</button>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 2%;display: none;" id="modal_nuevos_productos">
+                            <div class="col-xs-8">
+                                <input type="text" class="form-control" style="width: 100%;" id="caja_nombre_nuevo_prod" placeholder="NOMBRE PROTOCOLO NUEVO" v-on:keyup.13="pasar_precio"  v-model="nuevo_protocolo_nombre">
+                            </div>
+                            <div class="col-xs-4">
+                                <input type="number" class="form-control" style="width: 100%;" id="caja_precio_nuevo_prod" placeholder="0000.00000" v-on:keyup.13="registrar_protocolo"  v-model="nuevo_protocolo_precio">
                             </div>
                         </div>
 
@@ -348,6 +358,8 @@
                 IdGestionCaja: '',
                 totalcobrado: 0,
                 imprimir_clasificador: 0,
+                nuevo_protocolo_nombre: '',
+                nuevo_protocolo_precio: '',
             }
         },
         created: function() {
@@ -380,6 +392,41 @@
                 }).catch(error => {
                     console.log('no hay datos de tipos de documentos');
                 });                
+            },
+
+            registrar_protocolo: function() {
+                if (this.nuevo_protocolo_nombre == '') {
+                    toastr.error('Ingrese un nombre para el protocolo','WebSigesa');
+                    $('#caja_nombre_nuevo_prod').focus();
+                } else if (this.nuevo_protocolo_precio == '') {
+                    toastr.error('Ingrese un precio para el protocolo','WebSigesa');
+                    $('#caja_precio_nuevo_prod').focus();
+                } else {
+                    var url = 'protocolo/nuevo/' + this.nuevo_protocolo_nombre + '/' + this.nuevo_protocolo_precio;
+
+                    axios.get(url).then(response => {
+                        if (response.data.codigo == 1) {
+                            toastr.success(response.data.data,'WebSigesa');
+                            $('#modal_nuevos_productos').hide();
+                            this.nuevo_protocolo_nombre = '';
+                            this.nuevo_protocolo_precio = '';
+                            $('#paramatro_busqueda').focus();
+                        }
+                        if (response.data.codigo == 2) {
+                            toastr.success(response.data.data,'WebSigesa');
+                        }
+                    }).catch(error => {
+                        console.log(error.response.data);
+                    });
+                }
+            },
+
+            mostrar_modal_nuevo: function() {
+                $('#modal_nuevos_productos').fadeIn(400);
+                $('#caja_nombre_nuevo_prod').focus();
+            },
+            pasar_precio: function() {
+                $('#caja_precio_nuevo_prod').focus();
             },
 
             eliminarRegistrov: function(index) {
@@ -518,6 +565,9 @@
             ver_modal: function() {
                 this.productos_temp = [];
                 this.txt_busqueda = '';
+                this.nuevo_protocolo_nombre = '';
+                this.nuevo_protocolo_precio = '';
+                $('#modal_nuevos_productos').hide();
                 $('#modal_ingresos_productos').modal('show');
                 $('#modal_ingresos_productos').on('shown.bs.modal', function() {
                     $('#paramatro_busqueda').focus();

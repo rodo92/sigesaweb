@@ -68,6 +68,7 @@ Route::get('cajas/generar_ticket/{idorden}','PDFTicketController@generar');
 
 // Caja central
 Route::get('cajasc','CajaController@cajas_central');
+Route::get('protocolo/nuevo/{nombre}/{precio}','CajaController@nuevo_protocolo');
 
 // Cajas Farmacia
 Route::get('cajasf','CajaController@cajas_farmacia');

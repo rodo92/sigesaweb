@@ -586,6 +586,10 @@
                         this.serie = '';
                         this.ndocumento = '';
                         $('#serie_boleta').focus();
+                    } else if (datos == 'yafacturada') {
+                        toastr.error('Este documento ya se esta facturada.', 'WebSigesa');
+                        this.cuenta = '';
+                        $('#id_cuenta').focus();
                     }
                     else{
                         this.idorden = '';

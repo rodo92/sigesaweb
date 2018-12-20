@@ -126,19 +126,20 @@ class Caja extends Model
         return json_decode(json_encode($IdCajaFacturacion), true);
     }
 
-    public function Generar_Factura_Detalle($IdCajaFacturacion,$IdCuentaAtencion,$IdPartida,$Codigo,$Descripcion,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
+    public function Generar_Factura_Detalle($IdCajaFacturacion,$IdCuentaAtencion,$IdPartida,$Codigo,$Descripcion,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total,$DocumentoProcedencia)
     {
         $datos = array(
-                'IdCajaFacturacion' => $IdCajaFacturacion,
-                'IdCuentaAtencion'  => $IdCuentaAtencion,
-                'IdPartida'         => $IdPartida,
-                'Codigo'            => $Codigo,
-                'Descripcion'       => $Descripcion,
-                'Cantidad'          => $Cantidad,
-                'ValorUnitario'     => $ValorUnitario,
-                'SubTotal'          => $SubTotal,
-                'IGV'               => $IGV,
-                'Total'             => $Total
+                'IdCajaFacturacion'     => $IdCajaFacturacion,
+                'IdCuentaAtencion'      => $IdCuentaAtencion,
+                'IdPartida'             => $IdPartida,
+                'Codigo'                => $Codigo,
+                'Descripcion'           => $Descripcion,
+                'Cantidad'              => $Cantidad,
+                'ValorUnitario'         => $ValorUnitario,
+                'SubTotal'              => $SubTotal,
+                'IGV'                   => $IGV,
+                'Total'                 => $Total,
+                'DocumentoProcedencia'  => $DocumentoProcedencia
             );
         DB::table('CajaFacturacionDetalle')->insert($datos);
     }
@@ -166,7 +167,7 @@ class Caja extends Model
     public function Buscar_Boleta_Factura($IdCuentaAtencion)
     {
         $result = DB::table('CajaFacturacionDetalle')
-                ->where('IdCuentaAtencion','=',$IdCuentaAtencion)
+                ->where('DocumentoProcedencia','=',trim($IdCuentaAtencion))
                 ->get();
 
         return json_decode(json_encode($result), true);

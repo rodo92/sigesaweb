@@ -236,47 +236,56 @@ class CajaController extends Controller
     public function buscar_detalle_boleta_x_codigo($serio,$ndocumento,$idOrden='')
     {
         $caja = new Caja();
-        // $data = $caja->Datos_X_Codigo_Para_Facturar($serio,$ndocumento,$idOrden);
-        $data = $caja->Datos_X_Codigo_Para_Facturar($serio,$ndocumento,'0');
+        $verificacion = $caja->Buscar_Boleta_Factura($serio . '-' . (int)$ndocumento);
 
-        if (count($data) > 0) {
-            $paciente       = $data[0]['RazonSocial'];
-            $idpaciente     = $data[0]['IdPaciente'];
-            $subtotal       = number_format($data[0]['SubTotal'],2,'.',' ');
-            $igv            = number_format($data[0]['IGV'],2,'.',' ');
-            $total          = number_format($data[0]['Total'],2,'.',' ');
-            $comprobante    = $data[0]['Comprobante'];
 
-            for ($i=0; $i < count($data); $i++) { 
-                $productos[] = array(
-                    'Comprobante'   => $data[$i]['Comprobante'],
-                    'Codigo'        => $data[$i]['Codigo'],
-                    'Producto'      => $data[$i]['Producto'],
-                    'Cantidad'      => $data[$i]['Cantidad'],
-                    'IdPartida'     => $data[$i]['CodigoPresupuestal'],
-                    'Precio'        => number_format($data[$i]['Precio'],2,'.',' '),
-                    'Subtotal'      => number_format($data[$i]['Precio'] * $data[$i]['Cantidad'],2,'.',' ') ,
-                    'Impuesto'      => number_format($data[$i]['IGVUNITARIO'] * $data[$i]['Cantidad'],2,'.',' '),
-                    'TotalUnitario' => number_format($data[$i]['TotalUnitario'],2,'.',' ')
+        if (count($verificacion) > 0) {
+            return response()->json(['data' => 'yafacturada']);
+        }
+
+        else {
+            // $caja = new Caja();
+            // $data = $caja->Datos_X_Codigo_Para_Facturar($serio,$ndocumento,$idOrden);
+            $data = $caja->Datos_X_Codigo_Para_Facturar($serio,$ndocumento,'0');
+
+            if (count($data) > 0) {
+                $paciente       = $data[0]['RazonSocial'];
+                $idpaciente     = $data[0]['IdPaciente'];
+                $subtotal       = number_format($data[0]['SubTotal'],2,'.',' ');
+                $igv            = number_format($data[0]['IGV'],2,'.',' ');
+                $total          = number_format($data[0]['Total'],2,'.',' ');
+                $comprobante    = strtoupper($serio . '-' . $data[0]['Comprobante']);
+
+                for ($i=0; $i < count($data); $i++) { 
+                    $productos[] = array(
+                        'Comprobante'   => strtoupper($serio . '-' . $data[$i]['Comprobante']),
+                        'Codigo'        => $data[$i]['Codigo'],
+                        'Producto'      => $data[$i]['Producto'],
+                        'Cantidad'      => $data[$i]['Cantidad'],
+                        'IdPartida'     => $data[$i]['CodigoPresupuestal'],
+                        'Precio'        => number_format($data[$i]['Precio'],2,'.',' '),
+                        'Subtotal'      => number_format($data[$i]['Precio'] * $data[$i]['Cantidad'],2,'.',' ') ,
+                        'Impuesto'      => number_format($data[$i]['IGVUNITARIO'] * $data[$i]['Cantidad'],2,'.',' '),
+                        'TotalUnitario' => number_format($data[$i]['TotalUnitario'],2,'.',' ')
+                    );
+                }
+
+                $response = array(
+                    'paciente'      => $paciente,
+                    'idpaciente'    => $idpaciente,
+                    'subtotal'      => $subtotal,
+                    'igv'           => $igv,
+                    'total'         => $total,
+                    'comprobante'   => $comprobante,
+                    'productos'     => $productos
                 );
+
+                return response()->json(['data' => $response]);
             }
-
-            $response = array(
-                'paciente'      => $paciente,
-                'idpaciente'    => $idpaciente,
-                'subtotal'      => $subtotal,
-                'igv'           => $igv,
-                'total'         => $total,
-                'comprobante'   => $comprobante,
-                'productos'     => $productos
-            );
-
-            return response()->json(['data' => $response]);
+            else{
+                return response()->json(['data' => 'sindatos']);
+            }
         }
-        else{
-            return response()->json(['data' => 'sindatos']);
-        }
-        
     }
 
     public function buscar_boleta_x_cuenta($cuenta)
@@ -368,7 +377,7 @@ class CajaController extends Controller
             // se genera el detalle
             for ($i=0; $i < count($productos); $i++) { 
                 // $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$IdPartida,$Codigo,$Cantidad,$ValorUnitario,$SubTotal,$IGV,$Total)
-                $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$productos[$i]['IdPartida'],$productos[$i]['Codigo'],$productos[$i]['Producto'],$productos[$i]['Cantidad'],$productos[$i]['Precio'],$productos[$i]['Subtotal'],$productos[$i]['Impuesto'],$productos[$i]['TotalUnitario']);
+                $caja->Generar_Factura_Detalle($id_cabecera,$IdCuentaAtencion,$productos[$i]['IdPartida'],$productos[$i]['Codigo'],$productos[$i]['Producto'],$productos[$i]['Cantidad'],$productos[$i]['Precio'],$productos[$i]['Subtotal'],$productos[$i]['Impuesto'],$productos[$i]['TotalUnitario'],$productos[$i]['Comprobante']);
             }
 
             // se actualiza Número de Documento

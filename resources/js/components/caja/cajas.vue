@@ -762,12 +762,15 @@
 
                 else{
                     var totalunitario = parseFloat(cantidad) * parseFloat(subtotal);
+                    // console.log(precio*cantidad);
                     // totalunitario = Math.round(totalunitario * 100) / 100;
 
                     var subtotalunitario = parseFloat(cantidad) * parseFloat(precio);
+                    // console.log(subtotalunitario);
                     // subtotalunitario = Math.round(subtotalunitario * 100) / 100;
 
                     var impuestounitario = parseFloat(cantidad) * parseFloat(impuesto);
+                    // console.log(impuestounitario);
                     // impuestounitario = Math.round(impuestounitario * 100) / 100;
 
                     this.productos.push({

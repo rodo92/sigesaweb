@@ -24,6 +24,9 @@ Vue.component('caja', require('./components/caja/cajas.vue'));
 Vue.component('cajacentral', require('./components/caja/cajasc.vue'));
 Vue.component('cajafarmacia', require('./components/caja/cajasf.vue'));
 
+// Consulta externa
+Vue.component('admision', require('./components/consultaextena/admision.vue'));
+
 const app = new Vue({
     el: '#app'
 });

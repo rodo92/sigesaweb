@@ -222,9 +222,9 @@ class CajaController extends Controller
                     'Nombre'    => $data[$i]['Nombre'],
                     'Cantidad'  => 0,
                     'IdPartida' => $data[$i]['codPartida'],
-                    'Precio'    => number_format($data[$i]['PrecioUnitario'],2,'.',' '),
-                    'Subtotal'  => number_format($data[$i]['Precio'],2,'.',' ') ,
-                    'Impuesto'  => number_format($data[$i]['IGV'],2,'.',' ')
+                    'Precio'    => str_replace(' ','',number_format($data[$i]['PrecioUnitario'],2,'.',' ')),
+                    'Subtotal'  => str_replace(' ','',number_format($data[$i]['Precio'],2,'.',' ')) ,
+                    'Impuesto'  => str_replace(' ','',number_format($data[$i]['IGV'],2,'.',' '))
                 );
                 // return response()->json($data[$i]['Codigo']);
             }

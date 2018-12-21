@@ -251,9 +251,9 @@ class CajaController extends Controller
             if (count($data) > 0) {
                 $paciente       = $data[0]['RazonSocial'];
                 $idpaciente     = $data[0]['IdPaciente'];
-                $subtotal       = str_replace(' ','',number_format($data[$i]['SubTotal'],2,'.',' '));
-                $igv            = str_replace(' ','',number_format($data[$i]['IGV'],2,'.',' '));
-                $total          = str_replace(' ','',number_format($data[$i]['Total'],2,'.',' '));
+                $subtotal       = str_replace(' ','',number_format($data[0]['SubTotal'],2,'.',' '));
+                $igv            = str_replace(' ','',number_format($data[0]['IGV'],2,'.',' '));
+                $total          = str_replace(' ','',number_format($data[0]['Total'],2,'.',' '));
                 $comprobante    = strtoupper($serio . '-' . $data[0]['Comprobante']);
 
                 for ($i=0; $i < count($data); $i++) { 

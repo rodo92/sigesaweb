@@ -28,15 +28,15 @@
                     
                     <div class="row">
                         <div class="col-xs-5">
-                            <table>
+                            <table width="100%" style="border-collapse: collapse;">
                                 <tr>
                                     <td>
-                                        <input type="text" class="form-control" placeholder="ESPECIALIDAD" id="txt_especialidad">
+                                        <input type="text" class="form-control" placeholder="ESPECIALIDAD" id="txt_especialidad" data-provide="typeahead" >
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" class="form-control" placeholder="MEDICO">
+                                        <input type="text" class="form-control" placeholder="MEDICO" id="txt_medicos" data-provide="typeahead" >
                                     </td>
                                 </tr>
                             </table>
@@ -65,17 +65,62 @@
     export default {
         data() {
             return {
-                
+                id_medico: '',
+                id_especialidad: '',
             }
         },
         created: function() {
-            
+            this.carga_especialidades();
+            this.cargar_medicos();
         },
-        methods: {},
+        methods: {
+            carga_especialidades: function()
+            {
+                var url_especialidades = 'AdmisionCE/especialidades';
+                axios.get(url_especialidades).then(response => {  
+                    var data = response.data;
+                    $('#txt_especialidad').typeahead({
+                        source: data,
+                        // minLength: 3,
+                        autoSelect: true,
+                        afterSelect: function (item) {
+                            // console.log('afterSelect: ' + item.id);
+                            this.id_especialidad = item.id;
+                        }
+                    });
+                    $('#txt_especialidad').focus();
+                    
+                }).catch(error => {
+                    console.log(url);
+                    console.log('no hay datos de especialidades cargadas.');
+                });
+
+            },
+            cargar_medicos: function() {
+
+                var url_medicos = 'AdmisionCE/medicos';
+                axios.get(url_medicos).then(response => {  
+                    var data = response.data;
+                    $('#txt_medicos').typeahead({
+                        source: data,
+                        // minLength: 3,
+                        autoSelect: true,
+                        afterSelect: function (item) {
+                            // console.log('afterSelect: ' + item.id);
+                            this.id_medico = item.id;
+                        }
+                    });
+                    
+                }).catch(error => {
+                    console.log(url);
+                    console.log('no hay datos de medicos registrados.');
+                });
+            }
+        },
         mounted() {
             $('#calendario').datepicker({
                 inline: true,
-                sideBySide: true          
+                sideBySide: true
             }).on('changeDate', function(e) 
                 {
                     var dia     = e.date.getDate();
@@ -86,6 +131,7 @@
 
                 }
             );
+            $("#calendario").datepicker("update", new Date());
         }
     }
 </script>

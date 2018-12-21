@@ -96,4 +96,33 @@ class SistemaController extends Controller
             }     
         return response()->json($data);
     }
+
+    public function especialidades($idespecialidad = false)
+    {
+        $data = false;
+        $Sistema = new Sistema();
+        $especialidades = $Sistema->Obtener_Especialidades();
+
+        if ($idespecialidad) {
+            for ($i=0; $i < count($especialidades); $i++) { 
+                if ($especialidades[$i]['IdEspecialidad'] == $idespecialidad) {
+                    $data = array(
+                        'id'        => $especialidades[$i]['IdEspecialidad'],
+                        'name'      => strtoupper($especialidades[$i]['Nombre']),
+                        'iddpto'    => $especialidades[$i]['IdDepartamento']
+                    );
+                }                
+            }  
+        } else {
+            for ($i=0; $i < count($especialidades); $i++) { 
+                $data[] = array(
+                    'id'        => $especialidades[$i]['IdEspecialidad'],
+                    'name'      => strtoupper($especialidades[$i]['Nombre']),
+                    'iddpto'    => $especialidades[$i]['IdDepartamento']
+                );
+            }   
+        }
+
+        return response()->json($data);
+    }
 }

@@ -62,4 +62,24 @@ class Sistema extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Obtener_Especialidades()
+    {
+        $result = DB::table('Especialidades')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+    
+    public function Obtener_Especialidades_Tipo_Servicio($idTipoServicio)
+    {
+        $result = DB::table('Servicios')
+                ->leftJoin('Especialidades', 'Especialidades.IdEspecialidad', '=', 'Servicios.IdEspecialidad')
+                ->select('Servicios.IdEspecialidad','Especialidades.Nombre','Especialidades.IdDepartamento')
+                ->where('Servicios.IdTipoServicio','=',$idTipoServicio)
+                ->distinct()
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
 }

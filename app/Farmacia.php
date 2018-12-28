@@ -35,6 +35,16 @@ class Farmacia extends Model
         return json_decode(json_encode($result), true);
     }
 
+    public function Mostrar_Farmacias($tipo)
+    {
+        $result = DB::table('farmAlmacen')
+                ->where('farmAlmacen.idTipoLocales','=',$tipo)
+                ->select('farmAlmacen.*')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
     public function Reporte_Almacen_Traslado($fechainicio, $fechafin, $idAlmacen)
     {
         $result = DB::select('exec SIGESA_FARMACIA_REPORTES_ALMACEN_TRASLADO ?,?,?', [$fechainicio, $fechafin, $idAlmacen]);
@@ -45,6 +55,20 @@ class Farmacia extends Model
     public function Reporte_Almacen_Ingresos_Almacen($fechainicio, $fechafin, $idProveedor)
     {
         $result = DB::select('exec SIGESA_FARMACIA_INGRESOS_ALMACEN ?,?,?', [$fechainicio, $fechafin, $idProveedor]);
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Reporte_Almacen_Entrada_Salida_Documentos($fechainicio, $fechafin, $idAlmacenOrigen, $movTipo)
+    {
+        $result = DB::select('exec SIGESA_FARMACIA_REPORTE_ES_DOCUMENTOS ?,?,?,?', [$fechainicio, $fechafin, $movTipo, $idAlmacenOrigen]);
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Reporte_Almacen_Reporte_Por_Usuario($fechainicio, $fechafin, $idAlmacenOrigen)
+    {
+        $result = DB::select('exec SIGESA_FARMACIA_REPORTE_POR_USUARIO ?,?,?', [$fechainicio, $fechafin, $idAlmacenOrigen]);
 
         return json_decode(json_encode($result), true);
     }

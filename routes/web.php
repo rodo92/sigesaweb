@@ -34,7 +34,9 @@ Route::get('sistema/qr_s/{cadena}', 'QRController@qr_simple')->name('qrsimple');
  */
 Route::get('reportegestion', 'FarmaciaController@reportegestion');
 Route::get('reporalmacen', 'FarmaciaController@reporalmacen');
+Route::get('reporfarmacia', 'FarmaciaController@reporfarmacia');
 Route::get('farmacia/almacenes', 'FarmaciaController@almacenes');
+Route::get('farmacia/farmacias/{tipo}', 'FarmaciaController@farmacias');
 
 // Reportes Gestion
 Route::get('reporteici/generar_dbf', 'ReporteICIController@generar_dbf');
@@ -45,6 +47,12 @@ Route::post('farmacia/reporte_traslados', 'ReporteAlmacenController@reporte_tras
 Route::post('farmacia/reporte_ingresos_almacen', 'ReporteAlmacenController@reporte_ingresos_almacen');
 Route::get('farmacia/reporte_traslados_excel/{inicio}/{fin}/{idalmacen}', 'ReporteAlmacenController@reporte_traslados_excel');
 Route::get('farmacia/reporte_ingresos_almacen_excel/{inicio}/{fin}/{ruc}', 'ReporteAlmacenController@reporte_ingresos_almacen_excel');
+
+// Reportes Farmacia 
+Route::get('farmacia/reporte_es_documentos/{inicio}/{fin}/{almacenid}/{movtipo}', 'ReporteFarmaciaController@reporte_entradas_salidas_documentos');
+Route::get('farmacia/reporte_por_usuario/{inicio}/{fin}/{almacenid}', 'ReporteFarmaciaController@reporte_por_usuario');
+Route::get('farmacia/reporte_es_documentos_excel/{inicio}/{fin}/{almacenid}/{movtipo}', 'ReporteFarmaciaController@reporte_entradas_salidas_documentos_excel');
+Route::get('farmacia/reporte_por_usuario_excel/{inicio}/{fin}/{almacenid}', 'ReporteFarmaciaController@reporte_por_usuario_excel');
 
 
 /**

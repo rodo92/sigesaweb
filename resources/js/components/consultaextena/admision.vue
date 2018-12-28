@@ -15,35 +15,24 @@
         <section class="content container-fluid">
     
             <div class="box box-default color-palette-box" >
-                
-                <div class="box-header with-border">
-                    <h3 class="box-title"></h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="box-body">
+               <div class="box-body">
                     
                     <div class="row">
                         <div class="col-xs-5">
-                            <table width="100%" style="border-collapse: collapse;">
+                            <table width="100%">
                                 <tr>
                                     <td>
-                                        <input type="text" class="form-control" placeholder="ESPECIALIDAD" id="txt_especialidad" data-provide="typeahead" >
+                                        <input type="text" class="form-control" placeholder="ESPECIALIDAD" id="txt_especialidad">
                                     </td>
-                                </tr>
-                                <tr>
                                     <td>
-                                        <input type="text" class="form-control" placeholder="MEDICO" id="txt_medicos" data-provide="typeahead" >
+                                        <input type="text" class="form-control" placeholder="MEDICO" id="txt_medicos">
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="col-xs-4"></div>
-                        <div class="col-xs-3">
-                            <div id="calendario" style="border: 1px solid #d7d7d7;"></div>
+                        <div class="col-xs-3"></div>
+                        <div class="col-xs-4">
+                            <datepicker :inline="true" :language="es" :value="fecha"></datepicker>
                         </div>
                     </div>
 
@@ -56,17 +45,21 @@
 
 <script>
     import axios from 'axios'
-    import datepicker from 'bootstrap-datepicker'
     import toastr from 'toastr'
-    import DataTable from 'datatables.net-bs'
-    import dataTable from 'datatables.net'
-    import typeahead from 'bootstrap-3-typeahead'
+    import Datepicker from 'vuejs-datepicker';
+    import moment from 'moment';
+    import {es} from 'vuejs-datepicker/dist/locale'
 
     export default {
+        components: {
+            Datepicker
+        },
         data() {
             return {
+                es: es,
                 id_medico: '',
                 id_especialidad: '',
+                fecha: moment(new Date()).format('YYYY-MM-DD'),
             }
         },
         created: function() {
@@ -76,6 +69,7 @@
         methods: {
             carga_especialidades: function()
             {
+                console.log(this.fecha);
                 var url_especialidades = 'AdmisionCE/especialidades';
                 axios.get(url_especialidades).then(response => {  
                     var data = response.data;
@@ -118,20 +112,7 @@
             }
         },
         mounted() {
-            $('#calendario').datepicker({
-                inline: true,
-                sideBySide: true
-            }).on('changeDate', function(e) 
-                {
-                    var dia     = e.date.getDate();
-                    var mes     = e.date.getMonth() + 1;
-                    var anio    = e.date.getFullYear();
-
-                    var fecha_seleccionada = dia + '/' + mes + '/' + anio;
-
-                }
-            );
-            $("#calendario").datepicker("update", new Date());
+            
         }
     }
 </script>

@@ -18,11 +18,12 @@ Vue.component('inicioindex', require('./components/Inicio.Index.vue'));
 // Farmacia
 Vue.component('reportegestion', require('./components/farmacia/reportegestion.vue'));
 Vue.component('reporalmacen', require('./components/farmacia/reporalmacen.vue'));
+Vue.component('reporfarmacia', require('./components/farmacia/reporfarmacia.vue'));
 
 // Caja
 Vue.component('caja', require('./components/caja/cajas.vue'));
 Vue.component('cajacentral', require('./components/caja/cajasc.vue'));
-Vue.component('cajafarmacia', require('./components/caja/cajasf.vue'));
+
 
 // Consulta externa
 Vue.component('admision', require('./components/consultaextena/admision.vue'));

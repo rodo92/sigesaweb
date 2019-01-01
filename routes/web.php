@@ -101,3 +101,9 @@ Programacion General
 
 // Medico
 Route::resource('Medico', 'MedicoController');
+
+/*Archivo*/
+
+// Reportes de Archivo
+Route::get('Archivo/reporte_consejeria/{turno}/{fecha}','ArchivoController@Reporte_Conserjeria');
+Route::get('Archivo/reporte_consejeria_excel/{turno}/{fecha}','ArchivoController@Reporte_Conserjeria_Excel');

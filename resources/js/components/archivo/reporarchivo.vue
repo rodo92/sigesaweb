@@ -222,48 +222,55 @@
                 var url = 'Archivo/reporte_consejeria/'+this.turnoid+'/'+this.inicio;
                 // console.log(url);return false;
                 axios.get(url).then(reponse => {
-                    console.log(reponse.data.data);
-                    $('#tabla_conserjeria').dataTable().fnDestroy();
-                    $('#tabla_conserjeria').DataTable({
-                        language: {
-                            search: 'Buscar:',
-                            paginate: {
-                                first: "Primero",
-                                previous: "Atr&aacute;s",
-                                next: "Adelante",
-                                last: "&Uacute;ltimo"
+                    var respuesta_a = reponse.data.data;
+                    if (respuesta_a == 'sindatos') {
+                        $('#tabla_conserjeria').DataTable().clear().draw();
+                        toastr.clear();
+                        toastr.warning('No hay información para esta busqueda', 'WebSigesa');
+                    }
+                    else {
+                        $('#tabla_conserjeria').dataTable().fnDestroy();
+                        $('#tabla_conserjeria').DataTable({
+                            language: {
+                                search: 'Buscar:',
+                                paginate: {
+                                    first: "Primero",
+                                    previous: "Atr&aacute;s",
+                                    next: "Adelante",
+                                    last: "&Uacute;ltimo"
+                                },
+                                "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
+                                "lengthMenu": "Mostrar _MENU_ entradas",
+                                "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
                             },
-                            "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
-                            "lengthMenu": "Mostrar _MENU_ entradas",
-                            "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
-                        },
-                        "lengthMenu": [5, 10, 25, 50, 75, 100],
-                        data: reponse.data.data,
-                        columns: [
-                            {data: 'RUTA'},
-                            {data: 'ESPECIALIDAD'},
-                            {data: 'SERVICIO'},
-                            {data: 'NRO HISTORIA'},
-                            {data: 'PACIENTE'},
-                            {data: 'FECHA SOLICITUD'},
-                            {data: 'TIPO PACIENTE'},
-                            {data: 'TIPO CITA'},
-                            {data: 'HORA INICIO'},
-                            {data: 'CONSERJE'},
-                            {data: 'ARCHIVERO'},
-                            {data: 'TECNICA'},
-                            {data: 'MEDICO'},
-                            {data: 'SEGURO'},
-                            {data: 'DIGITO TERMINAL'},
-                            {data: 'DESTINO'},
-                            {data: 'ESTADO'},
-                            {data: 'UBICACION'},
-                            {data: 'ULTIMO MOVIMIENTO'},
-                            {data: 'TURNO'}
-                        ]
-                    });
-                    toastr.clear();
-                    $('#tabla_conserjeria').show();
+                            "lengthMenu": [5, 10, 25, 50, 75, 100],
+                            data: reponse.data.data,
+                            columns: [
+                                {data: 'RUTA'},
+                                {data: 'ESPECIALIDAD'},
+                                {data: 'SERVICIO'},
+                                {data: 'NRO HISTORIA'},
+                                {data: 'PACIENTE'},
+                                {data: 'FECHA SOLICITUD'},
+                                {data: 'TIPO PACIENTE'},
+                                {data: 'TIPO CITA'},
+                                {data: 'HORA INICIO'},
+                                {data: 'CONSERJE'},
+                                {data: 'ARCHIVERO'},
+                                {data: 'TECNICA'},
+                                {data: 'MEDICO'},
+                                {data: 'SEGURO'},
+                                {data: 'DIGITO TERMINAL'},
+                                {data: 'DESTINO'},
+                                {data: 'ESTADO'},
+                                {data: 'UBICACION'},
+                                {data: 'ULTIMO MOVIMIENTO'},
+                                {data: 'TURNO'}
+                            ]
+                        });
+                        toastr.clear();
+                        $('#tabla_conserjeria').show();
+                    }
                 }).catch(error => {
                     toastr.clear();
                     this.errores = error.response.data.errors;
@@ -284,42 +291,50 @@
                 var url = 'Archivo/reporte_listado_citados/'+this.turno_lc+'/'+this.inicio_ru+'/'+this.si_lc+'/'+this.sf_lc;
                 // console.log(url);return false;
                 axios.get(url).then(reponse => {
-                    console.log(reponse.data.data);
-                    $('#tabla_ru').dataTable().fnDestroy();
-                    $('#tabla_ru').DataTable({
-                        language: {
-                            search: 'Buscar:',
-                            paginate: {
-                                first: "Primero",
-                                previous: "Atr&aacute;s",
-                                next: "Adelante",
-                                last: "&Uacute;ltimo"
+                    var respuesta_a = reponse.data.data;
+                    if (respuesta_a == 'sindatos') {
+                        $('#tabla_ru').DataTable().clear().draw();
+                        toastr.clear();
+                        toastr.warning('No hay información para esta busqueda', 'WebSigesa');
+                    }
+                    else {
+                        $('#tabla_ru').dataTable().fnDestroy();
+                        $('#tabla_ru').DataTable({
+                            language: {
+                                search: 'Buscar:',
+                                paginate: {
+                                    first: "Primero",
+                                    previous: "Atr&aacute;s",
+                                    next: "Adelante",
+                                    last: "&Uacute;ltimo"
+                                },
+                                "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
+                                "lengthMenu": "Mostrar _MENU_ entradas",
+                                "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
                             },
-                            "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
-                            "lengthMenu": "Mostrar _MENU_ entradas",
-                            "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
-                        },
-                        "lengthMenu": [5, 10, 25, 50, 75, 100],
-                        data: reponse.data.data,
-                        columns: [
-                            { data: 'FECHA REQUERIDA' },
-                            { data: 'FECHA SOLICITUD' },
-                            { data: 'OBSERVACION' },
-                            { data: 'ESTADO' },
-                            { data: 'TIPO PACIENTE' },
-                            { data: 'NRO HISTORIA' },
-                            { data: 'PACIENTE' },
-                            { data: 'DIGITO TERMINAL' },
-                            { data: 'TIPO HISTORIA' },
-                            { data: 'SERVICIO' },
-                            { data: 'TURNO' },
-                            { data: 'ESPECIALIDAD' },
-                            { data: 'DESTINO' },
-                            { data: 'ULTIMO MOVIMIENTO' }
-                        ]
-                    });
-                    toastr.clear();
-                    $('#tabla_ru').show();
+                            "lengthMenu": [5, 10, 25, 50, 75, 100],
+                            data: reponse.data.data,
+                            columns: [
+                                { data: 'FECHA REQUERIDA' },
+                                { data: 'FECHA SOLICITUD' },
+                                { data: 'OBSERVACION' },
+                                { data: 'ESTADO' },
+                                { data: 'TIPO PACIENTE' },
+                                { data: 'NRO HISTORIA' },
+                                { data: 'PACIENTE' },
+                                { data: 'DIGITO TERMINAL' },
+                                { data: 'TIPO HISTORIA' },
+                                { data: 'SERVICIO' },
+                                { data: 'TURNO' },
+                                { data: 'ESPECIALIDAD' },
+                                { data: 'DESTINO' },
+                                { data: 'ULTIMO MOVIMIENTO' }
+                            ]
+                        });
+                        toastr.clear();
+                        $('#tabla_ru').show();
+                    }
+                    // console.log(reponse.data.data);
                 }).catch(error => {
                     toastr.clear();
                     this.errores = error.response.data.errors;

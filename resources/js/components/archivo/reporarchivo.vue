@@ -327,8 +327,8 @@
             },
             excelExport: function() {
                 if (this.inicio == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
+                // if (this.fin == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
                 if (this.turnoid == '') { toastr.error('Debe seleccionar un turno','WebSigesa');return false; }
-                
                 var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
                     timeOut: 0,
                     extendedTimeOut: 0

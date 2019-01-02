@@ -326,10 +326,9 @@
                 }); 
             },
             excelExport: function() {
-                if (this.inicio_ru == '') { toastr.error('Debe seleccionar una fecha','WebSigesa');return false; }
-                if (this.turno_lc == '') { toastr.error('Debe seleccionar un turno','WebSigesa');return false; }
-                if (this.si_lc == '') { toastr.error('Debe ingresar una serie de inicio.','WebSigesa');return false; }
-                if (this.sf_lc == '') { toastr.error('Debe ingresar una serie final.','WebSigesa');return false; }
+                if (this.inicio == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
+                if (this.turnoid == '') { toastr.error('Debe seleccionar un turno','WebSigesa');return false; }
+                
                 var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
                     timeOut: 0,
                     extendedTimeOut: 0

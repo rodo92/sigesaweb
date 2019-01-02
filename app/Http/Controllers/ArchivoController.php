@@ -51,6 +51,39 @@ class ArchivoController extends Controller
         } else { return response()->json(['data' => 'sindatos']); }
     }
 
+    public function Reporte_Listado_Citados($turno, $fecha, $serieinicial, $seriefinal)
+    {
+        $Archivo = new Archivo();
+        $data = $Archivo->Reporte_Archivo_Listado_Citas($turno, $fecha, $serieinicial, $seriefinal);
+
+        if (count($data) > 0) { 
+            for ($i=0; $i < count($data); $i++) { 
+                $response[] = array(
+                    'FECHA REQUERIDA' => $data[$i]['fecharequerida'],
+                    'FECHA SOLICITUD' => $data[$i]['fechasolicitud'],
+                    'OBSERVACION' => strtoupper($data[$i]['observacion']),
+                    'ESTADO' => strtoupper($data[$i]['estado']),
+                    'TIPO PACIENTE' => strtoupper($data[$i]['TipoPaciente']),
+                    'NRO HISTORIA' => $data[$i]['NroHistoriaClinica'],
+                    'PACIENTE' => strtoupper($data[$i]['nombres']),
+                    'DIGITO TERMINAL' => $data[$i]['digitoterminal'],
+                    'TIPO HISTORIA' => $data[$i]['tipohistoria'],
+                    'SERVICIO' => strtoupper($data[$i]['servicio']),
+                    'TURNO' => strtoupper($data[$i]['TURNO']),
+                    'ESPECIALIDAD' => strtoupper($data[$i]['especialidad']),
+                    'DESTINO' => strtoupper($data[$i]['destino']),
+                    // 'Ultimotiposervicio' => $data[$i]['Ultimotiposervicio'],
+                    // 'UltimoidServicio' => $data[$i]['UltimoidServicio'],
+                    'ULTIMO MOVIMIENTO' => strtoupper($data[$i]['ultimomov'])
+                );
+            }
+            return response()->json(
+                [
+                    'data' => $response
+                ]); 
+        } else { return response()->json(['data' => 'sindatos']); }
+    }
+
     public function Reporte_Conserjeria_Excel($turno, $fecha)
     {
         $Archivo = new Archivo();

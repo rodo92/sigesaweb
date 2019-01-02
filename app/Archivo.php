@@ -13,4 +13,11 @@ class Archivo extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Reporte_Archivo_Listado_Citas($turno, $fecha, $serieinicial, $seriefinal)
+    {
+        $result = DB::select('exec SIGESA_ARCHIVO_LISTADO_CITADOS ?,?,?,?', [$turno, $fecha, $serieinicial, $seriefinal]);
+
+        return json_decode(json_encode($result), true);
+    }
 }

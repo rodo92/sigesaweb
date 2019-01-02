@@ -109,3 +109,4 @@ Route::get('reporarchivo','ArchivoController@reporarchivo');
 Route::get('Archivo/reporte_consejeria/{turno}/{fecha}','ArchivoController@Reporte_Conserjeria');
 Route::get('Archivo/reporte_listado_citados/{turno}/{fecha}/{si}/{sf}','ArchivoController@Reporte_Listado_Citados');
 Route::get('Archivo/reporte_consejeria_excel/{turno}/{fecha}','ArchivoController@Reporte_Conserjeria_Excel');
+Route::get('Archivo/reporte_listado_citados_excel/{turno}/{fecha}/{si}/{sf}','ArchivoController@Reporte_Listado_Citados_Excel');

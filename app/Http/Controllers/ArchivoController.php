@@ -72,9 +72,9 @@ class ArchivoController extends Controller
                     'TURNO' => strtoupper($data[$i]['TURNO']),
                     'ESPECIALIDAD' => strtoupper($data[$i]['especialidad']),
                     'DESTINO' => strtoupper($data[$i]['destino']),
+                    'ULTIMO MOVIMIENTO' => strtoupper($data[$i]['ultimomov'])
                     // 'Ultimotiposervicio' => $data[$i]['Ultimotiposervicio'],
                     // 'UltimoidServicio' => $data[$i]['UltimoidServicio'],
-                    'ULTIMO MOVIMIENTO' => strtoupper($data[$i]['ultimomov'])
                 );
             }
             return response()->json(
@@ -197,6 +197,106 @@ class ArchivoController extends Controller
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="ReporteConserjeria.xls"'); /*-- $filename is  xsl filename ---*/
+        header('Cache-Control: max-age=0');
+        return $Excel_writer->save("php://output");
+    }
+
+    public function Reporte_Listado_Citados_Excel($turno, $fecha, $serieinicial, $seriefinal)
+    {
+        $Archivo = new Archivo();
+        $data = $Archivo->Reporte_Archivo_Listado_Citas($turno, $fecha, $serieinicial, $seriefinal);
+
+        $styleArray = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['argb' => 'FFE8E5E5'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'allborders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $styleCell = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $spreadsheet = new Spreadsheet();  /*----Spreadsheet object-----*/
+        $Excel_writer = new Xls($spreadsheet);  /*----- Excel (Xls) Object*/
+        $spreadsheet->setActiveSheetIndex(0);
+        $activeSheet = $spreadsheet->getActiveSheet();
+
+        $activeSheet->setTitle("Reporte de Ingresos de Almacen");
+
+        $activeSheet->getStyle('A1:N1')->applyFromArray($styleArray);
+
+        //Cabeceras de excel
+        $activeSheet->setCellValue('A1', 'FECHA REQUERIDA')->getStyle('A1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('B1', 'FECHA SOLICITUD')->getStyle('B1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('C1', 'OBSERVACION')->getStyle('C1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('D1', 'ESTADO')->getStyle('D1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E1', 'TIPO PACIENTE')->getStyle('E1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F1', 'NRO HISTORIA')->getStyle('F1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G1', 'PACIENTE')->getStyle('G1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('H1', 'DIGITO TERMINAL')->getStyle('H1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I1', 'TIPO HISTORIA')->getStyle('I1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('J1', 'SERVICIO')->getStyle('J1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('K1', 'TURNO')->getStyle('K1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('L1', 'ESPECIALIDAD')->getStyle('L1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('M1', 'DESTINO')->getStyle('M1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('N1', 'ULTIMO MOVIMIENTO')->getStyle('N1')->getFont()->setBold(true);
+
+        // Filtro
+        $activeSheet->setAutoFilter("A1:N1");
+
+        //Ingresando datos
+        $j = 2;
+        for ($i = 0; $i < count($data); $i++) {
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['fecharequerida']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$j, $data[$i]['fechasolicitud']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$j, strtoupper($data[$i]['observacion']));
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$j, strtoupper($data[$i]['estado']));
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('E'.$j, strtoupper($data[$i]['TipoPaciente']));
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$j, $data[$i]['NroHistoriaClinica']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$j, strtoupper($data[$i]['nombres']));
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, $data[$i]['digitoterminal']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, $data[$i]['tipohistoria']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$j, strtoupper($data[$i]['servicio']));
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('K'.$j, strtoupper($data[$i]['TURNO']));
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('L'.$j, strtoupper($data[$i]['especialidad']));
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('M'.$j, strtoupper($data[$i]['destino']));
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('N'.$j, strtoupper($data[$i]['ultimomov']));
+            $j++;
+        }
+
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('A')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('B')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('C')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('D')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('E')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('F')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('G')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('H')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('I')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('J')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('M')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('N')->setAutoSize(true);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ReporteListadoCitados.xls"'); /*-- $filename is  xsl filename ---*/
         header('Cache-Control: max-age=0');
         return $Excel_writer->save("php://output");
     }

@@ -97,7 +97,7 @@
             <div id="reportes_por_usuario">
                 <div class="box box-primary color-palette-box collapsed-box"><!-- collapsed-box -->
                     <div class="box-header with-border">
-                        <h3 class="box-title">Reporte por Usuario</h3>
+                        <h3 class="box-title">Reporte Listado de citados</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                             </button>
@@ -107,7 +107,7 @@
                         <table style="width: 100%;">
                             <tr>
                                 <td width="15%" style="padding-right: 5px;">
-                                    <label for="">Fecha Inicio:</label>
+                                    <label for="">Fecha:</label>
                                     <div class="input-group date">
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
@@ -115,29 +115,26 @@
                                         <input type="text" class="form-control pull-right" id="fecha_inicio_ru" :value="inicio_ru">
                                     </div>
                                 </td>
-                                <td width="15%" style="padding-right: 5px;">
-                                    <label for="">Fecha Fin:</label>
-                                    <div class="input-group date">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                        <input type="text" class="form-control pull-right" id="fecha_fin_ru" :value="fin_ru">
-                                    </div>
-                                </td>
-                                <td width="25%" style="padding-right: 5px;">
-                                    <label for="">Farmacia:</label>
+                                <td width="5%" style="padding-right: 5px;">
+                                    <label for="">Turno:</label>
                                     <div class="input-group">
-                                        <select name="" id="id_farmacia" class="form-control" v-model="farmaciaid_ru">
-                                            <option value="0">TODOS</option>
-                                            option
-                                            <option v-for="farmacia in farmacias" :value="farmacia.idAlmacen">
-                                                {{ farmacia.descripcion }}
-                                            </option>
+                                        <select name="" id="id_farmacia" class="form-control" v-model="turno_lc">
+                                            <option value="1">Mañana</option>
+                                            <option value="2">Tarde</option>
                                         </select>
                                     </div>
                                 </td>
-                                <td width="30%" style="padding-right: 5px;">
-                                    
+                                <td width="15%" style="padding-right: 5px;">
+                                    <label for="">Serie Inicial:</label>
+                                    <div class="input-group">
+                                        <input type="number" max="2" class="form-control" id="serie_inicial_id" placeholder="00" v-model="si_lc">
+                                    </div>
+                                </td>
+                                <td width="15%" style="padding-right: 5px;">
+                                    <label for="">Serie Final:</label>
+                                    <div class="input-group">
+                                        <input type="number" maxlength="2" class="form-control" id="serie_final_id" placeholder="99" v-model="sf_lc">
+                                    </div>
                                 </td>
                                 <td width="15%" class="text-center">
                                     <button class="btn btn-primary" v-on:click.prevent="postData_ru">
@@ -156,17 +153,20 @@
                         <table class="table table-bordered table-striped" id="tabla_ru" style="display: none;width: 100%;">
                             <thead>
                             <tr class="bg-gray">
-                                <th>MOVNUMERO</th>
-                                <th>FECHA</th>
-                                <!-- <th>IDALMACEN</th> -->
-                                <th>ALMACEN</th>
-                                <th>USUARIO</th>
+                                <th>FECHA REQUERIDA</th>
+                                <th>FECHA SOLICITUD</th>
+                                <th>OBSERVACION</th>
                                 <th>ESTADO</th>
-                                <th>CODIGO</th>
-                                <th>PRODUCTO</th>
-                                <th>CANTIDAD</th>
-                                <th>PRECIO</th>
-                                <th>TOTAL</th>
+                                <th>TIPO PACIENTE</th>
+                                <th>NRO HISTORIA</th>
+                                <th>PACIENTE</th>
+                                <th>DIGITO TERMINAL</th>
+                                <th>TIPO HISTORIA</th>
+                                <th>SERVICIO</th>
+                                <th>TURNO</th>
+                                <th>ESPECIALIDAD</th>
+                                <th>DESTINO</th>
+                                <th>ULTIMO MOVIMIENTO</th>
                             </tr>
                             </thead>
                             <tbody></tbody>
@@ -196,7 +196,9 @@
                 turnoid: '',
                 inicio_ru: '',
                 fin_ru: '',
-                farmaciaid_ru: '',
+                turno_lc: '',
+                si_lc: '',
+                sf_lc: '',
                 movtipo: '',
                 errores: '',
             }
@@ -269,17 +271,17 @@
             },
             // envio de Datos para traslados de unidades ejecutoras
             postData_ru: function() {
-
-                if (this.inicio_ru == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
-                if (this.fin_ru == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
-                if (this.farmaciaid_ru == '') { toastr.error('Debe seleccionar una farmacia','WebSigesa');return false; }
+                if (this.inicio_ru == '') { toastr.error('Debe seleccionar una fecha','WebSigesa');return false; }
+                if (this.turno_lc == '') { toastr.error('Debe seleccionar un turno','WebSigesa');return false; }
+                if (this.si_lc == '') { toastr.error('Debe ingresar una serie de inicio.','WebSigesa');return false; }
+                if (this.sf_lc == '') { toastr.error('Debe ingresar una serie final.','WebSigesa');return false; }
 
                 var alerta_espera = toastr.info('Espere un momento por favor','WebSigesa', { 
                     timeOut: 0,
                     extendedTimeOut: 0
                 });
                 
-                var url = '/farmacia/reporte_por_usuario/'+this.inicio_ru+'/'+this.fin_ru+'/'+this.farmaciaid_ru;
+                var url = 'Archivo/reporte_listado_citados/'+this.turno_lc+'/'+this.inicio_ru+'/'+this.si_lc+'/'+this.sf_lc;
                 // console.log(url);return false;
                 axios.get(url).then(reponse => {
                     console.log(reponse.data.data);
@@ -300,17 +302,20 @@
                         "lengthMenu": [5, 10, 25, 50, 75, 100],
                         data: reponse.data.data,
                         columns: [
-                            {data:'MOVNUMERO'},
-                            {data:'FECHA'},
-                            // {data:'IDALMACEN'},
-                            {data:'ALMACEN'},
-                            {data:'USUARIO'},
-                            {data:'ESTADO'},
-                            {data:'CODIGO'},
-                            {data:'PRODUCTO'},
-                            {data:'CANTIDAD'},
-                            {data:'PRECIO'},
-                            {data:'TOTAL'}
+                            { data: 'FECHA REQUERIDA' },
+                            { data: 'FECHA SOLICITUD' },
+                            { data: 'OBSERVACION' },
+                            { data: 'ESTADO' },
+                            { data: 'TIPO PACIENTE' },
+                            { data: 'NRO HISTORIA' },
+                            { data: 'PACIENTE' },
+                            { data: 'DIGITO TERMINAL' },
+                            { data: 'TIPO HISTORIA' },
+                            { data: 'SERVICIO' },
+                            { data: 'TURNO' },
+                            { data: 'ESPECIALIDAD' },
+                            { data: 'DESTINO' },
+                            { data: 'ULTIMO MOVIMIENTO' }
                         ]
                     });
                     toastr.clear();
@@ -321,10 +326,10 @@
                 }); 
             },
             excelExport: function() {
-                if (this.inicio == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
-                // if (this.fin == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
-                if (this.turnoid == '') { toastr.error('Debe seleccionar un turno','WebSigesa');return false; }
-                // if (this.movtipo == '') { toastr.error('Debe seleccionar un tipo de movimiento','WebSigesa');return false; }
+                if (this.inicio_ru == '') { toastr.error('Debe seleccionar una fecha','WebSigesa');return false; }
+                if (this.turno_lc == '') { toastr.error('Debe seleccionar un turno','WebSigesa');return false; }
+                if (this.si_lc == '') { toastr.error('Debe ingresar una serie de inicio.','WebSigesa');return false; }
+                if (this.sf_lc == '') { toastr.error('Debe ingresar una serie final.','WebSigesa');return false; }
                 var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
                     timeOut: 0,
                     extendedTimeOut: 0
@@ -334,14 +339,15 @@
                 toastr.clear();
             },
             excelExport_ru: function() {
-                if (this.inicio_ru == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
-                if (this.fin_ru == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
-                if (this.farmaciaid_ru == '') { toastr.error('Debe seleccionar una farmacia','WebSigesa');return false; }
+                if (this.inicio_ru == '') { toastr.error('Debe seleccionar una fecha','WebSigesa');return false; }
+                if (this.turno_lc == '') { toastr.error('Debe seleccionar un turno','WebSigesa');return false; }
+                if (this.si_lc == '') { toastr.error('Debe ingresar una serie de inicio.','WebSigesa');return false; }
+                if (this.sf_lc == '') { toastr.error('Debe ingresar una serie final.','WebSigesa');return false; }
                 var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
                     timeOut: 0,
                     extendedTimeOut: 0
                 });
-                var url = '/farmacia/reporte_por_usuario_excel/'+this.inicio_ru+'/'+this.fin_ru+'/'+this.farmaciaid_ru;
+                var url = 'Archivo/reporte_listado_citados_excel/'+this.turno_lc+'/'+this.inicio_ru+'/'+this.si_lc+'/'+this.sf_lc;
                 window.open(url);
                 toastr.clear();
             },

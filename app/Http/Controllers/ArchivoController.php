@@ -9,6 +9,11 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class ArchivoController extends Controller
 {
+    public function reporarchivo()
+    {
+        return view('archivo.reporarchivo');
+    }
+
     public function Reporte_Conserjeria($turno, $fecha)
     {
     	$Archivo = new Archivo();

@@ -28,6 +28,9 @@ Vue.component('cajacentral', require('./components/caja/cajasc.vue'));
 // Consulta externa
 Vue.component('admision', require('./components/consultaextena/admision.vue'));
 
+// Archivo Clinico
+Vue.component('reporarchivo', require('./components/archivo/reporarchivo.vue'));
+
 const app = new Vue({
     el: '#app'
 });

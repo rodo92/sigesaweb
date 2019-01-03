@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="box box-default" id="cuerpo_factura" style="display: none;"><!-- style="display: none;" -->
+            <div class="box box-default" id="cuerpo_factura"><!-- style="display: none;" -->
                 <div class="box-body" style="padding: 1%;">
                     <div class="row">
                         <div class="col-xs-8">
@@ -229,6 +229,18 @@
                                         <td class="text-right">{{ sumtotal }}</td>
                                         <td></td>
                                     </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="warning text-right">PAGO PENDIENTE <i class="fa fa-usd" aria-hidden="true"></i></td>
+                                        <td class="text-right" width="8%" style="padding: 0px;">
+                                            <input type="text" class="form-control" style="width: 100%;margin: 0px;padding: 0px;text-align: right;" placeholder="00.00" v-model="monto_pendiente">
+                                        </td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -356,6 +368,7 @@
                 IdGestionCaja: '',
                 totalcobrado: 0,
                 imprimir_clasificador: 0,
+                monto_pendiente: 0,
             }
         },
         created: function() {

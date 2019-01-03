@@ -187,12 +187,12 @@ class PDFComprobantesController extends Controller
     	$this->fpdf->Cell(20,4,utf8_decode('SOLES'),0,1,'L');
 
     	$this->fpdf->Cell(30,4,utf8_decode('OBSERVACIÓN 1:'),0,0,'L');
-    	$this->fpdf->MultiCell(160,4,utf8_decode($this->cabecera[0]['Observacion1']),0,'L',false);
+    	$this->fpdf->MultiCell(160,4,utf8_decode(strtoupper($this->cabecera[0]['Observacion1'])),0,'L',false);
     	// $this->fpdf->Cell(30,4,utf8_decode('C.I.I.U NRO:'),1,0,'L');
     	// $this->fpdf->Cell(20,4,utf8_decode('85111'),1,1,'L');
 
     	$this->fpdf->Cell(30,4,utf8_decode('OBSERVACIÓN 2:'),0,0,'L');
-    	$this->fpdf->MultiCell(160,4,utf8_decode($this->cabecera[0]['Observacion2']),0,'L',false);
+    	$this->fpdf->MultiCell(160,4,utf8_decode(strtoupper($this->cabecera[0]['Observacion2'])),0,'L',false);
 
         // $this->fpdf->SetXY(150,5);
         // $this->fpdf->Cell(30,4,utf8_decode('CONCEPTO: '),0,0,'L');
@@ -276,7 +276,7 @@ class PDFComprobantesController extends Controller
         $this->fpdf->Cell(30,4,utf8_decode('POR CONCEPTO: '),0,1,'L');
         $this->fpdf->SetFont('Arial','',7);
         $this->fpdf->Cell(15,5,'',0,0,'C');
-        $this->fpdf->MultiCell(120,4,utf8_decode($this->cabecera[0]['Concepto']),0,'L',false);
+        $this->fpdf->MultiCell(120,4,utf8_decode(strtoupper($this->cabecera[0]['Concepto'])),0,'L',false);
     }
 
     public function detalle_factura_partida()
@@ -284,8 +284,8 @@ class PDFComprobantesController extends Controller
         $this->fpdf->Ln(2);
         $this->fpdf->SetFont('Arial','',7);
         $this->fpdf->Cell(15,5,utf8_decode('CANTIDAD'),'TLB',0,'C');
-        $this->fpdf->Cell(15,5,utf8_decode('CÓDIGO'),'TLB',0,'C');
-        $this->fpdf->Cell(115,5,utf8_decode('DESCRIPCIÓN'),'TLB',0,'L');
+        $this->fpdf->Cell(20,5,utf8_decode('CLASIFICADOR'),'TLB',0,'C');
+        $this->fpdf->Cell(110,5,utf8_decode('DESCRIPCIÓN'),'TLB',0,'L');
         $this->fpdf->Cell(15,5,utf8_decode('PRECIO'),'TLB',0,'C');
         $this->fpdf->Cell(15,5,utf8_decode('IMPUESTO'),'TLB',0,'C');
         $this->fpdf->Cell(15,5,utf8_decode('SUBTOTAL'),1,1,'C');
@@ -297,8 +297,8 @@ class PDFComprobantesController extends Controller
             $h =  $h + 1;
 
             $this->fpdf->Cell(15,5,$this->partidas[$i]['Cantidad'],'L',0,'C');
-            $this->fpdf->Cell(15,5,trim($this->partidas[$i]['Codigo']),'L',0,'C');
-            $this->fpdf->Cell(115,5,strtoupper(utf8_decode($this->partidas[$i]['Nombre'])),'L',0,'L');
+            $this->fpdf->Cell(20,5,trim($this->partidas[$i]['Codigo']),'L',0,'C');
+            $this->fpdf->Cell(110,5,strtoupper(utf8_decode($this->partidas[$i]['Nombre'])),'L',0,'L');
             $this->fpdf->Cell(15,5,number_format($this->partidas[$i]['Precio'],2,'.',' '),'L',0,'C');
             $this->fpdf->Cell(15,5,number_format($this->partidas[$i]['IGV'],2,'.',' '),'L',0,'C');
             $this->fpdf->Cell(15,5,number_format($this->partidas[$i]['SubTotal'],2,'.',' '),'LR',1,'C');
@@ -309,8 +309,8 @@ class PDFComprobantesController extends Controller
         }
 
         $this->fpdf->Cell(15,5,"",'LB',0,'C');
-        $this->fpdf->Cell(15,5,"",'LB',0,'C');
-        $this->fpdf->Cell(115,5,"",'LB',0,'L');
+        $this->fpdf->Cell(20,5,"",'LB',0,'C');
+        $this->fpdf->Cell(110,5,"",'LB',0,'L');
         $this->fpdf->Cell(15,5,"",'LB',0,'C');
         $this->fpdf->Cell(15,5,"",'LB',0,'C');
         $this->fpdf->Cell(15,5,"",'LBR',1,'C');
@@ -353,7 +353,7 @@ class PDFComprobantesController extends Controller
         $this->fpdf->Cell(30,4,utf8_decode('POR CONCEPTO: '),0,1,'L');
         $this->fpdf->SetFont('Arial','',7);
         $this->fpdf->Cell(15,5,'',0,0,'C');
-        $this->fpdf->MultiCell(120,4,utf8_decode($this->cabecera[0]['Concepto']),0,'L',false);
+        $this->fpdf->MultiCell(120,4,utf8_decode(strtoupper($this->cabecera[0]['Concepto'])),0,'L',false);
     }
 
     public function pie_factura()

@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="box box-default" id="cuerpo_factura"><!-- style="display: none;" -->
+            <div class="box box-default" id="cuerpo_factura" style="display: none;"><!-- style="display: none;" -->
                 <div class="box-body" style="padding: 1%;">
                     <div class="row">
                         <div class="col-xs-8">

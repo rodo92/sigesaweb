@@ -94,6 +94,7 @@ Consulta externa
 Route::get('AdmisionCE','AdmisionController@AdmisionCitas');
 Route::get('AdmisionCE/especialidades','AdmisionController@Especialidades_Tipo_Servicio');
 Route::get('AdmisionCE/medicos','AdmisionController@Medicos_CE');
+Route::get('AdmisionCE/programacion/{fecha}/{especialidad?}/{medico?}','AdmisionController@Programacion_Por_Filtro');
 
 /*
 Programacion General

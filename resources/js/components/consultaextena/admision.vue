@@ -22,17 +22,25 @@
                             <table width="100%">
                                 <tr>
                                     <td>
-                                        <input type="text" class="form-control" placeholder="ESPECIALIDAD" id="txt_especialidad">
+                                        <!-- <label for="input">Especialidades:</label> -->
+                                        <input id="input" class="form-control" type="text" placeholder="ESPECIALIDAD" v-on:keyup.13="buscar_por_especialidad">
+                                        <typeahead v-model="model" target="#input" :data="especialidades" item-key="name"/>
+                                        <!-- <span v-show="model">You selected {{model}}</span> -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" placeholder="MEDICO" id="txt_medicos">
+                                       <!--  <li v-for="especialidad in especialidades">
+                                            {{ especialidad.name }}
+                                        </li> -->
+                                        <!-- <label for="input">Medicos:</label> -->
+                                        <input id="input-med" class="form-control" type="text" placeholder="MEDICO" v-on:keyup.13="buscar_por_medico">
+                                        <typeahead v-model="modelmedicos" target="#input-med" :data="medicos" item-key="name"/>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                         <div class="col-xs-3"></div>
                         <div class="col-xs-4">
-                            <datepicker :inline="true" :language="es" :value="fecha"></datepicker>
+                            <datepicker :inline="true" :language="es" :value="fecha" @selected="buscar_por_fecha"></datepicker>
                         </div>
                     </div>
 
@@ -49,9 +57,12 @@
     import Datepicker from 'vuejs-datepicker';
     import moment from 'moment';
     import {es} from 'vuejs-datepicker/dist/locale'
+    import {Typeahead} from 'uiv'
+    
 
     export default {
         components: {
+            Typeahead,
             Datepicker
         },
         data() {
@@ -60,55 +71,49 @@
                 id_medico: '',
                 id_especialidad: '',
                 fecha: moment(new Date()).format('YYYY-MM-DD'),
+                model: '',
+                modelmedicos:'',
+                especialidades: [],
+                medicos: [],
             }
         },
         created: function() {
-            this.carga_especialidades();
+            this.cargar_especialidades();
             this.cargar_medicos();
         },
         methods: {
-            carga_especialidades: function()
-            {
-                console.log(this.fecha);
+            buscar_por_fecha: function(fecha) {
+                console.log(moment(fecha).format('YYYY-MM-DD'));
+            },
+            buscar_por_especialidad: function() {
+                this.id_especialidad = this.model.id;
+                console.log(this.id_especialidad);
+            },
+            buscar_por_medico: function() {
+                this.id_medico = this.modelmedicos.id;
+                console.log(this.id_medico);
+            },
+            cargar_especialidades: function() {
                 var url_especialidades = 'AdmisionCE/especialidades';
                 axios.get(url_especialidades).then(response => {  
-                    var data = response.data;
-                    $('#txt_especialidad').typeahead({
-                        source: data,
-                        // minLength: 3,
-                        autoSelect: true,
-                        afterSelect: function (item) {
-                            // console.log('afterSelect: ' + item.id);
-                            this.id_especialidad = item.id;
-                        }
-                    });
-                    $('#txt_especialidad').focus();
-                    
+                    this.especialidades = response.data;                        
+                    // console.log(response.data);
                 }).catch(error => {
                     console.log(url);
                     console.log('no hay datos de especialidades cargadas.');
                 });
-
+                
             },
             cargar_medicos: function() {
-
                 var url_medicos = 'AdmisionCE/medicos';
                 axios.get(url_medicos).then(response => {  
-                    var data = response.data;
-                    $('#txt_medicos').typeahead({
-                        source: data,
-                        // minLength: 3,
-                        autoSelect: true,
-                        afterSelect: function (item) {
-                            // console.log('afterSelect: ' + item.id);
-                            this.id_medico = item.id;
-                        }
-                    });
-                    
+                    this.medicos = response.data;                        
+                    // console.log(response.data);
                 }).catch(error => {
                     console.log(url);
-                    console.log('no hay datos de medicos registrados.');
+                    console.log('no hay datos de medicos cargadas.');
                 });
+                
             }
         },
         mounted() {

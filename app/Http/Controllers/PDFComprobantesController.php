@@ -162,11 +162,13 @@ class PDFComprobantesController extends Controller
     	$this->fpdf->SetFont('Arial','',7);
     	$this->fpdf->Cell(30,4,utf8_decode('SEÑOR(ES):'),0,0,'L');
     	$this->fpdf->SetFont('Arial','B',7);
-    	$this->fpdf->Cell(110,4,utf8_decode($this->cabecera[0]['RazonSocial']),0,0,'L');
-    	$this->fpdf->SetFont('Arial','',7);    	
-    	$this->fpdf->Cell(30,4,utf8_decode('FECHA DE EMISIÓN:'),0,0,'L');
+    	$this->fpdf->MultiCell(110,4,utf8_decode($this->cabecera[0]['RazonSocial']),0,'L');
+    	$this->fpdf->SetY(38);
+        $this->fpdf->SetFont('Arial','',7);    	
+    	$this->fpdf->Cell(166,4,utf8_decode('FECHA DE EMISIÓN:'),0,0,'R');
     	$this->fpdf->Cell(20,4,$this->fecha_emision,0,1,'L');
 
+        $this->fpdf->Ln(4);
     	$this->fpdf->Cell(30,4,utf8_decode('R.U.C.:'),0,0,'L');
     	$this->fpdf->SetFont('Arial','B',7);
     	$this->fpdf->Cell(110,4,utf8_decode($this->cabecera[0]['Ruc']),0,0,'L');

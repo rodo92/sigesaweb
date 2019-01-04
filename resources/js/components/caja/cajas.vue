@@ -9,6 +9,21 @@
     .ruc_caja {
          border-spacing: 0px;
     }
+    .texto-preliminar {
+        color: red;
+
+        position: absolute;
+        top: 50%;
+        left: 12%;
+        font-size: 50px;
+        font-weight: bolder;
+        transform: rotate(-55deg); 
+        -webkit-transform: rotate(-55deg);
+        -moz-transform: rotate(-55deg);
+        -o-transform: rotate(-55deg);
+        opacity: 0.3;
+        filter: alpha(opacity=50);
+    }
 </style>
 <template>    
     <div>
@@ -176,6 +191,7 @@
                             <button type="" class="btn btn-info" v-on:click.prevent="ver_modal" id="btn_buscar_productos"><i class="fa fa-search"></i> AGREGAR<br>PRODUCTOS</button>
                             <button type="" class="btn btn-success" v-on:click.prevent="registrarfactura"><i class="fa fa-save"></i> GENERAR<br>COMPROBANTE</button>
                             <button type="" class="btn btn-default" v-on:click.prevent="facturar_clasificador"><i class="fa fa-save"></i> CON<br>CLASIFICADOR</button>
+                            <button type="" class="btn btn-primary" v-on:click.prevent="ver_preliminar"><i class="fa fa-eye"></i> VER<br>PRELIMINAR</button>
                             <button  class="btn btn-warning" v-on:click.prevent="cerrar_caja"><i class="fa fa-close"></i> CERRAR<br>CAJA</button>
                         </div>
                     </div>
@@ -334,8 +350,151 @@
                 </div>
             </div>
         </div>  
-
+            
+        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="modal_previa">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">PRELIMINAR</h4>
+                    </div>
+                    <div class="modal-body" style="padding: 1% 2% 1% 2%;">
+                        <div class="texto-preliminar">
+                            DOCUMENTO SIN VALOR LEGAL
+                        </div>
+                        <table class="table table-bordered" style="margin-bottom: 15%;">
+                            <tr>
+                                <td colspan="3"></td>
+                                <td colspan="3" align="center" style="border: 1px solid #d7d7d7;padding: 2%;">
+                                    {{ cadena_tipo_documento }} ELECTR&Oacute;NICA
+                                    <br>R.U.C. 20154996991
+                                    <br>{{ nroserie_grabar }} - {{ nrodocumento_grabar}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">&nbsp;</th>
+                                <th>&nbsp;</th>
+                                <th colspan="2">&nbsp;</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2">SEÑOR(ES):</th>
+                                <td>{{ razonsocial }}</td>
+                                <th colspan="2">FECHA DE EMISIÓN:</th>
+                                <td>{{ new Date().getDate() + "/" + (new Date().getMonth() +1) + "/" + new Date().getFullYear() }}</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">DIRECCIÓN:</th>
+                                <td>{{ direccion }}</td>
+                                <th colspan="2">RUC:</th>
+                                <td>{{ rucv }}</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">PACIENTE:</th>
+                                <td>{{ paciente }}</td>
+                                <th colspan="2">TIPO MONEDA:</th>
+                                <td>SOLES</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">OBSERVACION 1:</th>
+                                <td colspan="4">{{ observacion_uno }}</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">OBSERVACION 2:</th>
+                                <td colspan="4">{{ observacion_dos }}</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <th style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">CANTIDAD</th>
+                                <th style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">CÓDIGO</th>
+                                <th style="padding: 2px;border: 1px solid #d7d7d7;">DESCRIPCIÓN</th>
+                                <th style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">PRECIO</th>
+                                <th style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">IMPUESTO</th>
+                                <th style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">SUBTOTAL</th>
+                            </tr>
+                            <tr v-for="(producto,index) in productos" v-bind:index="index">
+                                <td style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">{{ producto.Cantidad }}</td>
+                                <td style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">{{ producto.Codigo }}</td>
+                                <td style="padding: 2px;border: 1px solid #d7d7d7;">{{ producto.Producto }}</td>
+                                <td style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">{{ producto.Precio }}</td>
+                                <td style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">{{ producto.Impuesto }}</td>
+                                <td style="padding: 2px;border: 1px solid #d7d7d7;text-align: center;">{{ producto.Subtotal }}</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">VALOR DE VENA DE OPERACIONES GRATUITAS S/. 0.00</td>
+                                <th colspan="2" style="text-align: right;">SUB TOTAL:</th>
+                                <td style="border: 1px solid #d7d7d7;"align="center">{{ sumsubtotal }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2"></td>
+                                <th colspan="2" style="text-align: right;">ANTICIPOS:</th>
+                                <td style="border: 1px solid #d7d7d7;"align="center">0.00</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2" rowspan="7" style="">
+                                    <b>POR CONCEPTO:</b><br>
+                                    <div style="padding-right: 20%;">
+                                        {{ conceptos }}
+                                    </div>
+                                </td>
+                                <th colspan="2" style="text-align: right;">DESCUENTOS:</th>
+                                <td style="border: 1px solid #d7d7d7;"align="center">0.00</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="2" style="text-align: right;">VALOR VENTA:</th>
+                                <td style="border: 1px solid #d7d7d7;"align="center">0.00</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="2" style="text-align: right;">ISC:</th>
+                                <td style="border: 1px solid #d7d7d7;"align="center">0.00</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="2" style="text-align: right;">IGV:</th>
+                                <td style="border: 1px solid #d7d7d7;"align="center">{{ sumigv }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="2" style="text-align: right;">OTROS CARGOS:</th>
+                                <td style="border: 1px solid #d7d7d7;"align="center">0.00</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="2" style="text-align: right;">OTROS TRIBUTOS:</th>
+                                <td style="border: 1px solid #d7d7d7;"align="center">0.00</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="2" style="text-align: right;">IMPORTE TOTAL:</th>
+                                <td style="border: 1px solid #d7d7d7;"align="center">{{ sumtotal }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
+
+    </div>
 </template>
 
 <script>
@@ -398,8 +557,13 @@
                     $('#ndocumento_boleta').focus();
                 }
             });
+
+            // $('#modal_previa').modal('show');
         },
         methods: {
+            ver_preliminar: function() {
+                $('#modal_previa').modal('show');
+            },
             mostrar_campos_nuevo_ruc: function() {
                 // console.log($('#datos_nuevos_proveedor').css('display'));
                 // $('#datos_nuevos_proveedor').fadeIn(400);

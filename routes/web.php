@@ -68,6 +68,7 @@ Route::get('cajas/servicios_medicamentos/{seguro}/{parametro}','CajaController@s
 Route::get('cajas/detalle_boleta/{serio}/{ndocumento}/{idorden?}','CajaController@buscar_detalle_boleta_x_codigo');	
 Route::get('cajas/detalle_cuenta/{cuenta}','CajaController@buscar_boleta_x_cuenta');
 Route::get('cajas/nuevo_correlativo/{idcaja}/{idtipocomprobante}','CajaController@correlativo');
+Route::get('cajas/nuevo_proveedor/{ruc}/{razonsocial}/{direccion}','CajaController@Crear_Nuevo_Proveedor');
 
 // Facturación Electrónica
 Route::post('cajas/registro_factura','CajaController@registro_factura');

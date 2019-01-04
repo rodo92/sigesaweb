@@ -6,6 +6,9 @@
     #serie_boleta {
         text-transform: uppercase;
     }
+    .ruc_caja {
+         border-spacing: 0px;
+    }
 </style>
 <template>    
     <div>
@@ -63,7 +66,13 @@
                             <table style="width: 100%" class="tabla_datos">
                                 <tr id="oculto_1">
                                     <td width="15%">
-                                        <input type="text" class="form-control" placeholder="RUC" v-on:keyup.13="buscar_proveedor" v-model="ruc" id="ruc_bus" maxlength="11">
+                                        <div class="input-group ruc_caja" >
+                                            <input type="text" class="form-control" placeholder="RUC" v-on:keyup.13="buscar_proveedor" v-model="ruc" id="ruc_bus" maxlength="11">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" v-on:click.prevent="mostrar_campos_nuevo_ruc" data-toggle="tooltip" data-placement="right" title="Crear Nuevos Proveedores"><i class="fa fa-plus"></i></button>
+                                                </span>
+                                        </div>
+                                        
                                     </td>
                                     <td width="15%">
                                         <label for="">RAZON&Oacute;N SOCIAL:</label>                                        
@@ -73,6 +82,7 @@
                                     </td>
                                    
                                 </tr>
+                                
                                 <tr id="oculto_2">
                                     <td width="15%">
                                         
@@ -100,6 +110,17 @@
                                     </td>
                                     <td width="20%" class="bg-warning">
                                         {{ new Date().getDate() + "/" + (new Date().getMonth() +1) + "/" + new Date().getFullYear() }}
+                                    </td>
+                                </tr>
+                                <tr id="datos_nuevos_proveedor" style="display: none;">
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="NUEVO RUC" id="nuevo_ruc_agregar" v-on:keyup.13="pasar_razon" v-model="nuevo_ruc_a">
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="text" class="form-control" placeholder="RAZON SOCIAL" id="nuevo_razon_agregar" v-on:keyup.13="pasar_direccion" v-model="razon_nueva_a">
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="text" class="form-control" placeholder="DIRECCION" id="nueva_direccion_agregar" v-on:keyup.13="registrar_nuevo_proveedor" v-model="direccion_nueva_a">
                                     </td>
                                 </tr>
                                 <tr>
@@ -313,7 +334,8 @@
                 </div>
             </div>
         </div>  
-    </div>
+
+        </div>
 </template>
 
 <script>
@@ -360,6 +382,9 @@
                 imprimir_clasificador: 0,
                 nuevo_protocolo_nombre: '',
                 nuevo_protocolo_precio: '',
+                nuevo_ruc_a: '',
+                razon_nueva_a: '',
+                direccion_nueva_a: '',
             }
         },
         created: function() {
@@ -375,6 +400,21 @@
             });
         },
         methods: {
+            mostrar_campos_nuevo_ruc: function() {
+                // console.log($('#datos_nuevos_proveedor').css('display'));
+                // $('#datos_nuevos_proveedor').fadeIn(400);
+                if ($('#datos_nuevos_proveedor').css('display') == 'none') {
+                    $('#datos_nuevos_proveedor').fadeIn(400);
+                    $('#datos_nuevos_proveedor').css('display','');
+                    $('#nuevo_ruc_agregar').focus();
+                } else {
+                    $('#datos_nuevos_proveedor').hide();
+                    $('#datos_nuevos_proveedor').css('display','none');
+                    this.nuevo_ruc_a = '';
+                    this.razon_nueva_a = '';
+                    this.direccion_nueva_a = '';
+                }
+            },
 
             // carga de datos
             loadData: function() {
@@ -393,7 +433,45 @@
                     console.log('no hay datos de tipos de documentos');
                 });                
             },
+            pasar_razon: function() {
+                $('#nuevo_razon_agregar').focus();
+            },
+            pasar_direccion: function() {
+                $('#nueva_direccion_agregar').focus();
+            },
+            registrar_nuevo_proveedor: function() {
+                if (this.nuevo_ruc_a == '') { toastr.error('Debe ingresar un nuevo RUC para el proveedor.','WebSigesa');return false; }
+                if (this.razon_nueva_a == '') { toastr.error('Debe ingresar una razon social para el proveedor.','WebSigesa');return false; }
+                if (this.direccion_nueva_a == '') { toastr.error('Debe ingresar una dirección para el proveedor.','WebSigesa');return false; }
 
+                var url = 'cajas/nuevo_proveedor/' + this.nuevo_ruc_a + '/' + this.razon_nueva_a + '/' + this.direccion_nueva_a;
+                axios.get(url).then(response => {
+                    toastr.clear();
+                    if (response.data.codigo == 2) {
+                        toastr.warning(response.data.data, 'WebSigesa');
+                        $('#nuevo_ruc_agregar').val('');
+                        $('#nuevo_razon_agregar').val('');
+                        $('#nueva_direccion_agregar').val('');
+                        $('#nuevo_ruc_agregar').focus();
+                    }
+                    else {
+                        // this.ruc = '';
+                        var datos = response.data.data;
+                        this.razonsocial = datos.RazonSocial;
+                        this.rucv = datos.Ruc;
+                        this.direccion = datos.Direccion;
+                        $('#id_cuenta').focus();
+                        $('#datos_nuevos_proveedor').hide();
+                        $('#datos_nuevos_proveedor').css('display','none');
+                        this.nuevo_ruc_a = '';
+                        this.razon_nueva_a = '';
+                        this.direccion_nueva_a = '';
+                        toastr.success('Proveedor ingresado correctamente.', 'WebSigesa');
+                    }
+                }).catch(error => {
+                    console.log(error.response.data);
+                });
+            },
             registrar_protocolo: function() {
                 if (this.nuevo_protocolo_nombre == '') {
                     toastr.error('Ingrese un nombre para el protocolo','WebSigesa');

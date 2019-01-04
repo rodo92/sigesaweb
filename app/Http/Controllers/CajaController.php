@@ -557,7 +557,37 @@ class CajaController extends Controller
                 ]
             );
         }
+    }
 
-        
+    public function Crear_Nuevo_Proveedor($Ruc,$RazonSocial,$Direccion)
+    {
+        $sistema = new Sistema();
+        $idProveedor = $sistema->Insertar_Proveedor($Ruc,$RazonSocial,$Direccion);
+
+        if ($idProveedor > 0) {
+            $data = $sistema->Obtener_Proveedor_id($idProveedor);
+
+            $response = array(
+                'idProveedor'   => $data[0]['idProveedor'],
+                'Ruc'           => $data[0]['Ruc'],
+                'RazonSocial'   => strtoupper($data[0]['RazonSocial']),
+                'Direccion'     => strtoupper($data[0]['Direccion'])
+            );
+
+            return response()->json(
+                [
+                    'data'      => $response,
+                    'codigo'    => 1
+                ]
+            );
+
+        } else {
+            return response()->json(
+                [
+                    'data'      => 'No se pudo registrar, intentenlo nuevamente.',
+                    'codigo'    => 2
+                ]
+            );
+        }
     }
 }

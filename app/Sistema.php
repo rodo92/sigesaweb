@@ -63,6 +63,16 @@ class Sistema extends Model
         return json_decode(json_encode($result), true);
     }
 
+    public function Obtener_Proveedor_id($idProveedor)
+    {
+        $result = DB::table('Proveedores')
+                ->where('Proveedores.idProveedor','=',$idProveedor)
+                ->select('Proveedores.*')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
     public function Obtener_Especialidades()
     {
         $result = DB::table('Especialidades')
@@ -81,5 +91,16 @@ class Sistema extends Model
                 ->get();
 
         return json_decode(json_encode($result), true);
+    }
+
+    public function Insertar_Proveedor($Ruc,$RazonSocial,$Direccion)
+    {
+        $datos = array(
+            'Ruc'           => $Ruc,
+            'RazonSocial'   => $RazonSocial,
+            'Direccion'     => $Direccion
+            );
+        $idProveedor = DB::table('Proveedores')->insertGetId($datos);
+        return json_decode(json_encode($idProveedor), true);
     }
 }

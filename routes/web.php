@@ -69,6 +69,8 @@ Route::get('cajas/detalle_boleta/{serio}/{ndocumento}/{idorden?}','CajaControlle
 Route::get('cajas/detalle_cuenta/{cuenta}','CajaController@buscar_boleta_x_cuenta');
 Route::get('cajas/nuevo_correlativo/{idcaja}/{idtipocomprobante}','CajaController@correlativo');
 Route::get('cajas/nuevo_proveedor/{ruc}/{razonsocial}/{direccion}','CajaController@Crear_Nuevo_Proveedor');
+Route::get('cajas/reporte_facturas/{fechainicio}/{fechafin}','CajaController@Listar_Facturas_Reportes');
+Route::get('cajas/eliminar_factura/{idcajafacturacion}','CajaController@Eliminacion_Facturas_Reporte');
 
 // Facturación Electrónica
 Route::post('cajas/registro_factura','CajaController@registro_factura');

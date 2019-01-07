@@ -201,4 +201,23 @@ class Caja extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Listar_Facturas($idCajero,$FechaInicio,$FechaFin)
+    {
+        $result = DB::select('exec SIGESA_CAJAS_REPORTES ?,?,?', [$idCajero,$FechaInicio,$FechaFin]);
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Eliminar_Factura($idCajero,$IdCajaFacturacion)
+    {
+        $datos = array(
+            'IdUsuarioActualiza' => $idCajero,
+            'Estado'            => 'A'
+        );
+
+        DB::table('CajaFacturacion')
+            ->where('IdCajaFacturacion', $IdCajaFacturacion)
+            ->update($datos);
+    }
 }

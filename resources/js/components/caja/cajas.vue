@@ -24,6 +24,9 @@
         opacity: 0.3;
         filter: alpha(opacity=50);
     }
+    .cabecera_tabla_estilo {
+
+    }
 </style>
 <template>    
     <div>
@@ -69,6 +72,7 @@
                             </div>
                             <br>
                             <button class="btn btn-primary btn-block" v-on:click.prevent="btn_ac"><i class="fa fa-print"></i> APERTURA DE CAJA</button>
+                            <button class="btn btn-info btn-block" v-on:click.prevent="btn_ar"><i class="fa fa-file-text-o"></i> REPORTE DE FACTURA</button>
                         </div>
                     </div>
                 </div>
@@ -279,6 +283,94 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="box box-default" id="cuerpo_reporte" style="display: none;">
+                <div class="box-body" style="padding: 1%;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td width="15%" style="padding-right: 5px;">
+                                <label for="">Fecha Inicio:</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="fecha_inicio" :value="inicio_rf">
+                                </div>
+                            </td>
+                            <td width="15%" style="padding-right: 5px;">
+                                <label for="">Fecha Fin:</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="fecha_fin" :value="fin_rf">
+                                </div>
+                            </td>
+                            <td width="40%"></td>
+                            <td width="30%">
+                                <label for=""></label>
+                                <button class="btn btn-default" v-on:click.prevent="traer_facturas"><i class="fa fa-search"></i> Buscar</button>
+                                <button class="btn btn-success" v-on:click.prevent="btn_regresar"><i class="fa fa-arrow-left"></i> Regresar</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+                       
+                        <table class="table table-bordered table-striped" id="tabla_rf" style="display: none;width: 100%;">
+                            <caption><p style="text-align: right;">Total de registros {{ facturas_reporte.length }}</p></caption>
+                            <thead>
+                                <tr class="bg-gray">
+                                    <th style="text-align: center;">FECHA</th>
+                                    <th style="text-align: center;">HORA</th>
+                                    <th style="text-align: center;">N° COMPROBANTE</th>
+                                    <th style="text-align: center;">RUC</th>
+                                    <th>RAZON SOCIAL</th>
+                                    <th style="text-align: center;">TIPO</th>
+                                    <th style="text-align: center;">ESTADO</th>
+                                    <th style="text-align: center;">SUBTOTAL</th>
+                                    <th style="text-align: center;">IGV</th>
+                                    <th style="text-align: center;">TOTAL</th>
+                                    <th style="text-align: center;"><i class="fa fa-cog"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(fact_repo,index) in facturas_reporte" v-bind:index="index" v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index">
+                                    <td align="center" v-text="fact_repo.FECHA"></td>
+                                    <td align="center" v-text="fact_repo.HORA"></td>
+                                    <td align="center" v-text="fact_repo.NCOMPROBANTE"></td>
+                                    <td align="center" v-text="fact_repo.RUC"></td>
+                                    <td v-text="fact_repo.RAZONSOCIAL"></td>
+                                    <td align="center" v-text="fact_repo.TIPOCOMPROBANTE"></td>
+                                    <td align="center">
+                                        <span v-if="fact_repo.ESTADO == 'REGISTRADO'" class="label label-info">{{ fact_repo.ESTADO }}</span>
+                                        <span v-else-if="fact_repo.ESTADO == 'ANULADO'" class="label label-danger">{{ fact_repo.ESTADO }}</span>
+                                    </td>
+                                    <td align="center" v-text="fact_repo.SUBTOTAL"></td>
+                                    <td align="center" v-text="fact_repo.IGV"></td>
+                                    <td align="center" v-text="fact_repo.TOTAL"></td>
+                                    <td align="center">
+                                        <a v-if="fact_repo.ESTADO == 'REGISTRADO'" class="btn btn-default btn-sm" :href="'cajas/generar_pdf/' + fact_repo.IDFACTURA" target="_blank"><i class="fa fa-print"></i></a>
+                                        <button v-if="fact_repo.ESTADO == 'REGISTRADO'" class="btn btn-danger btn-sm" v-on:click.prevent="mostrar_eliminar_fact(index)"><i class="fa fa-trash-o"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <nav aria-label="Page navigation" class="text-center">
+                            <ul class="pagination text-center">
+                                <li>
+                                    <a href="#" aria-label="Previous" v-show="pag != 1" @click.prevent="pag -= 1">
+                                        <span aria-hidden="true">&larr;</span> Anterior
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" aria-label="Next" v-show="pag * NUM_RESULTS / facturas_reporte.length < 1" @click.prevent="pag += 1">
+                                        Siguiente <span aria-hidden="true">&rarr;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                 </div>
             </div>
         </section>
@@ -493,14 +585,34 @@
                 </div>
             </div>
         </div>
-
+        
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="modal_confirmacion_eliminacion">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h5 class="modal-title">Facturación Electrónica</h5>
+                    </div>
+                    <div class="modal-body" style="padding: 5%">
+                        <h4><b>¿Estas seguro que deseas eliminar el documento?</b></h4>
+                        <p><u>{{ obj_eliminar_factura.TIPOCOMPROBANTE }} ELECTRÓNICA</u></p>
+                        <p>NÚMERO DE COMPROBANTE: <br>{{ obj_eliminar_factura.NCOMPROBANTE }}</p>
+                        <p>FECHA Y HORA DE REGISTRO: <br>{{ obj_eliminar_factura.FECHA + ' ' + obj_eliminar_factura.HORA}} </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>
+                        <button type="button" class="btn btn-danger" v-on:click.prevent="eliminar_comprobante(obj_eliminar_factura.IDFACTURA)">ELIMINAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
     import toastr from 'toastr'
-
+    import datepicker from 'bootstrap-datepicker'
     export default {
         data() {
             return {
@@ -544,6 +656,12 @@
                 nuevo_ruc_a: '',
                 razon_nueva_a: '',
                 direccion_nueva_a: '',
+                inicio_rf: '',
+                fin_rf: '',
+                facturas_reporte: [],
+                NUM_RESULTS: 5,
+                pag: 1,
+                obj_eliminar_factura: [],
             }
         },
         created: function() {
@@ -557,7 +675,25 @@
                     $('#ndocumento_boleta').focus();
                 }
             });
+            $('#fecha_inicio').datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                language: 'es'             
+            }).on(
+            "changeDate", () => {this.inicio_rf = $('#fecha_inicio').val()}
+            );
 
+            $('#fecha_fin').datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                language: 'es'             
+            }).on(
+            "changeDate", () => {this.fin_rf = $('#fecha_fin').val()}
+            );
+
+            
+
+            
             // $('#modal_previa').modal('show');
         },
         methods: {
@@ -702,7 +838,18 @@
                     this.productos.splice(aborrar[0],1);
                 }
             },
-
+            btn_ar: function() {
+                $('#cabecera_factura').hide();
+                $('#cuerpo_reporte').fadeIn(400);
+            },
+            btn_regresar: function() {
+                $('#cuerpo_reporte').hide();
+                $('#tabla_rf').css('display','hidden');
+                $('#cabecera_factura').fadeIn(400);
+                $('#tabla_rf').css('display','none');
+                this.inicio_rf = '';
+                this.fin_rf = '';
+            },
             btn_ac: function() {                
                 var url = 'cajas/aperturar_caja';
                 axios.post(url, {
@@ -1176,7 +1323,54 @@
                     toastr.clear();
                     toastr.error('No se puede cerrar la caja,intentelo nuevamente.','WebSigesa');
                 });
-            }
+            },
+            mostrar_eliminar_fact: function(index) {
+                // console.log(idfactura);
+                $('#modal_confirmacion_eliminacion').modal('show');
+                this.obj_eliminar_factura = this.facturas_reporte[index];
+                // console.log(this.obj_eliminar_factura);
+            },
+            eliminar_comprobante: function(idfactura)
+            {
+                $('#modal_confirmacion_eliminacion').modal('hide');
+                var url = 'cajas/eliminar_factura/' + idfactura;
+                axios.get(url).then(response => {
+                    toastr.success('Comprobante eliminado correctamente.','WebSigesa');
+                    this.obj_eliminar_factura = [];
+                    setTimeout(this.traer_facturas,1000);
+                    
+                }).catch(error => {
+                    toastr.error('Error al eliminar, intentelo nuevamente.','WebSigesa');
+                });
+            },
+            traer_facturas: function() {
+                if (this.inicio_rf == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
+                if (this.fin_rf == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
+
+                var alerta_espera = toastr.info('Espere un momento por favor','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
+                
+                var url = 'cajas/reporte_facturas/'+this.inicio_rf+'/'+this.fin_rf;
+                // console.log(url);return false;
+                axios.get(url).then(reponse => {
+                    // console.log(reponse.data.data);
+                    if (reponse.data.data == 'sindatos') {
+                        toastr.clear();
+                        toastr.warning('No tienes comprobantes registrados.','WebSigesa');
+                    }
+                    else {
+                        $('#tabla_rf').fadeIn(400);
+                        toastr.clear();
+                        this.facturas_reporte = reponse.data.data;
+                    }
+                }).catch(error => {
+                    toastr.clear();
+                    this.errores = error.response.data.errors;
+                }); 
+            },
+
         }
        
     }

@@ -590,4 +590,42 @@ class CajaController extends Controller
             );
         }
     }
+
+    public function Listar_Facturas_Reportes($FechaInicio,$FechaFin)
+    {
+        $IdCajero = session()->get('id_empleado');
+        $Caja = new Caja();
+        $data = $Caja->Listar_Facturas($IdCajero,$FechaInicio . ' 00:00:00',$FechaFin . ' 23:59:59');
+        
+        if (count($data) > 0) {
+            for ($i=0; $i < count($data); $i++) { 
+                $response[] = array(
+                    'IDFACTURA'         => $data[$i]['IDFACTURA'],
+                    'TIPOCOMPROBANTE'   => $data[$i]['TIPOCOMPROBANTE'],
+                    'FECHA'             => $data[$i]['FECHA'],
+                    'HORA'              => $data[$i]['HORA'],
+                    'SERIE'             => $data[$i]['NroSerie'],
+                    'DOCUMENTO'         => $data[$i]['NroDocumento'],
+                    'NCOMPROBANTE'      => $data[$i]['NroSerie'] . '-' . $data[$i]['NroDocumento'],
+                    'RUC'               => $data[$i]['Ruc'],
+                    'RAZONSOCIAL'       => $data[$i]['RazonSocial'],
+                    'SUBTOTAL'          => number_format($data[$i]['Subtotal'],2,'.',' '),
+                    'IGV'               => number_format($data[$i]['IGV'],2,'.',' '),
+                    'TOTAL'             => number_format($data[$i]['Total'],2,'.',' '),
+                    'ESTADO'            => $data[$i]['ESTADO']
+                );
+            }
+
+            return response()->json([ 'data'      => $response]);
+        } else {
+            return response()->json([ 'data'      => 'sindatos' ]);
+        }
+    }
+
+    public function Eliminacion_Facturas_Reporte($IdCajaFacturacion)
+    {
+        $IdCajero = session()->get('id_empleado');
+        $Caja = new Caja();
+        $data = $Caja->Eliminar_Factura($IdCajero,$IdCajaFacturacion);
+    }
 }

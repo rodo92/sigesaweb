@@ -20,4 +20,36 @@ class Archivo extends Model
 
         return json_decode(json_encode($result), true);
     }
+
+    public function Archivero_por_Dni($DNI)
+    {
+        $result = DB::table('Empleados')
+                ->where('Empleados.DNI','=',$DNI)
+                ->select('Empleados.*')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Listar_Archiveros()
+    {
+        $result = DB::table('ArchivoDigitoTerminal')
+                ->leftJoin('Empleados', 'Empleados.IdEmpleado', '=', 'ArchivoDigitoTerminal.IdEmpleado')
+                ->select('ArchivoDigitoTerminal.*','Empleados.ApellidoPaterno','Empleados.ApellidoMaterno','Empleados.Nombres','Empleados.DNI')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Insertar_Digito_Terminal($DigitoInicial,$DigitoFinal,$IdEmpleado)
+    {
+        $datos = array(
+            'DigitoInicial'  => $DigitoInicial,
+            'DigitoFinal'    => $DigitoFinal,
+            'IdEmpleado'     => $IdEmpleado,
+            'FechaCreacion'  => date('Y-m-d h:i:s')
+            );
+        $IdArchivoDigitoTerminal = DB::table('ArchivoDigitoTerminal')->insertGetId($datos);
+        return json_decode(json_encode($IdArchivoDigitoTerminal), true);
+    }
 }

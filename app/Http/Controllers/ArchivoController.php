@@ -14,6 +14,63 @@ class ArchivoController extends Controller
         return view('archivo.reporarchivo');
     }
 
+    public function archivero()
+    {
+        return view('archivo.archivero');
+    }
+
+    public function buscar_archivero($dni)
+    {
+        $archivo = new Archivo();
+        $data = $archivo->Archivero_por_Dni($dni);
+
+        if (count($data) > 0) {
+            $response = array(
+                'IDEMPLEADO'    => $data[0]['IdEmpleado'],
+                'PATERNO'       => strtoupper($data[0]['ApellidoPaterno']),
+                'MATERNO'       => strtoupper($data[0]['ApellidoMaterno']),
+                'NOMBRE'        => strtoupper($data[0]['Nombres'])
+            );
+
+            return response()->json([ 'data' =>$response]);
+        } else {
+            return response()->json([ 'data' =>'sindatos']);
+        }
+    }
+
+    public function nuevo_digito_terminal($DigitoInicial,$DigitoFinal,$IdEmpleado)
+    {
+        $archivo = new Archivo();
+        $IdArchivoDigitoTerminal = $archivo->Insertar_Digito_Terminal($DigitoInicial,$DigitoFinal,$IdEmpleado);
+
+        if ($IdArchivoDigitoTerminal > 0) { 
+            return response()->json(['data' => $IdArchivoDigitoTerminal]); 
+        } else { return response()->json(['data' => 'sindatos']); }
+    }
+
+    public function listar_archiveros_detallados()
+    {
+        $archivo = new Archivo();
+        $data = $archivo->Listar_Archiveros();
+        if (count($data) > 0) {
+            for ($i=0; $i < count($data); $i++) { 
+                $response[] = array(
+                    'IDARCHIVODIGITOTERMINAL'   => $data[$i]['IdArchivoDigitoTerminal'],
+                    'DIGITOINICIAL'             => $data[$i]['DigitoInicial'],
+                    'DIGITOFINAL'               => $data[$i]['DigitoFinal'],
+                    'IDEMPLEADO'                => $data[$i]['IdEmpleado'],
+                    'DNI'                       => trim($data[$i]['DNI']),
+                    'EMPLEADO'                  => strtoupper($data[$i]['ApellidoPaterno'] . ' ' . $data[$i]['ApellidoMaterno'] . ' ' . $data[$i]['Nombres'])
+                );
+            }
+            
+            return response()->json([ 'data' =>$response]);
+
+        } else {
+            return response()->json([ 'data' =>'sindatos']);
+        }
+    }
+
     public function Reporte_Conserjeria($turno, $fecha)
     {
     	$Archivo = new Archivo();

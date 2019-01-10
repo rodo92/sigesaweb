@@ -118,5 +118,7 @@ Route::get('Archivo/reporte_listado_citados_excel/{turno}/{fecha}/{si}/{sf}','Ar
 // Digito Terminal
 Route::get('Archivero','ArchivoController@archivero');
 Route::get('Archivero/listar','ArchivoController@listar_archiveros_detallados');
+Route::get('Archivero/listar_dni/{dni}','ArchivoController@listar_archiveros_detallados_dni');
+Route::get('Archivero/eliminar/{idarchivodigitoterminal}','ArchivoController@eliminar_archivero_id');
 Route::get('Archivero/buscar/{dni}','ArchivoController@buscar_archivero');
 Route::get('Archivero/nuevodigitoterminal/{digitoinicial}/{digitofinal}/{idempleado}','ArchivoController@nuevo_digito_terminal');

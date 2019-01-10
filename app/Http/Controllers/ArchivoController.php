@@ -19,6 +19,18 @@ class ArchivoController extends Controller
         return view('archivo.archivero');
     }
 
+    public function eliminar_archivero_id($IdArchivoDigitoTerminal)
+    {
+        $archivo = new Archivo();
+        $data = $archivo->Elimnar_Archiveros($IdArchivoDigitoTerminal);
+        if ($data == 1) {
+            return response()->json([ 'data' =>'eliminado']);
+        }
+        else if ($data == 0) {
+            return response()->json([ 'data' =>'no eliminado']);
+        }
+    }
+
     public function buscar_archivero($dni)
     {
         $archivo = new Archivo();
@@ -55,6 +67,29 @@ class ArchivoController extends Controller
         if (count($data) > 0) {
             for ($i=0; $i < count($data); $i++) { 
                 $response[] = array(
+                    'IDARCHIVODIGITOTERMINAL'   => $data[$i]['IdArchivoDigitoTerminal'],
+                    'DIGITOINICIAL'             => $data[$i]['DigitoInicial'],
+                    'DIGITOFINAL'               => $data[$i]['DigitoFinal'],
+                    'IDEMPLEADO'                => $data[$i]['IdEmpleado'],
+                    'DNI'                       => trim($data[$i]['DNI']),
+                    'EMPLEADO'                  => strtoupper($data[$i]['ApellidoPaterno'] . ' ' . $data[$i]['ApellidoMaterno'] . ' ' . $data[$i]['Nombres'])
+                );
+            }
+            
+            return response()->json([ 'data' =>$response]);
+
+        } else {
+            return response()->json([ 'data' =>'sindatos']);
+        }
+    }
+
+    public function listar_archiveros_detallados_dni($dni)
+    {
+        $archivo = new Archivo();
+        $data = $archivo->Listar_Archiveros_Dni($dni);
+        if (count($data) > 0) {
+            for ($i=0; $i < count($data); $i++) { 
+                $response = array(
                     'IDARCHIVODIGITOTERMINAL'   => $data[$i]['IdArchivoDigitoTerminal'],
                     'DIGITOINICIAL'             => $data[$i]['DigitoInicial'],
                     'DIGITOFINAL'               => $data[$i]['DigitoFinal'],

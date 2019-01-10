@@ -33,10 +33,10 @@
                                 <td width="15%" style="padding-right: 5px;">
                                     <div class="input-group">
                                         <label for="">DNI</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" v-model.trim="dni_busqueda" v-on:keyup.13="buscar_archivero_dni_l" id="dni_busqueda_id">
                                     </div>
                                 </td>
-                                <td width="15%" style="padding-right: 5px;">
+                                <!-- <td width="15%" style="padding-right: 5px;">
                                     <div class="input-group">
                                         <label for="">Apellido Paterno</label>
                                         <input type="text" class="form-control">
@@ -53,10 +53,11 @@
                                         <label for="">Nombres</label>
                                         <input type="text" class="form-control">
                                     </div>
-                                </td>
+                                </td> -->
                                 <td width="40%" align="right">
                                     <button class="btn btn-primary" v-on:click.prevent="mostrar_agregar_archiveros"><i class="fa fa-plus"></i> Agregar</button>
-                                    <button class="btn btn-default"><i class="fa fa-search"></i> Buscar</button>
+                                    <button class="btn btn-default"><i class="fa fa-search" v-on:click.prevent="buscar_archivero_dni_l"></i> Buscar</button>
+                                    <a class="btn btn-success" href="Archivero"><i class="fa fa-refresh"></i> Limpiar</a>
                                 </td>
                             </tr>
                         </table>
@@ -80,29 +81,25 @@
                                     <td align="center" v-text="arch_lista.DIGITOINICIAL"></td>
                                     <td align="center" v-text="arch_lista.DIGITOFINAL"></td>
                                     <td align="center">
-                                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+                                        <button class="btn btn-danger btn-sm" v-on:click.prevent="eliminar_archivero(index)"><i class="fa fa-trash-o"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
 
-                        <nav aria-label="Page navigation">
-                          <ul class="pagination">
-                            <li>
-                              <a href="#" aria-label="Previous" v-show="pag != 1" @click.prevent="pag -= 1">
-                                <span aria-hidden="true">&laquo;</span>
-                              </a>
-                            </li>
-                            <li v-for="numero in Math.round(archiveros_lista.length / NUM_RESULTS)">
-                                <a href="#" v-show="numero" @click.prevent="pag == numero">{{ numero }}</a>
-                            </li>
-                            
-                            <li>
-                              <a href="#" aria-label="Next" v-show="pag * NUM_RESULTS / archiveros_lista.length < 1" @click.prevent="pag += 1">
-                                <span aria-hidden="true">&raquo;</span>
-                              </a>
-                            </li>
-                          </ul>
+                        <nav aria-label="Page navigation" class="text-center">
+                            <ul class="pagination text-center">
+                                <li>
+                                    <a href="#" aria-label="Previous" v-show="pag != 1" @click.prevent="pag -= 1">
+                                        <span aria-hidden="true">&larr;</span> Anterior
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" aria-label="Next" v-show="pag * NUM_RESULTS / archiveros_lista.length < 1" @click.prevent="pag += 1">
+                                        Siguiente <span aria-hidden="true">&rarr;</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </nav>
                     </div>
                 </div>
@@ -116,7 +113,7 @@
                                 <hr>
                                 <div class="form-group">
                                     <label for="">DNI:</label>
-                                    <input type="text" class="form-control" placeholder="NUMERO DE DNI" v-on:keyup.13="buscar_archivero" v-model="dni" id="id_numero_dni">
+                                    <input type="text" class="form-control" placeholder="NUMERO DE DNI" v-on:keyup.13="buscar_archivero" v-model.trim="dni" id="id_numero_dni">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Datos del Empleado</label>
@@ -128,13 +125,13 @@
                                         <td style="padding-right: 5px;">
                                             <div class="form-group">
                                                 <label for="">D&iacute;gito Inicial:</label>
-                                                <input type="text" class="form-control" placeholder="DIGITO INICIAL" id="id_digito_inicial" v-on:keyup.13="pasar_digito_final" v-model="dt_inicio_registrar">
+                                                <input type="text" class="form-control" placeholder="DIGITO INICIAL" id="id_digito_inicial" v-on:keyup.13="pasar_digito_final" v-model.trim="dt_inicio_registrar">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
                                                 <label for="">D&iacute;gito Final:</label>
-                                                <input type="text" class="form-control" placeholder="DIGITO FINAL" id="id_digito_final" v-on:keyup.13="registrar_archivero_digito_terminal" v-model="dt_fin_registrar">
+                                                <input type="text" class="form-control" placeholder="DIGITO FINAL" id="id_digito_final" v-on:keyup.13="registrar_archivero_digito_terminal" v-model.trim="dt_fin_registrar">
                                             </div>
                                         </td>
                                     </tr>
@@ -162,6 +159,7 @@
         data() {
             return {
                 dni: '',
+                dni_busqueda: '',
                 paterno_mostrar: '',
                 materno_mostrar: '',
                 nombres_mostrar: '',
@@ -177,22 +175,69 @@
             this.cargar_datos();
         },
         methods: {
+            eliminar_archivero: function(index) {
+                // console.log(this.archiveros_lista[index]['IDARCHIVODIGITOTERMINAL']);
+                var url = 'Archivero/eliminar/' + this.archiveros_lista[index]['IDARCHIVODIGITOTERMINAL'];
+                toastr.remove();
+                axios.get(url).then(response => {
+                    if (response.data.data == 'eliminado') {
+                        toastr.success('Se elimino correctamente.','WebSigesa');
+                        this.cargar_datos();
+                    } else if (response.data.data == 'no eliminado') {
+                        toastr.warning('No se elimino, intentelo nuevamente.','WebSigesa');
+                    }
+                }).catch(error => {
+
+                });
+            },
+            buscar_archivero_dni_l: function() {
+                if (this.dni_busqueda.length <= 0) {
+                    toastr.error('Debe ingresar un número de DNI.','WebSigesa');
+                    this.dni_busqueda = '';
+                    $('#dni_busqueda_id').focus();
+                    return false;
+                } else if (this.dni_busqueda.length > 8) {
+                    toastr.error('La cantidad de digitos no es valida para el DNI.','WebSigesa');
+                    this.dni_busqueda = '';
+                    $('#dni_busqueda_id').focus();
+                    return false;
+                }
+                var url = 'Archivero/listar_dni/' + this.dni_busqueda;
+
+                axios.get(url).then(response => {
+                    if (response.data.data == 'sindatos') { 
+                        this.archiveros_lista = [];
+                        toastr.warning('No se encontraron registros.','WebSigesa');
+                    } else {
+                        this.archiveros_lista = [];
+                        this.archiveros_lista.push(response.data.data);
+                        this.dni_busqueda = '';
+                        // this.archiveros_lista = response.data.data;
+                    }
+                    // console.log(response.data.data);
+                }).catch(error => {
+                    console.log(error.response.data);
+                });
+            },
             cargar_datos: function() {
                 var url = 'Archivero/listar';
 
                 axios.get(url).then(response => {
                     if (response.data.data == 'sindatos') { 
-
+                        this.archiveros_lista = [];
+                        toastr.warning('No se encontraron registros.','WebSigesa');
                     } else {
                         this.archiveros_lista = response.data.data;
                     }
                 }).catch(error => {
                     console.log(error.response.data);
                 });
+
             },
             mostrar_agregar_archiveros: function() {
                 $('#lista_archiveros').hide();
                 $('#agregar_archiver').fadeIn(400);
+                $('#id_numero_dni').focus();
             },
             ocultar_agregar_archiveros: function()
             {

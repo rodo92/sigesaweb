@@ -36,6 +36,7 @@ class Archivo extends Model
         $result = DB::table('ArchivoDigitoTerminal')
                 ->leftJoin('Empleados', 'Empleados.IdEmpleado', '=', 'ArchivoDigitoTerminal.IdEmpleado')
                 ->select('ArchivoDigitoTerminal.*','Empleados.ApellidoPaterno','Empleados.ApellidoMaterno','Empleados.Nombres','Empleados.DNI')
+                ->where('ArchivoDigitoTerminal.Estado','=','1')
                 ->get();
 
         return json_decode(json_encode($result), true);
@@ -47,6 +48,7 @@ class Archivo extends Model
                 ->leftJoin('Empleados', 'Empleados.IdEmpleado', '=', 'ArchivoDigitoTerminal.IdEmpleado')
                 ->select('ArchivoDigitoTerminal.*','Empleados.ApellidoPaterno','Empleados.ApellidoMaterno','Empleados.Nombres','Empleados.DNI')
                 ->where('Empleados.DNI','=',$DNI)
+                ->where('ArchivoDigitoTerminal.Estado','=','1')
                 ->get();
 
         return json_decode(json_encode($result), true);
@@ -54,10 +56,13 @@ class Archivo extends Model
 
     public function Elimnar_Archiveros($IdArchivoDigitoTerminal)
     {
-        $result = DB::table('ArchivoDigitoTerminal')
-                ->where('IdArchivoDigitoTerminal',$IdArchivoDigitoTerminal)->delete();
+        $datos = array(
+            'Estado'         => '0'
+        );
 
-        return json_decode(json_encode($result), true);
+        DB::table('ArchivoDigitoTerminal')
+            ->where('IdArchivoDigitoTerminal', $IdArchivoDigitoTerminal)
+            ->update($datos);
     }
 
     public function Insertar_Digito_Terminal($DigitoInicial,$DigitoFinal,$IdEmpleado)
@@ -66,6 +71,7 @@ class Archivo extends Model
             'DigitoInicial'  => $DigitoInicial,
             'DigitoFinal'    => $DigitoFinal,
             'IdEmpleado'     => $IdEmpleado,
+            'Estado'         => '1',
             'FechaCreacion'  => date('Y-m-d h:i:s')
             );
         $IdArchivoDigitoTerminal = DB::table('ArchivoDigitoTerminal')->insertGetId($datos);

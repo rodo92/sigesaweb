@@ -23,12 +23,7 @@ class ArchivoController extends Controller
     {
         $archivo = new Archivo();
         $data = $archivo->Elimnar_Archiveros($IdArchivoDigitoTerminal);
-        if ($data == 1) {
-            return response()->json([ 'data' =>'eliminado']);
-        }
-        else if ($data == 0) {
-            return response()->json([ 'data' =>'no eliminado']);
-        }
+        return response()->json([ 'data' =>'eliminado']);
     }
 
     public function buscar_archivero($dni)

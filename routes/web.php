@@ -27,6 +27,9 @@ Route::get('sistema/get_data_session', 'SistemaController@get_data_session');
 Route::get('sistema/proveedores', 'SistemaController@proveedores');
 Route::get('sistema/proveedor/{ruc}', 'SistemaController@proveedor');
 Route::get('sistema/especialidad/{idespecialidad?}', 'SistemaController@especialidades');
+Route::get('sistema/especialidad_tipo_servicio/{idtiposervicio}', 'SistemaController@Especialidades_Tipo_Servicio');
+Route::get('sistema/tiposervicios/{idtiposervicios?}', 'SistemaController@tiposervicios');
+Route::get('sistema/servicios/{idespecialidad}', 'SistemaController@Servicio_Especialidad');
 Route::get('sistema/qr_s/{cadena}', 'QRController@qr_simple')->name('qrsimple');
 				
 /**
@@ -51,6 +54,7 @@ Route::get('farmacia/reporte_ingresos_almacen_excel/{inicio}/{fin}/{ruc}', 'Repo
 // Reportes Farmacia 
 Route::get('farmacia/reporte_es_documentos/{inicio}/{fin}/{almacenid}/{movtipo}', 'ReporteFarmaciaController@reporte_entradas_salidas_documentos');
 Route::get('farmacia/reporte_por_usuario/{inicio}/{fin}/{almacenid}', 'ReporteFarmaciaController@reporte_por_usuario');
+Route::get('farmacia/reporte_venta_producto/{inicio}/{fin}/{almacenid}/{insumomedicamento}', 'ReporteFarmaciaController@reporte_venta_producto_resumen');
 Route::get('farmacia/reporte_es_documentos_excel/{inicio}/{fin}/{almacenid}/{movtipo}', 'ReporteFarmaciaController@reporte_entradas_salidas_documentos_excel');
 Route::get('farmacia/reporte_por_usuario_excel/{inicio}/{fin}/{almacenid}', 'ReporteFarmaciaController@reporte_por_usuario_excel');
 
@@ -122,3 +126,6 @@ Route::get('Archivero/listar_dni/{dni}','ArchivoController@listar_archiveros_det
 Route::get('Archivero/eliminar/{idarchivodigitoterminal}','ArchivoController@eliminar_archivero_id');
 Route::get('Archivero/buscar/{dni}','ArchivoController@buscar_archivero');
 Route::get('Archivero/nuevodigitoterminal/{digitoinicial}/{digitofinal}/{idempleado}','ArchivoController@nuevo_digito_terminal');
+
+// Rutas
+Route::get('rutas','RutasController@index');

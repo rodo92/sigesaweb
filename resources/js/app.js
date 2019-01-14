@@ -31,6 +31,7 @@ Vue.component('admision', require('./components/consultaextena/admision.vue'));
 // Archivo Clinico
 Vue.component('reporarchivo', require('./components/archivo/reporarchivo.vue'));
 Vue.component('archivero', require('./components/archivo/archivero.vue'));
+Vue.component('ruta', require('./components/archivo/ruta.vue'));
 
 const app = new Vue({
     el: '#app'

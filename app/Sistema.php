@@ -73,9 +73,27 @@ class Sistema extends Model
         return json_decode(json_encode($result), true);
     }
 
+    public function Obtener_Servicio_Por_Especialidad($idespecialidad)
+    {
+        $result = DB::table('Servicios')
+                ->where('Servicios.IdEspecialidad','=',$idespecialidad)
+                ->select('Servicios.IdServicio','Servicios.Nombre')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
     public function Obtener_Especialidades()
     {
         $result = DB::table('Especialidades')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Obtener_Tipo_Servicio()
+    {
+        $result = DB::table('TipoServicio')
                 ->get();
 
         return json_decode(json_encode($result), true);
@@ -85,7 +103,7 @@ class Sistema extends Model
     {
         $result = DB::table('Servicios')
                 ->leftJoin('Especialidades', 'Especialidades.IdEspecialidad', '=', 'Servicios.IdEspecialidad')
-                ->select('Servicios.IdEspecialidad','Especialidades.Nombre','Especialidades.IdDepartamento')
+                ->select('Servicios.IdEspecialidad','Especialidades.Nombre')
                 ->where('Servicios.IdTipoServicio','=',$idTipoServicio)
                 ->distinct()
                 ->get();

@@ -125,4 +125,63 @@ class SistemaController extends Controller
 
         return response()->json($data);
     }
+
+    public function Especialidades_Tipo_Servicio($idtiposervicio)
+    {
+        // para consulta externa
+        $Sistema = new Sistema();
+        $especialidades = $Sistema->Obtener_Especialidades_Tipo_Servicio($idtiposervicio);
+
+        for ($i=0; $i < count($especialidades); $i++) { 
+            $data[] = array(
+                'id'        => $especialidades[$i]['IdEspecialidad'],
+                'name'      => strtoupper($especialidades[$i]['Nombre'])
+            );
+        }   
+
+        return response()->json($data);
+    }
+
+    public function Servicio_Especialidad($idespecialidad)
+    {
+        // para consulta externa
+        $Sistema = new Sistema();
+        $servicio = $Sistema->Obtener_Servicio_Por_Especialidad($idespecialidad);
+
+        for ($i=0; $i < count($servicio); $i++) { 
+            $data[] = array(
+                'id'        => $servicio[$i]['IdServicio'],
+                'name'      => strtoupper($servicio[$i]['Nombre'])
+            );
+        }   
+
+        return response()->json($data);
+    }
+
+    public function tiposervicios($idtiposervicio = false)
+    {
+        $data = false;
+        $Sistema = new Sistema();
+        $tiposervicios = $Sistema->Obtener_Tipo_Servicio();
+
+        if ($idtiposervicio) {
+            for ($i=0; $i < count($tiposervicios); $i++) { 
+                if ($tiposervicios[$i]['IdTipoServicio'] == $idtiposervicio) {
+                    $data = array(
+                        'id'        => $tiposervicios[$i]['IdTipoServicio'],
+                        'name'      => strtoupper($tiposervicios[$i]['Descripcion'])
+                    );
+                }                
+            }  
+        } else {
+            for ($i=0; $i < count($tiposervicios); $i++) { 
+                $data[] = array(
+                    'id'        => $tiposervicios[$i]['IdTipoServicio'],
+                    'name'      => strtoupper($tiposervicios[$i]['Descripcion'])
+                );
+            }   
+        }
+
+        return response()->json($data);
+    }
 }

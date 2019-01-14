@@ -9,6 +9,47 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class ReporteFarmaciaController extends Controller
 {
+    public function reporte_venta_producto_resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento)
+    {
+        $farmacia = new Farmacia();
+        $data = $farmacia->Reporte_Almacen_Venta_Producto_Resumen($fechainicio,$fechafin,$idAlmacen,$insumomedicamento);
+
+        if (count($data) > 0) { 
+            
+            for ($i=0; $i < count($data); $i++) { 
+                $response[] = array(
+                    'IDPRODUCTO'                    => $data[$i]['id_producto'],
+                    'CODIGOSISMED'                  => $data[$i]['codigo_sismed'],
+                    'PRODUCTO'                      => $data[$i]['producto'],
+                    'CANTIDADVENTAS'                => $data[$i]['cv'],
+                    'CONSULTAEXTERNA'               => $data[$i]['ce'],
+                    'HOSPITALIZACION'               => $data[$i]['ho'],
+                    'EMERGENCIA'                    => $data[$i]['em'],
+                    'PACIENTEEXTERNO'               => $data[$i]['ext'],
+                    'PARTICULAR'                    => $data[$i]['cash'],
+                    'SIS'                           => $data[$i]['sis'],
+                    'SOAT'                          => $data[$i]['soat'],
+                    'PENDIENTE'                     => $data[$i]['pnd'],
+                    'EXONERADO'                     => $data[$i]['exo'],
+                    'DONACION'                      => $data[$i]['do'],
+                    'INTERVENCIONSANITARIA'         => $data[$i]['is'],
+                    'STOCK'                         => $data[$i]['stock'],
+                    'CANTIDADFACTURADA'             => $data[$i]['cant_factura'],
+                    'TOTAL'                         => $data[$i]['total'],
+                    'DEVOLUCIONES'                  => $data[$i]['dv'],
+                    'CONSULTAEXTERNADEVOLUCIONES'   => $data[$i]['ce_d'],
+                    'HOSPITALIZACIONDEVOLUCIONES'   => $data[$i]['ho_d'],
+                    'EMERGENCIADEVOLUCIONES'        => $data[$i]['em_d'],
+                    'CANTVENTASMENOSDEVOLUCIONES'   => $data[$i]['cv-dv']
+                );
+            }
+            return response()->json(
+                [
+                    'data' => $response
+                ]); 
+        } else { return response()->json(['data' => 'sindatos']); }
+    }
+
     public function reporte_entradas_salidas_documentos($inicio, $fin, $almacenid, $movtipo)
     {
     	$farmacia = new Farmacia();

@@ -40,6 +40,8 @@ Route::get('reporalmacen', 'FarmaciaController@reporalmacen');
 Route::get('reporfarmacia', 'FarmaciaController@reporfarmacia');
 Route::get('farmacia/almacenes', 'FarmaciaController@almacenes');
 Route::get('farmacia/farmacias/{tipo}', 'FarmaciaController@farmacias');
+Route::get('NI', 'FarmaciaController@notaingresoalmacen');
+Route::get('NS', 'FarmaciaController@notasalidaalmacen');
 
 // Reportes Gestion
 Route::get('reporteici/generar_dbf', 'ReporteICIController@generar_dbf');

@@ -37,4 +37,14 @@ class FarmaciaController extends Controller
 
         return response()->json(['data' => $almacenes]);
     }
+
+    public function notaingresoalmacen()
+    {
+        return view('farmacia.notaingresoalmacen');
+    }
+
+    public function notasalidaalmacen()
+    {
+        return view('farmacia.notasalidaalmacen');
+    }
 }

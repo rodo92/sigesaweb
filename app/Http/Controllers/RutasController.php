@@ -10,4 +10,10 @@ class RutasController extends Controller
     {
     	return view('archivo.ruta');
     }
+
+    public function registrar_ruta(Request $Request)
+    {
+    	// print_r($Request->servicios);
+    	// echo 'hola';
+    }
 }

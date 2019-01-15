@@ -13,7 +13,7 @@ class Mantenimiento extends Model
     {
         $result = DB::table('FactCatalogoServicios')
                 ->select('Codigo')
-                ->where('Codigo','like','%PRT%')
+                ->where('Codigo','like','%AD%')
                 ->orderBy('Codigo','desc')
                 ->take(1)
                 ->get();

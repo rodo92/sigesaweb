@@ -522,9 +522,14 @@ class CajaController extends Controller
         $mantenimiento = new Mantenimiento();
         $data = $mantenimiento->Obtener_Ultimo_Protocolo();
 
-        $ultimo_codigo_protocolo = str_replace('PRT', '', $data[0]['Codigo']);
+        $ultimo_codigo_protocolo = str_replace('AD', '', $data[0]['Codigo']);
         $nuevo_codigo_protocolo = $ultimo_codigo_protocolo + 1;
-        $nuevo_codigo_protocolo = 'PRT' . $nuevo_codigo_protocolo;
+
+        if ($nuevo_codigo_protocolo < 100) {
+            $nuevo_codigo_protocolo = '0' . $nuevo_codigo_protocolo;
+        }
+
+        $nuevo_codigo_protocolo = 'AD' . $nuevo_codigo_protocolo;
 
         // echo $nuevo_codigo_protocolo . ' | ' . strtoupper($nombre);exit();
 

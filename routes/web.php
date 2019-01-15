@@ -131,3 +131,4 @@ Route::get('Archivero/nuevodigitoterminal/{digitoinicial}/{digitofinal}/{idemple
 
 // Rutas
 Route::get('rutas','RutasController@index');
+Route::post('rutas/registrar_ruta', 'RutasController@registrar_ruta');

@@ -223,7 +223,17 @@
         },
         methods: {
             agregar_nueva_ruta: function() {
-                
+                var url = 'rutas/registrar_ruta';
+
+                axios.post(url, {
+                    'ruta_nombre': this.ruta_nueva,
+                    'servicios': this.servicios_agregar,
+                    'conserjes': this.archiveros_lista
+                }).then(response => {
+                    console.log(response.data);
+                }).catch(error => {
+                    console.log(error.response.data);
+                });
             },
             limpiar_todo_agregar_ruta: function() {
                 this.ruta_nueva = '';

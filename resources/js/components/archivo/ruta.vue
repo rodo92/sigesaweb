@@ -221,15 +221,15 @@
                                         <td>
                                            <div class="form-group">
                                                 <label for="">Tipo de Servicio:</label>
-                                                <input id="id_tipo_especialidad" class="form-control" type="text" placeholder="" v-on:keyup.13="buscar_especialidad_por_tipo">
-                                                <typeahead v-model="modaltiposervicio" target="#id_tipo_especialidad" :data="tiposervicios" item-key="name"/>
+                                                <input id="id_tipo_especialidad_editar" class="form-control" type="text" placeholder="" v-on:keyup.13="buscar_especialidad_por_tipo_editar">
+                                                <typeahead v-model="modaltiposervicio_editar" target="#id_tipo_especialidad_editar" :data="tiposervicios_editar" item-key="name"/>
                                             </div> 
                                         </td>
                                         <td style="padding-left: 5px;">
                                             <div class="form-group">
                                                 <label for="">Especialidad:</label>
-                                                <input id="id_especialidad" class="form-control" type="text" placeholder="" v-on:keyup.13="buscar_servicio_por_especialidad">
-                                                <typeahead v-model="modalespecialidad" target="#id_especialidad" :data="especialidades" item-key="name"/>
+                                                <input id="id_especialidad_editar" class="form-control" type="text" placeholder="" v-on:keyup.13="buscar_servicio_por_especialidad_editar">
+                                                <typeahead v-model="modalespecialidad_editar" target="#id_especialidad_editar" :data="especialidades_editar" item-key="name"/>
                                             </div>
                                         </td>
                                     </tr>
@@ -237,19 +237,19 @@
                                         <td>
                                             <div class="form-group">
                                                 <label for="">DNI Conserje:</label>
-                                                <input type="text" class="form-control" v-model.trim="dni_busqueda" v-on:keyup.13="buscar_archivero_dni_l" id="dni_busqueda_id">
+                                                <input type="text" class="form-control" v-model.trim="dni_busqueda_editar" v-on:keyup.13="buscar_archivero_dni_l_editar" id="dni_busqueda_id_editar">
                                             </div> 
                                         </td>
                                         <td></td>
                                     </tr>
                                 </table>
 
-                                <div style="overflow:scroll;height: 300px;width: 100%;" v-if="servicios.length > 0">
+                                <div style="overflow:scroll;height: 300px;width: 100%;" v-if="servicios_editar.length > 0">
                                     <table class="tabla_servicios">
                                         <caption>Lista de Servicios</caption>
-                                        <tr v-for="(servicio,index) in servicios" v-bind:index="index">
-                                            <td v-text="servicio.name"></td>
-                                            <td align="center"><button class="btn btn-success btn-xs" v-on:click.prevent="agregar_temp_servicio(index)"><i class="fa fa-plus"></i></button></td>
+                                        <tr v-for="(servicio_editar,index) in servicios_editar" v-bind:index="index">
+                                            <td v-text="servicio_editar.name"></td>
+                                            <td align="center"><button class="btn btn-success btn-xs" v-on:click.prevent="agregar_temp_servicio_editar(index)"><i class="fa fa-plus"></i></button></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -265,28 +265,28 @@
                                         </dl>
                                     </div>
                                     <div class="col-xs-6">
-                                        <table class="tabla_servicios" v-if="archiveros_lista.length > 0">
+                                        <table class="tabla_servicios" v-if="archiveros_lista_editar.length > 0">
                                             <caption>Conserjes para la nueva Ruta</caption>
-                                            <tr v-for="(archivero_lista,index) in archiveros_lista" v-bind:index="index">
-                                                <td v-text="archivero_lista.Conserje"></td>
-                                                <td align="center"><button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_conserje(index)"><i class="fa fa-trash-o"></i></button></td>
+                                            <tr v-for="(archivero_lista_editar,index) in archiveros_lista_editar" v-bind:index="index">
+                                                <td v-text="archivero_lista_editar.Conserje"></td>
+                                                <td align="center"><button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_conserje_editar(index)"><i class="fa fa-trash-o"></i></button></td>
                                             </tr>
                                         </table>
                                     </div>
                                 </div>
 
-                                <table class="tabla_servicios" v-if="servicios_agregar.length > 0">
-                                    <caption>Servicios para la nueva Ruta</caption>
-                                    <tr v-for="(servicio_agregar,index) in servicios_agregar" v-bind:index="index">
-                                        <td v-text="servicio_agregar.Nombre"></td>
-                                        <td align="center"><button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_servicio_agregar(index)"><i class="fa fa-trash-o"></i></button></td>
+                                <table class="tabla_servicios" v-if="servicios_editar_agregar.length > 0">
+                                    <caption>Servicios para la Ruta a editar</caption>
+                                    <tr v-for="(servicio_editar,index) in servicios_editar_agregar" v-bind:index="index">
+                                        <td v-text="servicio_editar.Nombre"></td>
+                                        <td align="center"><button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_servicio_agregar_editar(index)"><i class="fa fa-trash-o"></i></button></td>
                                     </tr>
                                 </table>
                                 <hr>
                                 <div style="text-align: center;">
                                     <button class="btn btn-default" v-on:click.prevent="ocultar_agregar_rutas"><i class="fa fa-arrow-left" ></i> RETORNAR</button>
-                                    <button type="" class="btn btn-primary" v-on:click.prevent="agregar_nueva_ruta"><i class="fa fa-save"></i> REGISTRAR RUTA</button>
-                                    <button type="" class="btn btn-default" v-on:click.prevent="limpiar_todo_agregar_ruta"><i class="fa fa-save"></i> CANCELAR</button>
+                                    <button type="" class="btn btn-primary" v-on:click.prevent="editar_nueva_ruta"><i class="fa fa-save"></i> ACTUALIZAR RUTA</button>
+                                    <button type="" class="btn btn-default" v-on:click.prevent="ver_editar_ruta(id_ruta_editar)"><i class="fa fa-save"></i> CANCELAR</button>
                                 </div>
                             </div>
                         </div>
@@ -305,7 +305,7 @@
                         <table v-if="conserjes_mostrar != 'Sin conserjes registrados'">
                             <caption style="text-decoration: underline;"><i class="fa fa-users"></i>&nbsp;CONSERJES</caption>
                             <tr v-for="(conserje_mostrar,index) in conserjes_mostrar" v-bind:index="index">
-                                <td><i class="fa fa-user"></i>&nbsp;&nbsp;{{ conserje_mostrar.Empleado }}</td>
+                                <td><i class="fa fa-user"></i>&nbsp;&nbsp;{{ conserje_mostrar.Conserje }}</td>
                             </tr>
                         </table>
                         <hr v-if="conserjes_mostrar != 'Sin conserjes registrados'">
@@ -368,7 +368,17 @@
                 conserjes_mostrar: '',
 
                 // variables para actualizar
+                id_ruta_editar: '',
                 ruta_editar: '',
+                archiveros_lista_editar: [],
+                servicios_editar_agregar: [],
+                tiposervicios_editar:[],
+                modaltiposervicio_editar: '',
+                idtiposervicio_editar: '',
+                especialidades_editar: [],
+                modalespecialidad_editar: '',
+                servicios_editar: [],
+                dni_busqueda_editar: '',
             }
         },
         created: function() {
@@ -390,15 +400,44 @@
                 // this.cargar_rutas_mostrar();
             },
             ver_editar_ruta: function(id_ruta) {
+                this.limpiar_todo_agregar_ruta();
+                this.id_ruta_editar = id_ruta;
                 var url = 'rutas/ruta_detalle/' + id_ruta;
+                var url2 = 'rutas/servicios/' + id_ruta;
                 axios.get(url).then(response => {
-
+                    this.archiveros_lista_editar = [];
                     this.ruta_editar = response.data.data.ruta;
+                    var consej_temp = response.data.data.conserjes;
 
-                    this.limpiar_todo_agregar_ruta();
+                    if (consej_temp == 'Sin conserjes registrados') {
+                        this.archiveros_lista_editar = [];
+                    } else {
+                    
+                        for(var i = 0; i < consej_temp.length; i++){
+                            this.archiveros_lista_editar.push({
+                                IdEmpleado: consej_temp[i]['IdEmpleado'],
+                                Conserje: consej_temp[i]['Conserje'].toUpperCase()
+                            });
+                        }
+                    }
+                    // this.limpiar_todo_agregar_ruta();
                     $('#lista_rutas').hide();
                     $('#editar_rutas').fadeIn(400);
                     $('#nueva_ruta_id').focus();
+                }).catch(error => {
+
+                });
+
+                axios.get(url2).then(response => {
+                    // console.log(response.data.data);
+                    this.servicios_editar_agregar = [];
+                    var servicios_temp = response.data.data;
+                    for(var i = 0; i < servicios_temp.length; i++){
+                        this.servicios_editar_agregar.push({
+                            IdServicio: servicios_temp[i]['IdServicio'],
+                            Nombre: servicios_temp[i]['Nombre'].toUpperCase()
+                        });
+                    }
                 }).catch(error => {
 
                 });
@@ -457,6 +496,28 @@
                     console.log(error.response.data);
                 });
             },
+
+            editar_nueva_ruta: function() {
+                var url = 'rutas/editar_ruta';
+
+                axios.post(url, {
+                    'id_ruta': this.id_ruta_editar,
+                    'servicios': this.servicios_editar_agregar,
+                    'conserjes': this.archiveros_lista_editar
+                }).then(response => {
+                    if (response.data.data == 'noseregistro') {
+                        toastr.clear();
+                        toastr.error('No se pudo actualizar, intentelo nuevamente.','WebSigesa');
+                    } else {
+                        toastr.clear();
+                        toastr.success('Se actualizaron los datos correctamente.','WebSigesa');
+                        this.ver_editar_ruta(this.id_ruta_editar);
+                        this.cargar_rutas_mostrar();
+                    }
+                }).catch(error => {
+                    console.log(error.response.data);
+                });
+            },
             limpiar_todo_agregar_ruta: function() {
                 this.ruta_nueva = '';
                 // this.tiposervicios =[];
@@ -469,6 +530,17 @@
                 this.servicios_agregar = [];
                 this.dni_busqueda = '';
                 this.archiveros_lista = [];
+                this.id_ruta_editar = '';
+                this.ruta_editar = '';
+                this.archiveros_lista_editar = [];
+                this.servicios_editar_agregar = [];
+                this.tiposervicios_edita = [];
+                this.modaltiposervicio_editar = '';
+                this.idtiposervicio_editar = '';
+                this.especialidades_editar = [];
+                this.modalespecialidad_editar = '';
+                this.servicios_editar = [];
+                this.dni_busqueda_editar = '';
             },
             pasar_tipo_servicio: function() {
                 $('#id_tipo_especialidad').focus();
@@ -489,7 +561,8 @@
             cargar_tipo_servicio: function() {
                 var url = 'sistema/tiposervicios';
                 axios.get(url).then(response => {  
-                    this.tiposervicios = response.data;                        
+                    this.tiposervicios = response.data;  
+                    this.tiposervicios_editar = response.data;                      
                     // console.log(response.data);
                 }).catch(error => {
                     console.log(url);
@@ -511,12 +584,39 @@
                     console.log('no hay datos de especialidades cargadas.');
                 });
             },
+
+            buscar_especialidad_por_tipo_editar: function() {
+                this.idtiposervicio_editar = this.modaltiposervicio_editar.id;
+                
+                var url = 'sistema/especialidad_tipo_servicio/' + this.idtiposervicio_editar;
+                axios.get(url).then(response => {  
+                    this.especialidades_editar = response.data; 
+                    this.modalespecialidad_editar = '';
+                    $('#id_especialidad_editar').focus();
+                    // console.log(response.data);
+                }).catch(error => {
+                    console.log(url);
+                    console.log('no hay datos de especialidades cargadas.');
+                });
+            },
             buscar_servicio_por_especialidad: function() {
                 this.idespecialidad = this.modalespecialidad.id;
 
                 var url = 'sistema/servicios/' + this.idespecialidad;
                 axios.get(url).then(response => {  
                     this.servicios = response.data; 
+                }).catch(error => {
+                    console.log(url);
+                    console.log('no hay datos de servicios cargadas.');
+                });
+            },
+            buscar_servicio_por_especialidad_editar: function() {
+                this.idespecialidad_editar = this.modalespecialidad_editar.id;
+
+                var url = 'sistema/servicios/' + this.idespecialidad_editar;
+                axios.get(url).then(response => { 
+                    console.log(response.data);
+                    this.servicios_editar = response.data; 
                 }).catch(error => {
                     console.log(url);
                     console.log('no hay datos de servicios cargadas.');
@@ -537,11 +637,32 @@
                     Nombre: this.servicios[index]['name']
                 });
             },
+            agregar_temp_servicio_editar: function(index) {
+                for(var key in this.servicios_editar_agregar)
+                {
+                    if(this.servicios_editar_agregar[key]['IdServicio'] == this.servicios_editar[index]['id'])
+                    {
+                        toastr.clear();
+                        toastr.warning('Este servicio ya esta agregado para ser registrado.','WebSigesa');
+                        return false;
+                    }
+                }
+                this.servicios_editar_agregar.push({
+                    IdServicio: this.servicios_editar[index]['id'],
+                    Nombre: this.servicios_editar[index]['name']
+                });
+            },
             eliminar_servicio_agregar: function(index) {
                 this.servicios_agregar.splice(index,1);
             },
+            eliminar_servicio_agregar_editar: function(index) {
+                this.servicios_editar_agregar.splice(index,1);
+            },
             eliminar_conserje: function(index) {
                 this.archiveros_lista.splice(index,1);
+            },
+            eliminar_conserje_editar: function(index) {
+                this.archiveros_lista_editar.splice(index,1);
             },
             buscar_archivero_dni_l: function() {
                if (this.dni_busqueda.length <= 0) {
@@ -590,6 +711,55 @@
                     toastr.warning('No se puede buscar el DNI.','WebSigesa');
                 });
             },
-        }
+
+            buscar_archivero_dni_l_editar: function() {
+               if (this.dni_busqueda_editar.length <= 0) {
+                    toastr.clear();
+                    toastr.error('Debe ingresar un número de DNI.','WebSigesa');
+                    this.dni_busqueda_editar = '';
+                    $('#dni_busqueda_id_editar').focus();
+                    return false;
+                } else if (this.dni_busqueda_editar.length > 8) {
+                    toastr.clear();
+                    toastr.error('La cantidad de digitos no es valida para el DNI.','WebSigesa');
+                    this.dni_busqueda_editar = '';
+                    $('#dni_busqueda_id_editar').focus();
+                    return false;
+                }
+                var url = 'Archivero/buscar/' + this.dni_busqueda_editar;
+                axios.get(url).then(response => {
+                    if (response.data.data == 'sindatos') { 
+                        toastr.clear();
+                        toastr.warning('No existe el empleado registrado en el sistema.','WebSigesa');
+                        this.dni_busqueda_editar = '';
+                        $('#dni_busqueda_id_editar').focus();
+                    }
+                    else {
+                        var data = response.data.data;
+                        for(var key in this.archiveros_lista_editar)
+                        {
+                            if(this.archiveros_lista_editar[key]['IdEmpleado'] == data.IDEMPLEADO)
+                            {
+                                toastr.clear();
+                                toastr.warning('El conserje ya ha sido agregado para ser registrado.','WebSigesa');
+                                this.dni_busqueda_editar = '';
+                                // $('#id_digito_inicial').focus();
+                                return false;
+                            }
+                        }
+                        this.archiveros_lista_editar.push({
+                            IdEmpleado: data.IDEMPLEADO,
+                            Conserje:  data.PATERNO + ' ' + data.MATERNO + ' ' + data.NOMBRE
+                        });
+                        this.dni_busqueda_editar = '';
+                        // $('#id_digito_inicial').focus();
+                    }
+                }).catch(error => {
+                    toastr.clear();
+                    toastr.warning('No se puede buscar el DNI.','WebSigesa');
+                });
+            },
+        },
+
     }
 </script>

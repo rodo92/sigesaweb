@@ -144,11 +144,29 @@ class Archivo extends Model
         return json_decode(json_encode($result), true);
     }
 
+    public function Listar_Servicios_Ruta($IdRuta)
+    {
+        $result = DB::table('ArchivoRutaServicio')
+                ->leftJoin('Servicios', 'Servicios.IdServicio', '=', 'ArchivoRutaServicio.IdServicio')
+                ->select('ArchivoRutaServicio.IdServicio','Servicios.Nombre')
+                ->where('ArchivoRutaServicio.IdRuta','=',$IdRuta)
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
     public function Eliminar_Ruta($IdRuta)
     {
         DB::table('ArchivoRutaConserje')->where('IdRuta', '=', $IdRuta)->delete();
         DB::table('ArchivoRutaServicio')->where('IdRuta', '=', $IdRuta)->delete();
         DB::table('ArchivoRuta')->where('IdRuta', '=', $IdRuta)->delete();
+    }
+
+    public function Eliminar_Servicios_Conserjes($IdRuta)
+    {
+        DB::table('ArchivoRutaConserje')->where('IdRuta', '=', $IdRuta)->delete();
+        DB::table('ArchivoRutaServicio')->where('IdRuta', '=', $IdRuta)->delete();
+        // DB::table('ArchivoRuta')->where('IdRuta', '=', $IdRuta)->delete();
     }
 
 }

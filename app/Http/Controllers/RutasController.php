@@ -108,7 +108,7 @@ class RutasController extends Controller
     			for ($i=0; $i < count($data_conserjes); $i++) { 
 	    			$conserjes[] = array(
 	    				'IdEmpleado' => $data_conserjes[$i]['IdEmpleado'],
-	    				'Empleado' => $data_conserjes[$i]['ApellidoPaterno'] . ' ' . $data_conserjes[$i]['ApellidoMaterno'] . ' ' . $data_conserjes[$i]['Nombres']
+	    				'Conserje' => $data_conserjes[$i]['ApellidoPaterno'] . ' ' . $data_conserjes[$i]['ApellidoMaterno'] . ' ' . $data_conserjes[$i]['Nombres']
 	    			);
 	    		}
     		} else {
@@ -167,6 +167,64 @@ class RutasController extends Controller
 
     	// print_r($Request->servicios);
     	// echo 'hola';
+    }
+
+    public function editar_ruta(Request $request)
+    {
+    	$messages = [
+            'id_ruta.required' 		=> 'La Ruta no fue seleccionada o escogida para su edición.'
+        ];
+
+        $rules = [
+            'id_ruta' 	=> 'required'
+        ];
+
+        $this->validate($request,$rules,$messages);
+    	
+    	# insertando nueva ruta 
+    	$IdRuta = false;
+    	$archivo = new Archivo();
+    	// $IdRuta = $archivo->Inserta_Nueva_Ruta(strtoupper($request->ruta_nombre));
+    	$archivo->Eliminar_Servicios_Conserjes($request->id_ruta);
+
+    	if ($request->id_ruta) {
+    		# registrar los servicios
+    		if (count($request->servicios) > 0) {
+    			for ($i=0; $i < count($request->servicios); $i++) {
+	    			$archivo->Inserta_Nueva_Ruta_Servicios($request->id_ruta, $request->servicios[$i]['IdServicio']);
+	    		}
+    		}
+
+    		# registrar conserjes
+    		if (count($request->conserjes) > 0) {
+    			for ($i=0; $i < count($request->conserjes); $i++) {
+	    			$archivo->Inserta_Nueva_Ruta_Conserje($request->id_ruta, $request->conserjes[$i]['IdEmpleado']);
+	    		}
+    		}
+
+    		return response()->json(['data' => 'seregistro']);
+
+    	} else {
+    		return response()->json(['data' => 'noseregistro']);
+    	}
+
+    	// print_r($Request->servicios);
+    	// echo 'hola';
+    }
+
+    public function mostrar_servicios_ruta($idruta)
+    {
+    	$servicios = false;
+    	$archivo = new Archivo();
+    	$servicios = $archivo->Listar_Servicios_Ruta($idruta);
+
+    	if ($servicios) {
+    		return response()->json(['data' => $servicios]);
+    	} else {
+    		return response()->json(['data' => 'sindatos']);
+    	}
+
+    	return response()->json($servicios);
     }
 
     public function eliminar_ruta($idruta)

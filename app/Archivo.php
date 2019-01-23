@@ -77,4 +77,78 @@ class Archivo extends Model
         $IdArchivoDigitoTerminal = DB::table('ArchivoDigitoTerminal')->insertGetId($datos);
         return json_decode(json_encode($IdArchivoDigitoTerminal), true);
     }
+
+    public function Inserta_Nueva_Ruta($nombre)
+    {
+        $datos = array(
+            'Nombre'  => $nombre
+            );
+        $IdRuta = DB::table('ArchivoRuta')->insertGetId($datos);
+        return json_decode(json_encode($IdRuta), true);
+    }
+
+    public function Inserta_Nueva_Ruta_Servicios($IdRuta, $IdServicio)
+    {
+        $datos = array(
+            'IdRuta'        => $IdRuta,
+            'IdServicio'    => $IdServicio
+            );
+        $IdRutaServicio = DB::table('ArchivoRutaServicio')->insertGetId($datos);
+        return json_decode(json_encode($IdRutaServicio), true);
+    }
+
+    public function Inserta_Nueva_Ruta_Conserje($IdRuta,$IdEmpleado)
+    {
+        $datos = array(
+            'IdRuta'            => $IdRuta,
+            'IdEmpleado'        => $IdEmpleado,
+            'FechaCreacion'     => date('Y-m-d h:i:s')
+            );
+        $IdRutaConserje = DB::table('ArchivoRutaConserje')->insertGetId($datos);
+        return json_decode(json_encode($IdRutaConserje), true);
+    }
+
+    public function Listar_Rutas()
+    {
+        $result = DB::table('ArchivoRuta')
+                ->select('ArchivoRuta.*')
+                ->orderBy('IdRuta','desc')
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Listar_Rutas_Detalle($IdRuta)
+    {
+        $result = DB::table('ArchivoRuta')
+                ->leftJoin('ArchivoRutaServicio', 'ArchivoRutaServicio.IdRuta', '=', 'ArchivoRuta.IdRuta')
+                ->leftJoin('Servicios', 'Servicios.IdServicio', '=', 'ArchivoRutaServicio.IdServicio')
+                ->leftJoin('Especialidades', 'Especialidades.IdEspecialidad', '=', 'Servicios.IdEspecialidad')
+                ->leftJoin('TiposServicio', 'TiposServicio.IdTipoServicio', '=', 'Servicios.IdTipoServicio')
+                ->select('ArchivoRuta.IdRuta','ArchivoRuta.Nombre AS Ruta','ArchivoRutaServicio.IdServicio','Servicios.Nombre AS Servicio','Servicios.IdEspecialidad','Especialidades.Nombre AS Especialidad','Servicios.IdTipoServicio','TiposServicio.Descripcion as TipoServicio')
+                ->where('ArchivoRuta.IdRuta','=',$IdRuta)
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Listar_Conserjes_Por_Ruta($IdRuta)
+    {
+        $result = DB::table('ArchivoRuta')
+                ->leftJoin('ArchivoRutaConserje', 'ArchivoRutaConserje.IdRuta', '=', 'ArchivoRuta.IdRuta')
+                ->leftJoin('Empleados', 'Empleados.IdEmpleado', '=', 'ArchivoRutaConserje.IdEmpleado')
+                ->select('ArchivoRuta.IdRuta','ArchivoRuta.Nombre AS Ruta','ArchivoRutaConserje.IdEmpleado','Empleados.ApellidoPaterno','Empleados.ApellidoMaterno','Empleados.Nombres')
+                ->where('ArchivoRuta.IdRuta','=',$IdRuta)
+                ->get();
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Eliminar_Ruta($IdRuta)
+    {
+        DB::table('ArchivoRutaConserje')->where('IdRuta', '=', $IdRuta)->delete();
+        DB::table('ArchivoRutaServicio')->where('IdRuta', '=', $IdRuta)->delete();
+        DB::table('ArchivoRuta')->where('IdRuta', '=', $IdRuta)->delete();
+    }
+
 }

@@ -8,6 +8,16 @@
         border: 1px solid #ddd;
         padding: 4px;
     }
+
+    table.tabla_rutas {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table.tabla_rutas td,table.tabla_rutas th {
+        border: 1px solid #ddd;
+        padding: 6px;
+    }
 </style>
 <template>
     <div>
@@ -29,13 +39,13 @@
                     <div class="box-body">
                         <table style="width: 100%">
                             <tr>
-                                <td width="15%" style="padding-right: 5px;">
+                                <!-- <td width="15%" style="padding-right: 5px;">
                                     <div class="input-group">
                                         <label for="">NOMBRE RUTA</label>
                                         <input type="text" class="form-control">
                                     </div>
                                 </td>
-                                <!-- <td width="15%" style="padding-right: 5px;">
+                                <td width="15%" style="padding-right: 5px;">
                                     <div class="input-group">
                                         <label for="">Apellido Paterno</label>
                                         <input type="text" class="form-control">
@@ -61,29 +71,29 @@
                             </tr>
                         </table>
                         <hr>
-                        <table class="tabla_archiveros_lista">
+                        <table class="tabla_rutas">
+                            <caption>Rutas registrada en el Sistema</caption>
                             <thead>
                                 <tr>
-                                    <th style="text-align:center;">#</th>
-                                    <th style="text-align:center;">RUTA</th>
-                                    <th style="text-align:center;"></th>
+                                    <th style="text-align:center;" width="5%">#</th>
+                                    <th style="text-align:left;" width="75%">RUTA</th>
+                                    <th style="text-align:center;" width="20%"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- <tr v-for="(arch_lista,index) in archiveros_lista" v-bind:index="index" v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index">
-                                    <td align="center">{{ index + 1 }}</td>
-                                    <td align="center" v-text="arch_lista.DNI"></td>
-                                    <td v-text="arch_lista.EMPLEADO"></td>
-                                    <td align="center" v-text="arch_lista.DIGITOINICIAL"></td>
-                                    <td align="center" v-text="arch_lista.DIGITOFINAL"></td>
-                                    <td align="center">
-                                        <button class="btn btn-danger btn-sm" v-on:click.prevent="eliminar_archivero(index)"><i class="fa fa-trash-o"></i></button>
+                                <tr v-for="(ruta_mostrar,index) in rutas_mostrar" v-bind:index="index" v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index">
+                                    <td align="center" width="5%">{{ index + 1 }}</td>
+                                    <td v-text="ruta_mostrar.Nombre" width="75%"></td>
+                                    <td align="center" width="20%">
+                                        <button class="btn btn-default btn-xs" v-on:click.prevent="ver_detalle_ruta(ruta_mostrar.IdRuta)"><i class="fa fa-search"></i></button>
+                                        <button class="btn btn-warning btn-xs" v-on:click.prevent="ver_editar_ruta(ruta_mostrar.IdRuta)"><i class="fa fa-pencil"></i></button>
+                                        <button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_ruta(ruta_mostrar.IdRuta)"><i class="fa fa-trash-o"></i></button>
                                     </td>
-                                </tr> -->
+                                </tr>
                             </tbody>
                         </table>
 
-                        <!-- <nav aria-label="Page navigation" class="text-center">
+                        <nav aria-label="Page navigation" class="text-center">
                             <ul class="pagination text-center">
                                 <li>
                                     <a href="#" aria-label="Previous" v-show="pag != 1" @click.prevent="pag -= 1">
@@ -91,12 +101,12 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" aria-label="Next" v-show="pag * NUM_RESULTS / archiveros_lista.length < 1" @click.prevent="pag += 1">
+                                    <a href="#" aria-label="Next" v-show="pag * NUM_RESULTS / rutas_mostrar.length < 1" @click.prevent="pag += 1">
                                         Siguiente <span aria-hidden="true">&rarr;</span>
                                     </a>
                                 </li>
                             </ul>
-                        </nav> -->
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -110,7 +120,7 @@
                                         <td>
                                             <div class="form-group">
                                                 <label for="">Nombre de ruta:</label>
-                                                <input type="text" class="form-control" v-model="ruta_nueva" style="text-transform: uppercase;" v-on:keyup.13="pasar_tipo_servicio">
+                                                <input type="text" class="form-control" v-model="ruta_nueva" style="text-transform: uppercase;" v-on:keyup.13="pasar_tipo_servicio" id="nueva_ruta_id">
                                             </div>
                                         </td>
                                         <td></td>
@@ -191,8 +201,140 @@
                     </div>
                 </div>
             </div>
+
+            <div id="editar_rutas" style="display: none;">
+                <div class="box box-primary color-palette-box">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <table>
+                                    <!-- <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="">Nombre de ruta:</label>
+                                                <input type="text" class="form-control" v-model="ruta_nueva" style="text-transform: uppercase;" v-on:keyup.13="pasar_tipo_servicio" id="nueva_ruta_id">
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                    </tr> -->
+                                    <tr>
+                                        <td>
+                                           <div class="form-group">
+                                                <label for="">Tipo de Servicio:</label>
+                                                <input id="id_tipo_especialidad" class="form-control" type="text" placeholder="" v-on:keyup.13="buscar_especialidad_por_tipo">
+                                                <typeahead v-model="modaltiposervicio" target="#id_tipo_especialidad" :data="tiposervicios" item-key="name"/>
+                                            </div> 
+                                        </td>
+                                        <td style="padding-left: 5px;">
+                                            <div class="form-group">
+                                                <label for="">Especialidad:</label>
+                                                <input id="id_especialidad" class="form-control" type="text" placeholder="" v-on:keyup.13="buscar_servicio_por_especialidad">
+                                                <typeahead v-model="modalespecialidad" target="#id_especialidad" :data="especialidades" item-key="name"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="">DNI Conserje:</label>
+                                                <input type="text" class="form-control" v-model.trim="dni_busqueda" v-on:keyup.13="buscar_archivero_dni_l" id="dni_busqueda_id">
+                                            </div> 
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                                <div style="overflow:scroll;height: 300px;width: 100%;" v-if="servicios.length > 0">
+                                    <table class="tabla_servicios">
+                                        <caption>Lista de Servicios</caption>
+                                        <tr v-for="(servicio,index) in servicios" v-bind:index="index">
+                                            <td v-text="servicio.name"></td>
+                                            <td align="center"><button class="btn btn-success btn-xs" v-on:click.prevent="agregar_temp_servicio(index)"><i class="fa fa-plus"></i></button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <dl>
+                                            <dt>Nombre de la ruta:</dt>
+                                            <dd style="text-transform: uppercase;text-align: center;padding: 3%;" class="bg-info">
+                                                <h1>{{ ruta_editar }}</h1>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <table class="tabla_servicios" v-if="archiveros_lista.length > 0">
+                                            <caption>Conserjes para la nueva Ruta</caption>
+                                            <tr v-for="(archivero_lista,index) in archiveros_lista" v-bind:index="index">
+                                                <td v-text="archivero_lista.Conserje"></td>
+                                                <td align="center"><button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_conserje(index)"><i class="fa fa-trash-o"></i></button></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <table class="tabla_servicios" v-if="servicios_agregar.length > 0">
+                                    <caption>Servicios para la nueva Ruta</caption>
+                                    <tr v-for="(servicio_agregar,index) in servicios_agregar" v-bind:index="index">
+                                        <td v-text="servicio_agregar.Nombre"></td>
+                                        <td align="center"><button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_servicio_agregar(index)"><i class="fa fa-trash-o"></i></button></td>
+                                    </tr>
+                                </table>
+                                <hr>
+                                <div style="text-align: center;">
+                                    <button class="btn btn-default" v-on:click.prevent="ocultar_agregar_rutas"><i class="fa fa-arrow-left" ></i> RETORNAR</button>
+                                    <button type="" class="btn btn-primary" v-on:click.prevent="agregar_nueva_ruta"><i class="fa fa-save"></i> REGISTRAR RUTA</button>
+                                    <button type="" class="btn btn-default" v-on:click.prevent="limpiar_todo_agregar_ruta"><i class="fa fa-save"></i> CANCELAR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
+        <div class="modal fade" id="modal_detalle_ruta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ ruta_mostrar }}&nbsp;&nbsp;<i class="fa fa-map-marker"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        <table v-if="conserjes_mostrar != 'Sin conserjes registrados'">
+                            <caption style="text-decoration: underline;"><i class="fa fa-users"></i>&nbsp;CONSERJES</caption>
+                            <tr v-for="(conserje_mostrar,index) in conserjes_mostrar" v-bind:index="index">
+                                <td><i class="fa fa-user"></i>&nbsp;&nbsp;{{ conserje_mostrar.Empleado }}</td>
+                            </tr>
+                        </table>
+                        <hr v-if="conserjes_mostrar != 'Sin conserjes registrados'">
+                        <div class="row" v-for="(detalle,index) in detalle_mostrar" style="text-align: left;width: 100%;">
+                            <p style="margin-left: 2%;text-transform: uppercase;"><i class="fa fa-check"></i>&nbsp;Tipo de Servicio: {{ detalle.TipoServicio }}</p>
+                            <div class="col-xs-3 col-sm-4 col-xs-md-12" v-for="(especialidadm, index2) in detalle.Especialidades">
+                                <blockquote>
+                                    <table>
+                                        <p><i class="fa fa-hospital-o"></i>&nbsp;{{ especialidadm.Especialidad }}</p>
+                                        <footer v-for="(serviciosm, index3) in especialidadm.Servicios">
+                                            {{ serviciosm.Servicio }} <br>
+                                        </footer>
+                                    </table>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    
+
 </template>
 <script>
     import axios from 'axios'
@@ -205,6 +347,7 @@
         },
         data() {
             return {
+                rutas_mostrar: [],
                 ruta_nueva: '',
                 tiposervicios:[],
                 especialidades:[],
@@ -215,13 +358,84 @@
                 servicios: [],
                 servicios_agregar: [],
                 dni_busqueda: '',
-                archiveros_lista: []
+                archiveros_lista: [],
+                NUM_RESULTS: 5,
+                pag: 1,
+
+                // datos para mostrar
+                ruta_mostrar: '',
+                detalle_mostrar: '',
+                conserjes_mostrar: '',
+
+                // variables para actualizar
+                ruta_editar: '',
             }
         },
         created: function() {
             this.cargar_tipo_servicio();
+            this.cargar_rutas_mostrar();
         },
         methods: {
+            eliminar_ruta: function(id_ruta) {
+                var url = 'rutas/ruta_eliminar/' + id_ruta;
+                axios.get(url).then(response => {
+                    toastr.clear();
+                    toastr.success('Ruta eliminada con éxito.','WebSigesa');
+                    // this.cargar_tipo_servicio();
+                    this.cargar_rutas_mostrar();
+                }).catch(error => {
+                    toastr.clear();
+                    toastr.error('No se pudo eliminar, intentelo nuevamente.','WebSigesa');
+                });
+                // this.cargar_rutas_mostrar();
+            },
+            ver_editar_ruta: function(id_ruta) {
+                var url = 'rutas/ruta_detalle/' + id_ruta;
+                axios.get(url).then(response => {
+
+                    this.ruta_editar = response.data.data.ruta;
+
+                    this.limpiar_todo_agregar_ruta();
+                    $('#lista_rutas').hide();
+                    $('#editar_rutas').fadeIn(400);
+                    $('#nueva_ruta_id').focus();
+                }).catch(error => {
+
+                });
+            },
+            ver_detalle_ruta: function(id_ruta) {
+                var url = 'rutas/ruta_detalle/' + id_ruta;
+                axios.get(url).then(response => {
+                    // console.log(response.data.data);
+                    this.ruta_mostrar = response.data.data.ruta;
+                    this.conserjes_mostrar = response.data.data.conserjes;
+                    this.detalle_mostrar = response.data.data.detalle;
+                }).catch(error => {
+
+                });
+                $('#modal_detalle_ruta').modal('show');
+                // console.log(id_ruta);
+            },
+            cargar_rutas_mostrar: function() {
+                var url = 'rutas/listar';
+                this.rutas_mostrar = [],
+                axios.get(url).then(response => {
+                    if (response.data.data == 'sindatos') {
+
+                    } else {
+                        var datos = response.data.data;
+                        for (var i = datos.length - 1; i >= 0; i--) {
+                            // console.log(datos[i]['Nombre']);
+                            this.rutas_mostrar.push({
+                                IdRuta: datos[i]['IdRuta'],
+                                Nombre: datos[i]['Nombre']
+                            })
+                        }
+                    }
+                }).catch(error => {
+
+                });
+            },
             agregar_nueva_ruta: function() {
                 var url = 'rutas/registrar_ruta';
 
@@ -230,7 +444,15 @@
                     'servicios': this.servicios_agregar,
                     'conserjes': this.archiveros_lista
                 }).then(response => {
-                    console.log(response.data);
+                    if (response.data.data == 'noseregistro') {
+                        toastr.clear();
+                        toastr.error('No se pudo registrar, intentelo nuevamente.','WebSigesa');
+                    } else {
+                        toastr.clear();
+                        toastr.success('Se registraron los datos correctamente.','WebSigesa');
+                        this.limpiar_todo_agregar_ruta();
+                        this.cargar_rutas_mostrar();
+                    }
                 }).catch(error => {
                     console.log(error.response.data);
                 });
@@ -255,11 +477,13 @@
                 this.limpiar_todo_agregar_ruta();
                 $('#lista_rutas').hide();
                 $('#agregar_rutas').fadeIn(400);
+                $('#nueva_ruta_id').focus();
             },
             ocultar_agregar_rutas: function()
             {
                 this.limpiar_todo_agregar_ruta();
                 $('#agregar_rutas').hide();
+                $('#editar_rutas').hide();
                 $('#lista_rutas').fadeIn(400);
             },
             cargar_tipo_servicio: function() {

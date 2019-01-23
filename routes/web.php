@@ -132,3 +132,6 @@ Route::get('Archivero/nuevodigitoterminal/{digitoinicial}/{digitofinal}/{idemple
 // Rutas
 Route::get('rutas','RutasController@index');
 Route::post('rutas/registrar_ruta', 'RutasController@registrar_ruta');
+Route::get('rutas/listar', 'RutasController@mostrar_rutas');
+Route::get('rutas/ruta_detalle/{idrutas}', 'RutasController@mostrar_rutas_detalle');
+Route::get('rutas/ruta_eliminar/{idrutas}', 'RutasController@eliminar_ruta');

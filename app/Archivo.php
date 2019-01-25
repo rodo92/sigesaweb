@@ -21,6 +21,13 @@ class Archivo extends Model
         return json_decode(json_encode($result), true);
     }
 
+    public function Listado_Historia_Archivero_Digito_Terminal($IdEmpleado, $Fecha)
+    {
+        $result = DB::select('exec SIGESA_HISTORIAS_ARCHIVERO_DIGITOTERMINAL ?,?', [$IdEmpleado, $Fecha]);
+
+        return json_decode(json_encode($result), true);
+    }
+
     public function Archivero_por_Dni($DNI)
     {
         $result = DB::table('Empleados')

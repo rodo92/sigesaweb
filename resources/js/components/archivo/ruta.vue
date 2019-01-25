@@ -182,14 +182,17 @@
                                         </table>
                                     </div>
                                 </div>
-
-                                <table class="tabla_servicios" v-if="servicios_agregar.length > 0">
-                                    <caption>Servicios para la nueva Ruta</caption>
-                                    <tr v-for="(servicio_agregar,index) in servicios_agregar" v-bind:index="index">
-                                        <td v-text="servicio_agregar.Nombre"></td>
-                                        <td align="center"><button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_servicio_agregar(index)"><i class="fa fa-trash-o"></i></button></td>
-                                    </tr>
-                                </table>
+                                
+                                <div style="overflow:scroll;height: 300px;width: 100%;" v-if="servicios_agregar.length > 0">
+                                    <table class="tabla_servicios"  >
+                                        <caption>Servicios para la nueva Ruta</caption>
+                                        <tr v-for="(servicio_agregar,index) in servicios_agregar" v-bind:index="index">
+                                            <td v-text="servicio_agregar.Nombre"></td>
+                                            <td align="center"><button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_servicio_agregar(index)"><i class="fa fa-trash-o"></i></button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                
                                 <hr>
                                 <div style="text-align: center;">
                                     <button class="btn btn-default" v-on:click.prevent="ocultar_agregar_rutas"><i class="fa fa-arrow-left" ></i> RETORNAR</button>
@@ -274,14 +277,16 @@
                                         </table>
                                     </div>
                                 </div>
-
-                                <table class="tabla_servicios" v-if="servicios_editar_agregar.length > 0">
+                                <div style="overflow:scroll;height: 300px;width: 100%;" v-if="servicios_editar_agregar.length > 0">
+                                    <table class="tabla_servicios" >
                                     <caption>Servicios para la Ruta a editar</caption>
                                     <tr v-for="(servicio_editar,index) in servicios_editar_agregar" v-bind:index="index">
                                         <td v-text="servicio_editar.Nombre"></td>
                                         <td align="center"><button class="btn btn-danger btn-xs" v-on:click.prevent="eliminar_servicio_agregar_editar(index)"><i class="fa fa-trash-o"></i></button></td>
                                     </tr>
-                                </table>
+                                </table>  
+                                </div>
+                                
                                 <hr>
                                 <div style="text-align: center;">
                                     <button class="btn btn-default" v-on:click.prevent="ocultar_agregar_rutas"><i class="fa fa-arrow-left" ></i> RETORNAR</button>
@@ -565,7 +570,7 @@
                     this.tiposervicios_editar = response.data;                      
                     // console.log(response.data);
                 }).catch(error => {
-                    console.log(url);
+                    // console.log(url);
                     console.log('no hay datos de tipos de servicios cargadas.');
                 });
                 
@@ -580,7 +585,7 @@
                     $('#id_especialidad').focus();
                     // console.log(response.data);
                 }).catch(error => {
-                    console.log(url);
+                    // console.log(url);
                     console.log('no hay datos de especialidades cargadas.');
                 });
             },
@@ -595,7 +600,7 @@
                     $('#id_especialidad_editar').focus();
                     // console.log(response.data);
                 }).catch(error => {
-                    console.log(url);
+                    // console.log(url);
                     console.log('no hay datos de especialidades cargadas.');
                 });
             },
@@ -606,7 +611,7 @@
                 axios.get(url).then(response => {  
                     this.servicios = response.data; 
                 }).catch(error => {
-                    console.log(url);
+                    // console.log(url);
                     console.log('no hay datos de servicios cargadas.');
                 });
             },
@@ -618,7 +623,7 @@
                     console.log(response.data);
                     this.servicios_editar = response.data; 
                 }).catch(error => {
-                    console.log(url);
+                    // console.log(url);
                     console.log('no hay datos de servicios cargadas.');
                 });
             },

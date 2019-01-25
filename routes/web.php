@@ -137,3 +137,7 @@ Route::get('rutas/listar', 'RutasController@mostrar_rutas');
 Route::get('rutas/ruta_detalle/{idrutas}', 'RutasController@mostrar_rutas_detalle');
 Route::get('rutas/ruta_eliminar/{idrutas}', 'RutasController@eliminar_ruta');
 Route::get('rutas/servicios/{idrutas}', 'RutasController@mostrar_servicios_ruta');
+
+// Movimiento de Historias
+Route::get('MovimientoHistoria','MovimientoHistoriaController@index');
+Route::get('MovimientoHistoria/listado_historias_archivero','MovimientoHistoriaController@listado_historias_archivero');

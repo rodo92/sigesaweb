@@ -141,3 +141,10 @@ Route::get('rutas/servicios/{idrutas}', 'RutasController@mostrar_servicios_ruta'
 // Movimiento de Historias
 Route::get('MovimientoHistoria','MovimientoHistoriaController@index');
 Route::get('MovimientoHistoria/listado_historias_archivero','MovimientoHistoriaController@listado_historias_archivero');
+Route::get('MovimientoHistoria/noencontradohistoria/{idhistoriasolicitada}', 'MovimientoHistoriaController@estado_no_encontrado_historia_archiver');
+Route::get('MovimientoHistoria/encontradohistoria/{idhistoriasolicitada}', 'MovimientoHistoriaController@estado_encontrado_historia_archiver');
+Route::get('MovimientoHistoria/imprimirlistadoarchivero', 'MovimientoHistoriaController@excel_listado_archivero');
+Route::get('MovimientoHistoria/historiasenrutadas', 'MovimientoHistoriaController@Listado_Historias_Enrutadas');
+Route::get('MovimientoHistoria/historiasenrutadasexcel', 'MovimientoHistoriaController@Listado_Historias_Enrutadas_Excel');
+Route::get('MovimientoHistoria/listadoconserje', 'MovimientoHistoriaController@Listado_Historias_Conserje');
+Route::get('MovimientoHistoria/generarlistadosconserje/', 'MovimientoHistoriaController@generar_listados_conserje');

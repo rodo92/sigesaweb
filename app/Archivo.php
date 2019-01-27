@@ -23,7 +23,24 @@ class Archivo extends Model
 
     public function Listado_Historia_Archivero_Digito_Terminal($IdEmpleado, $Fecha)
     {
+        // echo $Fecha;exit();
         $result = DB::select('exec SIGESA_HISTORIAS_ARCHIVERO_DIGITOTERMINAL ?,?', [$IdEmpleado, $Fecha]);
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Listado_Historia_Conserje($fecha, $IdEmpleado)
+    {
+        // echo $Fecha;exit();
+        $result = DB::select('exec SIGESA_HISTORIAS_CONSERJE ?,?', [$fecha, $IdEmpleado]);
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function Listado_Historia_Enrutado($fecha)
+    {
+        // echo $Fecha;exit();
+        $result = DB::select('exec SIGESA_HISTORIAS_ARCHIVERO_ENRUTADO ?', [$fecha]);
 
         return json_decode(json_encode($result), true);
     }
@@ -174,6 +191,30 @@ class Archivo extends Model
         DB::table('ArchivoRutaConserje')->where('IdRuta', '=', $IdRuta)->delete();
         DB::table('ArchivoRutaServicio')->where('IdRuta', '=', $IdRuta)->delete();
         // DB::table('ArchivoRuta')->where('IdRuta', '=', $IdRuta)->delete();
+    }
+
+    public function No_Encontrado_Historia_Archivero($IdHistoriaSolicitada)
+    {
+        $datos = array(
+            'SalidaArchivo'         => '0',
+            'FechaSalidaArchivo'    => null
+        );
+
+        DB::table('SigesaGestionArchivo')
+            ->where('IdHistoriaSolicitada', $IdHistoriaSolicitada)
+            ->update($datos);
+    }
+
+    public function Encontrado_Historia_Archivero($IdHistoriaSolicitada,$fecha)
+    {
+        $datos = array(
+            'SalidaArchivo'         => '1',
+            'FechaSalidaArchivo'    => $fecha
+        );
+
+        DB::table('SigesaGestionArchivo')
+            ->where('IdHistoriaSolicitada', $IdHistoriaSolicitada)
+            ->update($datos);
     }
 
 }

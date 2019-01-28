@@ -420,6 +420,13 @@
                 // console.log(url);return false;
                 axios.get(url).then(reponse => {
                     console.log(reponse.data.data);
+
+                    if (reponse.data.data == 'sindatos') {
+                        $('#tabla_es_ventas_productos').hide();
+                        toastr.success('No hay datos encontrados', 'WebSigesa');
+                        return false;
+                    }
+
                     $('#tabla_es_ventas_productos').dataTable().fnDestroy();
                     $('#tabla_es_ventas_productos').DataTable({
                         language: {

@@ -169,12 +169,15 @@
 	            			<table class="tabla_servicios">
 	            				<thead>
 	            					<tr>
-	            						<th width="4%" style="text-align: center;">#</th>
-	            						<th width="8%" style="text-align: center;">HISTORIA</th>
-	            						<th width="32%" style="text-align: left;">PACIENTE</th>
-	            						<th width="6%" style="text-align: center;">RUTA</th>
-	            						<th width="25%" style="text-align: center;">ESPECIALIDAD</th>
-	            						<th width="25%" style="text-align: center;">CONSULTORIO</th>
+	            						<th width="5%" style="text-align: center;">#</th>
+	            						<th width="10%" style="text-align: center;">HISTORIA</th>
+	            						<th width="25%" style="text-align: left;">PACIENTE</th>
+	            						<th width="5%" style="text-align: center;">RUTA</th>
+	            						<th width="20%" style="text-align: center;">ESPECIALIDAD</th>
+	            						<th width="20%" style="text-align: center;">CONSULTORIO</th>
+	            						<th width="5%" style="text-align: center;">SALIDA</th>
+	            						<th width="5%" style="text-align: center;">RUTA</th>
+	            						<th width="5%" style="text-align: center;">RECEPCION</th>
 	            					</tr>
 	            				</thead>
 	            				<tbody>
@@ -185,6 +188,9 @@
 	            						<td align="center" v-text="historia_conserje.Ruta"></td>
 	            						<td align="center" v-text="historia_conserje.Especialidad"></td>
 	            						<td align="center" v-text="historia_conserje.Consultorio"></td>
+	            						<td align="center"></td>
+	            						<td align="center"></td>
+	            						<td align="center"></td>
 	            					</tr>
 	            				</tbody>
 	            			</table>

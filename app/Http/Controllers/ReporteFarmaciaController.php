@@ -314,4 +314,139 @@ class ReporteFarmaciaController extends Controller
         header('Cache-Control: max-age=0');
         return $Excel_writer->save("php://output");
     }
+
+    public function reporte_venta_producto_resumen_excel($fechainicio, $fechafin, $idAlmacen, $insumomedicamento)
+    {
+        $farmacia = new Farmacia();
+        $data = $farmacia->Reporte_Almacen_Venta_Producto_Resumen($fechainicio,$fechafin,$idAlmacen,$insumomedicamento);
+
+        $styleArray = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['argb' => 'FFE8E5E5'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'allborders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $styleCell = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $spreadsheet = new Spreadsheet();  /*----Spreadsheet object-----*/
+        $Excel_writer = new Xls($spreadsheet);  /*----- Excel (Xls) Object*/
+        $spreadsheet->setActiveSheetIndex(0);
+        $activeSheet = $spreadsheet->getActiveSheet();
+
+        $activeSheet->setTitle("Reporte de Ingresos de Almacen");
+
+        $activeSheet->getStyle('A1:V1')->applyFromArray($styleArray);
+
+        //Cabeceras de excel
+        $activeSheet->setCellValue('A1', 'CODIGOSISMED')->getStyle('A1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('B1', 'PRODUCTO DE COMPRA')->getStyle('B1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('C1', 'CANTIDADVENTAS')->getStyle('C1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('D1', 'CONSULTAEXTERNA')->getStyle('D1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E1', 'HOSPITALIZACION')->getStyle('E1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F1', 'EMERGENCIA SISMED')->getStyle('F1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G1', 'PACIENTEEXTERNO')->getStyle('G1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('H1', 'PARTICULAR')->getStyle('H1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I1', 'SIS')->getStyle('I1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('J1', 'SOAT')->getStyle('J1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('K1', 'PENDIENTE')->getStyle('K1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('L1', 'EXONERADO SISMED')->getStyle('L1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('M1', 'DONACION')->getStyle('M1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('N1', 'INTERVENCIONSANITARIA')->getStyle('N1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('01', 'STOCK')->getStyle('01')->getFont()->setBold(true);
+        $activeSheet->setCellValue('P1', 'CANTIDADFACTURADA')->getStyle('P1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('Q1', 'TOTAL')->getStyle('Q1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('R1', 'DEVOLUCIONES')->getStyle('R1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('S1', 'CONSULTAEXTERNADEVOLUCIONES')->getStyle('S1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('T1', 'HOSPITALIZACIONDEVOLUCIONES')->getStyle('T1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('U1', 'EMERGENCIADEVOLUCIONES')->getStyle('U1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('V1', 'CANTVENTASMENOSDEVOLUCIONES')->getStyle('V1')->getFont()->setBold(true);
+
+        // Filtro
+        $activeSheet->setAutoFilter("A1:V1");
+
+        //Ingresando datos
+        $j = 2;
+        $total = number_format(0,2,'.',' ');
+        for ($i = 0; $i < count($data); $i++) {
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['codigo_sismed']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$j, $data[$i]['producto']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$j, $data[$i]['cv']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$j, $data[$i]['ce']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('E'.$j, $data[$i]['ho']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$j, $data[$i]['em']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$j, $data[$i]['ext']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, $data[$i]['cash']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, $data[$i]['sis']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$j, $data[$i]['soat']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('K'.$j, $data[$i]['pnd']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('L'.$j, $data[$i]['exo']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('M'.$j, $data[$i]['do']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('N'.$j, $data[$i]['is']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('O'.$j, number_format($data[$i]['stock'],2,'.',' ') );
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('P'.$j, $data[$i]['cant_factura']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('Q'.$j, number_format($data[$i]['total'],2,'.',' ') );
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('R'.$j, $data[$i]['dv']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('S'.$j, $data[$i]['ce_d']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('T'.$j, $data[$i]['ho_d']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('U'.$j, $data[$i]['em_d']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('V'.$j, $data[$i]['dv']);
+
+            $activeSheet->getStyle("A".$j.":V".$j)->applyFromArray($styleCell);
+            $activeSheet->getStyle("O".$j)->getNumberFormat()->setFormatCode('#,##0.00');
+            $activeSheet->getStyle("Q".$j)->getNumberFormat()->setFormatCode('#,##0.00');
+            $j++;
+            // $total = $total + $data[$i]['TOTAL'];
+        }
+
+        /*$spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, 'TOTAL DE ACTIVOS');
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, 'MONTO TOTAL SIN ANULADOS');
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$j, '');
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('K'.$j, number_format($total,2,'.',' '));*/
+
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('A')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('B')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('C')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('D')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('E')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('F')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('G')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('H')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('I')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('J')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('M')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('N')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('O')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('P')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('Q')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('R')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('S')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('T')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('U')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('V')->setAutoSize(true);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ReporteVenProdResu.xls"'); /*-- $filename is  xsl filename ---*/
+        header('Cache-Control: max-age=0');
+        return $Excel_writer->save("php://output");
+    }
 }

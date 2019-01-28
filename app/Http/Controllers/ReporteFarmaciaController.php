@@ -319,7 +319,7 @@ class ReporteFarmaciaController extends Controller
     {
         $farmacia = new Farmacia();
         $data = $farmacia->Reporte_Almacen_Venta_Producto_Resumen($fechainicio,$fechafin,$idAlmacen,$insumomedicamento);
-
+        // print_r($data);exit();
         $styleArray = [
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -370,7 +370,7 @@ class ReporteFarmaciaController extends Controller
         $activeSheet->setCellValue('L1', 'EXONERADO SISMED')->getStyle('L1')->getFont()->setBold(true);
         $activeSheet->setCellValue('M1', 'DONACION')->getStyle('M1')->getFont()->setBold(true);
         $activeSheet->setCellValue('N1', 'INTERVENCIONSANITARIA')->getStyle('N1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('01', 'STOCK')->getStyle('01')->getFont()->setBold(true);
+        $activeSheet->setCellValue('O1', 'STOCK')->getStyle('O1')->getFont()->setBold(true);
         $activeSheet->setCellValue('P1', 'CANTIDADFACTURADA')->getStyle('P1')->getFont()->setBold(true);
         $activeSheet->setCellValue('Q1', 'TOTAL')->getStyle('Q1')->getFont()->setBold(true);
         $activeSheet->setCellValue('R1', 'DEVOLUCIONES')->getStyle('R1')->getFont()->setBold(true);
@@ -384,7 +384,7 @@ class ReporteFarmaciaController extends Controller
 
         //Ingresando datos
         $j = 2;
-        $total = number_format(0,2,'.',' ');
+        // $total = number_format(0,2,'.',' ');
         for ($i = 0; $i < count($data); $i++) {
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['codigo_sismed']);
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$j, $data[$i]['producto']);
@@ -410,8 +410,8 @@ class ReporteFarmaciaController extends Controller
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('V'.$j, $data[$i]['dv']);
 
             $activeSheet->getStyle("A".$j.":V".$j)->applyFromArray($styleCell);
-            $activeSheet->getStyle("O".$j)->getNumberFormat()->setFormatCode('#,##0.00');
-            $activeSheet->getStyle("Q".$j)->getNumberFormat()->setFormatCode('#,##0.00');
+            // $activeSheet->getStyle("O".$j)->getNumberFormat()->setFormatCode('#,##0.00');
+            // $activeSheet->getStyle("Q".$j)->getNumberFormat()->setFormatCode('#,##0.00');
             $j++;
             // $total = $total + $data[$i]['TOTAL'];
         }
@@ -445,7 +445,7 @@ class ReporteFarmaciaController extends Controller
         $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('V')->setAutoSize(true);
 
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="ReporteVenProdResu.xls"'); /*-- $filename is  xsl filename ---*/
+        header('Content-Disposition: attachment;filename="ReporteVenProd.xls"'); /*-- $filename is  xsl filename ---*/
         header('Cache-Control: max-age=0');
         return $Excel_writer->save("php://output");
     }

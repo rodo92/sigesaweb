@@ -528,6 +528,19 @@
                 window.open(url);
                 toastr.clear();
             },
+            excelExport_vpr: function() {
+                if (this.inicio_vpr == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
+                if (this.fin_vpr == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
+                if (this.farmaciaid_vpr == '') { toastr.error('Debe seleccionar una farmacia','WebSigesa');return false; }
+                if (this.movtipo_vpr == '') { toastr.error('Debe seleccionar un tipo de movimiento','WebSigesa');return false; }
+                var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
+                var url = '/farmacia/reporte_venta_producto_excel/'+this.inicio_vpr+'/'+this.fin_vpr+'/'+this.farmaciaid_vpr+'/'+this.movtipo_vpr;
+                window.open(url);
+                toastr.clear();
+            },
             pdfExport: function()
             {
                 toastr.clear();

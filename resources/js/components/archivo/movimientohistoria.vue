@@ -35,7 +35,7 @@
         		</div>
         	</div>
         	<div class="box box-primary color-palette-box" style="display: none;" id="box_archivero">
-                <div class="box-body">
+                <div class="box-body" style="padding:2%;">
                 	<div class="row">
                 		<div class="col-xs-4 bg-info" >
                 			<table>
@@ -110,7 +110,7 @@
             </div>
 
             <div class="box box-primary color-palette-box" style="display: none;" id="box_enrutador">
-            	<div class="box-body">
+            	<div class="box-body" style="padding:2%;">
             		<div class="row">
 	            		<div class="col-xs-4"></div>
 	            		<div class="col-xs-4"></div>
@@ -152,10 +152,26 @@
             </div>
 
             <div class="box box-primary color-palette-box" style="display: none;" id="box_conserje">
-            	<div class="box-body">
+            	<div class="box-body" style="padding:2%;">
             		<div class="row">
 	            		<div class="col-xs-6">
 	            			<h4>CONSERJE: {{ conserje_mostrar }}</h4>
+
+	            			<table>
+	            				<tr>
+	            					<td>
+	            						<div class="checkbox">
+    										<button class="btn btn-default" v-on:click.prevent="dar_salida_todos_conserje"><i class="fa fa-check"></i>&nbsp;Todos Salieron</button>
+  										</div>
+	            					</td>
+	            					<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	            					<td>
+	            						<div class="checkbox">
+    										<button class="btn btn-default" v-on:click.prevent="dar_recepcion_todos_conserje"><i class="fa fa-check"></i>&nbsp;Todos Regresaron</button>
+  										</div>
+	            					</td>
+	            				</tr>
+	            			</table>
 	            		</div>
 	            		<div class="col-xs-2"></div>
 	            		<div class="col-xs-4 text-right">
@@ -169,15 +185,16 @@
 	            			<table class="tabla_servicios">
 	            				<thead>
 	            					<tr>
-	            						<th width="5%" style="text-align: center;">#</th>
-	            						<th width="10%" style="text-align: center;">HISTORIA</th>
+	            						<th width="2%" style="text-align: center;">#</th>
+	            						<th width="6%" style="text-align: center;">HISTORIA</th>
 	            						<th width="25%" style="text-align: left;">PACIENTE</th>
 	            						<th width="5%" style="text-align: center;">RUTA</th>
-	            						<th width="20%" style="text-align: center;">ESPECIALIDAD</th>
-	            						<th width="20%" style="text-align: center;">CONSULTORIO</th>
+	            						<th width="20%" style="text-align: left;">ESPECIALIDAD</th>
+	            						<th width="20%" style="text-align: left;">CONSULTORIO</th>
+	            						<th width="5%" style="text-align: center;">ESTADO</th>
 	            						<th width="5%" style="text-align: center;">SALIDA</th>
-	            						<th width="5%" style="text-align: center;">RUTA</th>
-	            						<th width="5%" style="text-align: center;">RECEPCION</th>
+	            						<th width="7%" style="text-align: center;">ESTADO</th>
+	            						<th width="7%" style="text-align: center;">RECEPCION</th>
 	            					</tr>
 	            				</thead>
 	            				<tbody>
@@ -186,11 +203,21 @@
 	            						<td align="center" v-text="historia_conserje.NroHistoriaClinica"></td>
 	            						<td v-text="historia_conserje.Paciente"></td>
 	            						<td align="center" v-text="historia_conserje.Ruta"></td>
-	            						<td align="center" v-text="historia_conserje.Especialidad"></td>
-	            						<td align="center" v-text="historia_conserje.Consultorio"></td>
-	            						<td align="center"></td>
-	            						<td align="center"></td>
-	            						<td align="center"></td>
+	            						<td align="left" v-text="historia_conserje.Especialidad"></td>
+	            						<td align="left" v-text="historia_conserje.Consultorio"></td>
+
+	            						<td class="bg-success" align="center" v-if="historia_conserje.SalidaConserje == '1'">Salio</td>
+	            						<td class="bg-danger" align="center" v-else-if="historia_conserje.SalidaConserje == '0'">No Salio</td>
+
+	            						<td align="center" v-if="historia_conserje.SalidaConserje == '0'" v-on:click.prevent="dar_salida_conserje(historia_conserje.IdHistoriaSolicitada)"><button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button></td>
+	            						<td align="center" v-if="historia_conserje.SalidaConserje == '1'" v-on:click.prevent="no_dar_salida_conserje(historia_conserje.IdHistoriaSolicitada)"><button class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button></td>
+
+	            						<td class="bg-success" align="center" v-if="historia_conserje.RecepcionConserje == '1'" >Regreso</td>
+	            						<td class="bg-danger" align="center" v-else-if="historia_conserje.RecepcionConserje == '0'">No Regreso</td>
+
+	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '0'"><button class="btn btn-success btn-xs" v-on:click.prevent="dar_recepcion_conserje(historia_conserje.IdHistoriaSolicitada)"><i class="fa fa-check"></i></button></td>
+	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '1'"><button class="btn btn-danger btn-xs" v-on:click.prevent="no_dar_recepcion_conserje(historia_conserje.IdHistoriaSolicitada)"><i class="fa fa-times"></i></button></td>
+	            						
 	            					</tr>
 	            				</tbody>
 	            			</table>
@@ -323,7 +350,86 @@
         	{
         		var url = 'MovimientoHistoria/historiasenrutadasexcel';
                 window.open(url);
-        	}
+        	},
+        	dar_salida_todos_conserje: function()
+        	{
+        		var idhistorias = [];
+        		for (var i = 0; i < this.historias_conserje.length; i++) {
+        			idhistorias.push(this.historias_conserje[i]['IdHistoriaSolicitada']);
+        		}
+        		var url = 'MovimientoHistoria/salidatodosconserje';
+        		axios.post(url, {
+        			'idhistorias': idhistorias
+        		}).then(response => {
+        			// console.log(response.data);
+                    this.traer_lista_historias_conserjes();
+        		}).catch(error => {
+
+        		});
+                
+        	},
+            dar_recepcion_todos_conserje: function()
+            {
+                var idhistorias = [];
+                for (var i = 0; i < this.historias_conserje.length; i++) {
+                    idhistorias.push(this.historias_conserje[i]['IdHistoriaSolicitada']);
+                }
+                var url = 'MovimientoHistoria/recepciontodosconserje';
+                axios.post(url, {
+                    'idhistorias': idhistorias
+                }).then(response => {
+                    // console.log(response.data);
+                    this.traer_lista_historias_conserjes();
+                }).catch(error => {
+
+                });
+                
+            },
+        	dar_salida_conserje: function(idhistoria)
+        	{
+        		// console.log(idhistoria);return false;
+        		var url = 'MovimientoHistoria/darsalidaconserje/' + idhistoria;
+
+        		axios.get(url).then(response => {
+        			this.traer_lista_historias_conserjes();
+        		}).catch(error => {
+
+        		});
+        	},
+            no_dar_salida_conserje: function(idhistoria)
+            {
+                // console.log(idhistoria);return false;
+                var url = 'MovimientoHistoria/nosalidaconserje/' + idhistoria;
+
+                axios.get(url).then(response => {
+                    this.traer_lista_historias_conserjes();
+                }).catch(error => {
+
+                });
+            },
+            dar_recepcion_conserje: function(idhistoria)
+            {
+                // console.log(idhistoria);return false;
+                var url = 'MovimientoHistoria/darrecepcionconserje/' + idhistoria;
+
+                axios.get(url).then(response => {
+                    this.traer_lista_historias_conserjes();
+                }).catch(error => {
+
+                });
+            },
+
+            no_dar_recepcion_conserje: function(idhistoria)
+            {
+                // console.log(idhistoria);return false;
+                var url = 'MovimientoHistoria/norecepciontodosconserje/' + idhistoria;
+
+                axios.get(url).then(response => {
+                    this.traer_lista_historias_conserjes();
+                }).catch(error => {
+
+                });
+            }
         }
     }
 </script>

@@ -56,10 +56,10 @@ Route::get('farmacia/reporte_ingresos_almacen_excel/{inicio}/{fin}/{ruc}', 'Repo
 // Reportes Farmacia 
 Route::get('farmacia/reporte_es_documentos/{inicio}/{fin}/{almacenid}/{movtipo}', 'ReporteFarmaciaController@reporte_entradas_salidas_documentos');
 Route::get('farmacia/reporte_por_usuario/{inicio}/{fin}/{almacenid}', 'ReporteFarmaciaController@reporte_por_usuario');
-Route::get('farmacia/reporte_venta_producto/{inicio}/{fin}/{almacenid}/{insumomedicamento}', 'ReporteFarmaciaController@reporte_venta_producto_resumen');
+Route::get('farmacia/reporte_venta_producto/{inicio}/{fin}/{almacenid}/{insumomedicamento}/{movinicio?}/{movfin?}', 'ReporteFarmaciaController@reporte_venta_producto_resumen');
 Route::get('farmacia/reporte_es_documentos_excel/{inicio}/{fin}/{almacenid}/{movtipo}', 'ReporteFarmaciaController@reporte_entradas_salidas_documentos_excel');
 Route::get('farmacia/reporte_por_usuario_excel/{inicio}/{fin}/{almacenid}', 'ReporteFarmaciaController@reporte_por_usuario_excel');
-Route::get('farmacia/reporte_venta_producto_excel/{inicio}/{fin}/{almacenid}/{insumomedicamento}', 'ReporteFarmaciaController@reporte_venta_producto_resumen_excel');
+Route::get('farmacia/reporte_venta_producto_excel/{inicio}/{fin}/{almacenid}/{insumomedicamento}/{movinicio?}/{movfin?}', 'ReporteFarmaciaController@reporte_venta_producto_resumen_excel');
 
 
 /**
@@ -149,3 +149,9 @@ Route::get('MovimientoHistoria/historiasenrutadas', 'MovimientoHistoriaControlle
 Route::get('MovimientoHistoria/historiasenrutadasexcel', 'MovimientoHistoriaController@Listado_Historias_Enrutadas_Excel');
 Route::get('MovimientoHistoria/listadoconserje', 'MovimientoHistoriaController@Listado_Historias_Conserje');
 Route::get('MovimientoHistoria/generarlistadosconserje/', 'MovimientoHistoriaController@generar_listados_conserje');
+Route::get('MovimientoHistoria/darsalidaconserje/{idhistoriasolicitada}', 'MovimientoHistoriaController@Dar_Salida_Historia_Conserje');
+Route::get('MovimientoHistoria/darrecepcionconserje/{idhistoriasolicitada}', 'MovimientoHistoriaController@Dar_Recepcion_Historia_Conserje');
+Route::post('MovimientoHistoria/salidatodosconserje', 'MovimientoHistoriaController@Dar_Salida_Toddas_Historia_Conserje');
+Route::post('MovimientoHistoria/recepciontodosconserje', 'MovimientoHistoriaController@Dar_Recepcion_Toddas_Historia_Conserje');
+Route::get('MovimientoHistoria/nosalidaconserje/{idhistoriasolicitada}','MovimientoHistoriaController@No_Dar_Salida_Historia_Conserje');
+Route::get('MovimientoHistoria/norecepciontodosconserje/{idhistoriasolicitada}','MovimientoHistoriaController@No_Dar_Recepcion_Historia_Conserje');

@@ -9,10 +9,10 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class ReporteFarmaciaController extends Controller
 {
-    public function reporte_venta_producto_resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento)
+    public function reporte_venta_producto_resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio=null, $movifin=null)
     {
         $farmacia = new Farmacia();
-        $data = $farmacia->Reporte_Almacen_Venta_Producto_Resumen($fechainicio,$fechafin,$idAlmacen,$insumomedicamento);
+        $data = $farmacia->Reporte_Almacen_Venta_Producto_Resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio, $movifin);
 
         if (count($data) > 0) { 
             
@@ -315,10 +315,10 @@ class ReporteFarmaciaController extends Controller
         return $Excel_writer->save("php://output");
     }
 
-    public function reporte_venta_producto_resumen_excel($fechainicio, $fechafin, $idAlmacen, $insumomedicamento)
+    public function reporte_venta_producto_resumen_excel($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio=null, $movifin=null)
     {
         $farmacia = new Farmacia();
-        $data = $farmacia->Reporte_Almacen_Venta_Producto_Resumen($fechainicio,$fechafin,$idAlmacen,$insumomedicamento);
+        $data = $farmacia->Reporte_Almacen_Venta_Producto_Resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio, $movifin);
         // print_r($data);exit();
         $styleArray = [
             'fill' => [
@@ -327,6 +327,21 @@ class ReporteFarmaciaController extends Controller
             ],
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'allborders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $styleArrayTitulo = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['argb' => 'FFE8E5E5'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
             ],
             'borders' => [
                 'allborders' => [
@@ -351,39 +366,46 @@ class ReporteFarmaciaController extends Controller
         $spreadsheet->setActiveSheetIndex(0);
         $activeSheet = $spreadsheet->getActiveSheet();
 
-        $activeSheet->setTitle("Reporte de Ingresos de Almacen");
+        $activeSheet->setTitle("Reporte Ventas Producto");
 
-        $activeSheet->getStyle('A1:V1')->applyFromArray($styleArray);
+        $activeSheet->getStyle('A4:V4')->applyFromArray($styleArray);
+        $activeSheet->getStyle('B1:C1')->applyFromArray($styleArrayTitulo);
+        $activeSheet->getStyle('B2:C2')->applyFromArray($styleArrayTitulo);
+
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('B1', 'DESDE: ' . $fechainicio . ' HASTA: ' . $fechafin)->getStyle('B1')->getFont()->setBold(true);
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('B2', 'NÚMERO DE MOVIMIENTO INICIAL : ' . $movinicio . ' NÚMERO DE MOVIMIENTO FINAL: ' . $movifin)->getStyle('B2')->getFont()->setBold(true);
+        $spreadsheet->setActiveSheetIndex(0)->mergeCells('B1:C1');
+        $spreadsheet->setActiveSheetIndex(0)->mergeCells('B2:C2');
 
         //Cabeceras de excel
-        $activeSheet->setCellValue('A1', 'CODIGOSISMED')->getStyle('A1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('B1', 'PRODUCTO DE COMPRA')->getStyle('B1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('C1', 'CANTIDADVENTAS')->getStyle('C1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('D1', 'CONSULTAEXTERNA')->getStyle('D1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('E1', 'HOSPITALIZACION')->getStyle('E1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('F1', 'EMERGENCIA SISMED')->getStyle('F1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('G1', 'PACIENTEEXTERNO')->getStyle('G1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('H1', 'PARTICULAR')->getStyle('H1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('I1', 'SIS')->getStyle('I1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('J1', 'SOAT')->getStyle('J1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('K1', 'PENDIENTE')->getStyle('K1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('L1', 'EXONERADO SISMED')->getStyle('L1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('M1', 'DONACION')->getStyle('M1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('N1', 'INTERVENCIONSANITARIA')->getStyle('N1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('O1', 'STOCK')->getStyle('O1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('P1', 'CANTIDADFACTURADA')->getStyle('P1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('Q1', 'TOTAL')->getStyle('Q1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('R1', 'DEVOLUCIONES')->getStyle('R1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('S1', 'CONSULTAEXTERNADEVOLUCIONES')->getStyle('S1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('T1', 'HOSPITALIZACIONDEVOLUCIONES')->getStyle('T1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('U1', 'EMERGENCIADEVOLUCIONES')->getStyle('U1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('V1', 'CANTVENTASMENOSDEVOLUCIONES')->getStyle('V1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('A4', 'CODIGOSISMED')->getStyle('A4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('B4', 'PRODUCTO DE COMPRA')->getStyle('B4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('C4', 'CANTIDADVENTAS')->getStyle('C4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('D4', 'CONSULTAEXTERNA')->getStyle('D4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E4', 'HOSPITALIZACION')->getStyle('E4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F4', 'EMERGENCIA SISMED')->getStyle('F4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G4', 'PACIENTEEXTERNO')->getStyle('G4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('H4', 'PARTICULAR')->getStyle('H4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I4', 'SIS')->getStyle('I4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('J4', 'SOAT')->getStyle('J4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('K4', 'PENDIENTE')->getStyle('K4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('L4', 'EXONERADO SISMED')->getStyle('L4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('M4', 'DONACION')->getStyle('M4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('N4', 'INTERVENCIONSANITARIA')->getStyle('N4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('O4', 'STOCK')->getStyle('O4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('P4', 'CANTIDADFACTURADA')->getStyle('P4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('Q4', 'TOTAL')->getStyle('Q4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('R4', 'DEVOLUCIONES')->getStyle('R4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('S4', 'CONSULTAEXTERNADEVOLUCIONES')->getStyle('S4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('T4', 'HOSPITALIZACIONDEVOLUCIONES')->getStyle('T4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('U4', 'EMERGENCIADEVOLUCIONES')->getStyle('U4')->getFont()->setBold(true);
+        $activeSheet->setCellValue('V4', 'CANTVENTASMENOSDEVOLUCIONES')->getStyle('V4')->getFont()->setBold(true);
 
         // Filtro
-        $activeSheet->setAutoFilter("A1:V1");
+        $activeSheet->setAutoFilter("A4:V4");
 
         //Ingresando datos
-        $j = 2;
+        $j = 5;
         // $total = number_format(0,2,'.',' ');
         for ($i = 0; $i < count($data); $i++) {
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['codigo_sismed']);

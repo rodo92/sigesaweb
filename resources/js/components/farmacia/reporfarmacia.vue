@@ -252,6 +252,22 @@
                                 </td>
                             </tr>
                         </table>
+                        <table style="width: 40%;">
+                            <tr>   
+                                <td width="15%" style="padding-right: 2%;">
+                                    <div class="form-group">
+                                        <label for="">N&uacute;mero de Movimiento Inicio</label>
+                                        <input type="text" class="form-control" v-model="nummovini">
+                                    </div>
+                                </td>
+                                <td width="15%" style="padding-right: 2%;">
+                                    <div class="form-group">
+                                        <label for="">N&uacute;mero de Movimiento Fin</label>
+                                        <input type="text" class="form-control" v-model="nummovfin">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                         <hr>
                         <table class="table table-bordered table-striped" id="tabla_es_ventas_productos" style="display: none;width: 100%;">
                             <thead>
@@ -314,6 +330,8 @@
                 farmaciaid_vpr: '',
                 movtipo_vpr: '',
                 errores: '',
+                nummovini: '',
+                nummovfin: '',
             }
         },
         created: function() {
@@ -398,7 +416,7 @@
                     extendedTimeOut: 0
                 });
                 
-                var url = '/farmacia/reporte_venta_producto/'+this.inicio_vpr+'/'+this.fin_vpr+'/'+this.farmaciaid_vpr+'/'+this.movtipo_vpr;
+                var url = '/farmacia/reporte_venta_producto/'+this.inicio_vpr+'/'+this.fin_vpr+'/'+this.farmaciaid_vpr+'/'+this.movtipo_vpr+'/'+this.nummovini+'/'+this.nummovfin;
                 // console.log(url);return false;
                 axios.get(url).then(reponse => {
                     console.log(reponse.data.data);
@@ -537,7 +555,7 @@
                     timeOut: 0,
                     extendedTimeOut: 0
                 });
-                var url = '/farmacia/reporte_venta_producto_excel/'+this.inicio_vpr+'/'+this.fin_vpr+'/'+this.farmaciaid_vpr+'/'+this.movtipo_vpr;
+                var url = '/farmacia/reporte_venta_producto_excel/'+this.inicio_vpr+'/'+this.fin_vpr+'/'+this.farmaciaid_vpr+'/'+this.movtipo_vpr+'/'+this.nummovini+'/'+this.nummovfin;
                 window.open(url);
                 toastr.clear();
             },

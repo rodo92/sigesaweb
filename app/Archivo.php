@@ -217,4 +217,52 @@ class Archivo extends Model
             ->update($datos);
     }
 
+    public function Salida_Historias_Conserje($IdHistoriaSolicitada,$fecha)
+    {
+        $datos = array(
+            'SalidaConserje'        => '1',
+            'FechaSalidaConserje'   => $fecha
+        );
+
+        DB::table('SigesaGestionArchivo')
+            ->where('IdHistoriaSolicitada', $IdHistoriaSolicitada)
+            ->update($datos);
+    }
+
+    public function No_Salida_Historias_Conserje($IdHistoriaSolicitada)
+    {
+        $datos = array(
+            'SalidaConserje'        => '0',
+            'FechaSalidaConserje'   => null
+        );
+
+        DB::table('SigesaGestionArchivo')
+            ->where('IdHistoriaSolicitada', $IdHistoriaSolicitada)
+            ->update($datos);
+    }
+
+    public function Recepcion_Historias_Conserje($IdHistoriaSolicitada,$fecha)
+    {
+        $datos = array(
+            'RecepcionConserje'        => '1',
+            'FechaRecepcionConserje'   => $fecha
+        );
+
+        DB::table('SigesaGestionArchivo')
+            ->where('IdHistoriaSolicitada', $IdHistoriaSolicitada)
+            ->update($datos);
+    }
+
+    public function No_Recepcion_Historias_Conserje($IdHistoriaSolicitada)
+    {
+        $datos = array(
+            'RecepcionConserje'        => '0',
+            'FechaRecepcionConserje'   => null
+        );
+
+        DB::table('SigesaGestionArchivo')
+            ->where('IdHistoriaSolicitada', $IdHistoriaSolicitada)
+            ->update($datos);
+    }
+
 }

@@ -20,7 +20,7 @@ class MovimientoHistoriaController extends Controller
     public function listado_historias_archivero()
     {
     	$fecha = date('Y-m-d');
-    	//$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
+    	$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
 		$idempleado = session()->get('id_empleado');
 
 
@@ -107,7 +107,7 @@ class MovimientoHistoriaController extends Controller
     public function excel_listado_archivero()
     {
     	$fecha = date('Y-m-d');
-    	//$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
+    	$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
 		$idempleado = session()->get('id_empleado');
     	$archivo = new Archivo();
         $data = $archivo->Listado_Historia_Archivero_Digito_Terminal($idempleado, $fecha);
@@ -182,7 +182,7 @@ class MovimientoHistoriaController extends Controller
     public function Listado_Historias_Enrutadas()
     {
     	$fecha = date('Y-m-d');
-    	//$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
+    	$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
 		$idempleado = session()->get('id_empleado');
 
     	$archivo = new Archivo();
@@ -193,7 +193,7 @@ class MovimientoHistoriaController extends Controller
     public function Listado_Historias_Conserje()
     {
     	$fecha = date('Y-m-d');
-    	//$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
+    	$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
 		$idempleado = session()->get('id_empleado');
 
     	$archivo = new Archivo();
@@ -204,7 +204,7 @@ class MovimientoHistoriaController extends Controller
     public function Listado_Historias_Enrutadas_Excel()
     {
     	$fecha = date('Y-m-d');
-    	//$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
+    	$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
 		$idempleado = session()->get('id_empleado');
     	$archivo = new Archivo();
         $data = $archivo->Listado_Historia_Enrutado($fecha);
@@ -285,7 +285,7 @@ class MovimientoHistoriaController extends Controller
     public function generar_listados_conserje()
     {
     	$fecha = date('Y-m-d');
-    	//$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
+    	$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
 		$idempleado = session()->get('id_empleado');
     	$archivo = new Archivo();
         $data = $archivo->Listado_Historia_Conserje($fecha, $idempleado);
@@ -334,6 +334,7 @@ class MovimientoHistoriaController extends Controller
     				for ($k=0; $k < count($consultorios); $k++) { 
     					if ($especialidades[$j]['idespecialidad'] == $consultorios[$k]['idespecialidad']) {
     						echo '<tr><td>Consultorio: </td><td>' . $consultorios[$k]['consultorio'] . '</td></tr>';
+    						// echo '<tr><td>Medico: </td><td>' . $consultorios[$k]['Medico'] . '</td></tr>';
     						echo '<tr><td colspan="2">Historias Clínicas</td></tr>';
     						for ($l=0; $l < count($data); $l++) { 
     							if ($consultorios[$k]['idconsultorio'] == $data[$l]['IdServicio']) {
@@ -351,5 +352,67 @@ class MovimientoHistoriaController extends Controller
 
         // return response()->json($especialidades);
 
+    }
+
+    public function Dar_Salida_Historia_Conserje($IdHistoriaSolicitada)
+    {
+    	$fecha = date('Y-m-d');
+    	$archivo = new Archivo();
+        $data = $archivo->Salida_Historias_Conserje($IdHistoriaSolicitada, $fecha);
+    }
+
+    public function No_Dar_Salida_Historia_Conserje($IdHistoriaSolicitada)
+    {
+    	// $fecha = date('Y-m-d');
+    	$archivo = new Archivo();
+        $data = $archivo->No_Salida_Historias_Conserje($IdHistoriaSolicitada);
+    }
+
+    public function Dar_Recepcion_Historia_Conserje($IdHistoriaSolicitada)
+    {
+    	$fecha = date('Y-m-d');
+    	$archivo = new Archivo();
+        $data = $archivo->Recepcion_Historias_Conserje($IdHistoriaSolicitada, $fecha);
+    }
+
+    public function No_Dar_Recepcion_Historia_Conserje($IdHistoriaSolicitada)
+    {
+    	// $fecha = date('Y-m-d');
+    	$archivo = new Archivo();
+        $data = $archivo->No_Recepcion_Historias_Conserje($IdHistoriaSolicitada);
+    }
+
+    public function Dar_Salida_Toddas_Historia_Conserje(Request $request)
+    {
+    	$historias = $request->idhistorias;
+    	// return response()->json(count($historias));exit();
+
+    	$fecha = date('Y-m-d');
+    	$archivo = new Archivo();
+
+    	for ($i=0; $i < count($historias); $i++) { 
+    		$archivo->Salida_Historias_Conserje($historias[$i], $fecha);
+    		// return response()->json($historias[$i]);
+    	}
+    	/*$fecha = date('Y-m-d');
+    	$archivo = new Archivo();
+        $data = $archivo->Salida_Historias_Conserje($IdHistoriaSolicitada, $fecha);*/
+    }
+
+    public function Dar_Recepcion_Toddas_Historia_Conserje(Request $request)
+    {
+    	$historias = $request->idhistorias;
+    	// return response()->json(count($historias));exit();
+
+    	$fecha = date('Y-m-d');
+    	$archivo = new Archivo();
+
+    	for ($i=0; $i < count($historias); $i++) { 
+    		$archivo->Recepcion_Historias_Conserje($historias[$i], $fecha);
+    		// return response()->json($historias[$i]);
+    	}
+    	/*$fecha = date('Y-m-d');
+    	$archivo = new Archivo();
+        $data = $archivo->Salida_Historias_Conserje($IdHistoriaSolicitada, $fecha);*/
     }
 }

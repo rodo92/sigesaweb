@@ -73,9 +73,11 @@ class Farmacia extends Model
         return json_decode(json_encode($result), true);
     }
 
-    public function Reporte_Almacen_Venta_Producto_Resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio, $movifin)
+    public function Reporte_Almacen_Venta_Producto_Resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio, $movfin)
     {
-        $result = DB::select('exec SIGESA_VENTA_PRODUCTO_RESUMEN ?,?,?,?,?', [$idAlmacen, $fechainicio, $fechafin, $movinicio, $movifin, $insumomedicamento]);
+        /*echo $idAlmacen . '|' . $fechainicio . '|' . $fechafin . '|' . $movinicio . '|' . $movfin . '|' . $insumomedicamento;
+        exit();*/
+        $result = DB::select('exec SIGESA_VENTA_PRODUCTO_RESUMEN ?,?,?,?,?,?', [$idAlmacen, $fechainicio, $fechafin, $movinicio, $movfin, $insumomedicamento]);
 
         return json_decode(json_encode($result), true);
     }

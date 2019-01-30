@@ -190,7 +190,7 @@
 	            					<tr>
 	            						<th width="2%" style="text-align: center;">#</th>
 	            						<th width="6%" style="text-align: center;">HISTORIA</th>
-	            						<th width="25%" style="text-align: left;">PACIENTE</th>
+	            						<th width="20%" style="text-align: left;">PACIENTE</th>
 	            						<th width="5%" style="text-align: center;">RUTA</th>
 	            						<th width="20%" style="text-align: left;">ESPECIALIDAD</th>
 	            						<th width="20%" style="text-align: left;">CONSULTORIO</th>
@@ -198,6 +198,7 @@
 	            						<th width="5%" style="text-align: center;">SALIDA</th>
 	            						<th width="7%" style="text-align: center;">ESTADO</th>
 	            						<th width="7%" style="text-align: center;">RECEPCION</th>
+                                        <th width="5%" style="text-align: left;">OBSERVACIONES</th>
 	            					</tr>
 	            				</thead>
 	            				<tbody>
@@ -220,6 +221,9 @@
 
 	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '0'"><button class="btn btn-success btn-xs" v-on:click.prevent="dar_recepcion_conserje(historia_conserje.IdHistoriaSolicitada)"><i class="fa fa-check"></i></button></td>
 	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '1'"><button class="btn btn-danger btn-xs" v-on:click.prevent="no_dar_recepcion_conserje(historia_conserje.IdHistoriaSolicitada)"><i class="fa fa-times"></i></button></td>
+                                        <td>
+                                            
+                                        </td>
 	            						
 	            					</tr>
 	            				</tbody>
@@ -444,9 +448,6 @@
                     $('#boton_citados_del_dia_conserje').addClass('btn');
                     $('#boton_citados_del_dia_conserje').addClass('btn-warning');
                 }).catch(error => {
-                    // console.log();
-                    // prev(hol);
-                    // $.trim('string');
                 });
                 
             }

@@ -9,11 +9,11 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class ReporteFarmaciaController extends Controller
 {
-    public function reporte_venta_producto_resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio=null, $movifin=null)
+    public function reporte_venta_producto_resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio=null, $movfin=null)
     {
         $farmacia = new Farmacia();
-        $data = $farmacia->Reporte_Almacen_Venta_Producto_Resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio, $movifin);
-
+        $data = $farmacia->Reporte_Almacen_Venta_Producto_Resumen($fechainicio, $fechafin, $idAlmacen, $insumomedicamento, $movinicio, $movfin);
+        // echo count($data); exit;
         if (count($data) > 0) { 
             
             for ($i=0; $i < count($data); $i++) { 

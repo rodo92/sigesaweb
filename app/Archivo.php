@@ -37,6 +37,13 @@ class Archivo extends Model
         return json_decode(json_encode($result), true);
     }
 
+    public function Listado_Historia_Archivero_Citados_Dia($IdEmpleado)
+    {
+        $result = DB::select('exec SIGESA_HISTORIAS_ARCHIVERO_DIGITOTERMINAL_CITADOSDELDIA ?', [$IdEmpleado]);
+
+        return json_decode(json_encode($result), true);
+    }
+
     public function Listado_Historia_Enrutado($fecha)
     {
         // echo $Fecha;exit();

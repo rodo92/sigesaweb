@@ -315,8 +315,7 @@ class MovimientoHistoriaController extends Controller
         	$consultorios[] = array(
         		'idespecialidad'	=> $data[$i]['IdEspecialidad'],
         		'consultorio'		=> $data[$i]['Consultorio'],
-        		'idconsultorio'		=> $data[$i]['IdServicio'],
-        		// 'medico'			=> $data[$i]['Medico']
+        		'idconsultorio'		=> $data[$i]['IdServicio']
         	);
         }
 
@@ -403,7 +402,6 @@ class MovimientoHistoriaController extends Controller
 
     public function No_Dar_Salida_Historia_Conserje($IdHistoriaSolicitada)
     {
-    	// $fecha = date('Y-m-d');
     	$archivo = new Archivo();
         $data = $archivo->No_Salida_Historias_Conserje($IdHistoriaSolicitada);
     }
@@ -417,7 +415,6 @@ class MovimientoHistoriaController extends Controller
 
     public function No_Dar_Recepcion_Historia_Conserje($IdHistoriaSolicitada)
     {
-    	// $fecha = date('Y-m-d');
     	$archivo = new Archivo();
         $data = $archivo->No_Recepcion_Historias_Conserje($IdHistoriaSolicitada);
     }
@@ -425,34 +422,94 @@ class MovimientoHistoriaController extends Controller
     public function Dar_Salida_Toddas_Historia_Conserje(Request $request)
     {
     	$historias = $request->idhistorias;
-    	// return response()->json(count($historias));exit();
 
     	$fecha = date('Y-m-d');
     	$archivo = new Archivo();
 
     	for ($i=0; $i < count($historias); $i++) { 
     		$archivo->Salida_Historias_Conserje($historias[$i], $fecha);
-    		// return response()->json($historias[$i]);
     	}
-    	/*$fecha = date('Y-m-d');
-    	$archivo = new Archivo();
-        $data = $archivo->Salida_Historias_Conserje($IdHistoriaSolicitada, $fecha);*/
     }
 
     public function Dar_Recepcion_Toddas_Historia_Conserje(Request $request)
     {
     	$historias = $request->idhistorias;
-    	// return response()->json(count($historias));exit();
 
     	$fecha = date('Y-m-d');
     	$archivo = new Archivo();
 
     	for ($i=0; $i < count($historias); $i++) { 
     		$archivo->Recepcion_Historias_Conserje($historias[$i], $fecha);
-    		// return response()->json($historias[$i]);
     	}
-    	/*$fecha = date('Y-m-d');
+    }
+
+    public function citados_del_dia_archiver()
+    {
+		$idempleado = session()->get('id_empleado');
     	$archivo = new Archivo();
-        $data = $archivo->Salida_Historias_Conserje($IdHistoriaSolicitada, $fecha);*/
+    	$data = $archivo->Listado_Historia_Archivero_Citados_Dia($idempleado);
+    	for ($i=0; $i < count($data); $i++) { 
+        	$programaciones[] = array(
+        		'archivero'			=> $data[$i]['Archivero'],
+        		'idprogramacion'	=> $data[$i]['IdProgramacion'],
+        		'horainicio'		=> $data[$i]['InicioPro'],
+        		'horafin'			=> $data[$i]['FinPro'],
+        		'tiempo'			=> $data[$i]['TPA'],
+        		'consultorio'		=> $data[$i]['Consultorio'],
+        		'dinicial'			=> $data[$i]['DI'],
+        		'dfinal'			=> $data[$i]['DF'],
+        		'idservicio'		=> $data[$i]['IdServicio']	
+        	);
+        }
+
+        $programaciones = array_map("unserialize", array_unique(array_map("serialize", $programaciones)));
+    	$programaciones = array_values($programaciones);
+
+    	for ($i=0; $i < count($programaciones); $i++) { 
+    		
+    		$horainicio = $programaciones[$i]['horainicio'];
+    		$c = 0;
+    		while ($horainicio < $programaciones[$i]['horafin']) {
+    			
+    			$nueva_programaciones[$i]['cupos'][$c]['horainicio'] = $horainicio;
+    			$horainicio = strtotime('+' . $programaciones[$i]['tiempo'] . ' minute', strtotime($horainicio));
+    			$horainicio = date('H:i', $horainicio);
+    			$nueva_programaciones[$i]['cupos'][$c]['horafin'] = $horainicio;
+    			$nueva_programaciones[$i]['cupos'][$c]['idservicio'] = $programaciones[$i]['idservicio'];
+    			$nueva_programaciones[$i]['cupos'][$c]['idprogramacion'] = $programaciones[$i]['idprogramacion'];
+    			$nueva_programaciones[$i]['cupos'][$c]['consultorio'] = $programaciones[$i]['consultorio'];
+    			$nueva_programaciones[$i]['cupos'][$c]['archivero'] = $programaciones[$i]['archivero'];
+    			$nueva_programaciones[$i]['cupos'][$c]['dinicial'] = $programaciones[$i]['dinicial'];
+    			$nueva_programaciones[$i]['cupos'][$c]['dfinal'] = $programaciones[$i]['dfinal'];
+    			$nueva_programaciones[$i]['cupos'][$c]['cupo'] = $c + 1;
+    			$c++;
+    		}
+    	}
+
+    	for ($i=0; $i < count($nueva_programaciones); $i++) { 
+    		for ($x=0; $x < count($nueva_programaciones[$i]['cupos']); $x++) { 
+    			$nuevo[] = $nueva_programaciones[$i]['cupos'][$x];
+    		}
+    	}
+
+    	// algoritmo
+    	for ($i=0; $i < count($nuevo); $i++) { 
+    		for ($j=0; $j < count($data); $j++) { 
+    			if ($nuevo[$i]['idprogramacion'] == $data[$j]['IdProgramacion']) {
+    				if ($nuevo[$i]['horainicio'] == $data[$j]['InicioCita']) {
+    					$nuevo[$i]['historia'] = $data[$j]['NroHistoriaClinica'];
+    					$nuevo[$i]['paciente'] = $data[$j]['Paciente'];
+    					$nuevo[$i]['idhistoriasolicitada'] = $data[$j]['IdHistoriaSolicitada'];
+    					$nuevo[$i]['salidaarchivo'] = $data[$j]['SalidaArchivo'];
+    					$nuevo[$i]['seriehc'] = $data[$j]['Serie_HC'];
+	    			} else {
+	    				
+	    			}
+    			}
+
+    		}
+    	}
+
+    	return response()->json(['data' => $nuevo]);
     }
 }

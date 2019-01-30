@@ -57,7 +57,8 @@
                 			</table>
                 		</div>
                 		<div class="col-xs-3 text-center" >
-                            <button class="btn btn-default" v-on:click.prevent=""><i class="fa fa-stethoscope"></i>&nbsp;CITADOS DEL DIA</button>
+                            <button class="btn btn-default" v-on:click.prevent="ver_archiveros_citados_dia" id="boton_citados_del_dia_conserje"><i class="fa fa-stethoscope"></i>&nbsp;CITADOS DEL DIA</button>         
+                            <button class="btn btn-default" v-on:click.prevent="traer_lista_historias_archivero" id="boton_citados_del_dia_conserje"><i class="fa fa-refresh"></i></button>
                 		</div>
                 		<div class="col-xs-4 text-right">
                 			<button class="btn btn-default" v-on:click.prevent="imprimir_listado"><i class="fa fa-print"></i>&nbsp;IMPRIMIR LISTADO</button>
@@ -154,7 +155,7 @@
             <div class="box box-primary color-palette-box" style="display: none;" id="box_conserje">
             	<div class="box-body" style="padding:2%;">
             		<div class="row">
-	            		<div class="col-xs-6">
+	            		<div class="col-xs-4">
 	            			<h4>CONSERJE: {{ conserje_mostrar }}</h4>
 
 	            			<table>
@@ -173,7 +174,9 @@
 	            				</tr>
 	            			</table>
 	            		</div>
-	            		<div class="col-xs-2"></div>
+	            		<div class="col-xs-4 text-center">
+                                     
+                        </div>
 	            		<div class="col-xs-4 text-right">
 	            			<button class="btn btn-default" v-on:click.prevent="generar_lista_conserje"><i class="fa fa-file-excel-o"></i>&nbsp;EXPORTAR LISTADO</button>
 	            			<button class="btn btn-default" v-on:click.prevent="seleccionar_modo('4')"><i class="fa fa-bars"></i>&nbsp;MEN&Uacute; PRINCIPAL</button>
@@ -282,7 +285,6 @@
   						$('#box_enrutador').hide();
   						$('#box_conserje').hide();
   						$('#box_menu').fadeIn(200);
-    					this.traer_lista_historias_archivero();
     					break;
     				default:
     					break;
@@ -296,6 +298,9 @@
         			this.nombre_archivero_mostrar = response.data.data[0]['archivero'].toUpperCase();
         			this.digito_inicial_mostrar = response.data.data[0]['dinicial'];
 					this.digito_fin_mostrar = response.data.data[0]['dfinal'];
+                    $('#boton_citados_del_dia_conserje').removeClass();
+                    $('#boton_citados_del_dia_conserje').addClass('btn');
+                    $('#boton_citados_del_dia_conserje').addClass('btn-default');
         		}).catch(error => {
 
         		});
@@ -313,8 +318,10 @@
         	{
         		var url = 'MovimientoHistoria/listadoconserje';
         		axios.get(url).then(response => {
-        			this.historias_conserje = response.data.data;
+        			this.historias_conserje = '';
+                    this.historias_conserje = response.data.data;
         			this.conserje_mostrar = response.data.data[0]['Conserje'].toUpperCase();
+                    
             		}).catch(error => {
 
         		});
@@ -424,6 +431,24 @@
             },
             generar_lista_conserje: function() {
                 window.open('MovimientoHistoria/generarlistadosconserje','_blank');
+            },
+            ver_archiveros_citados_dia: function()
+            {
+                var url = 'MovimientoHistoria/listadoarchiverocitadosdia';
+                axios.get(url).then(response => {
+                    this.historias_archiveros = response.data.data;
+                    this.nombre_archivero_mostrar = response.data.data[0]['archivero'].toUpperCase();
+                    this.digito_inicial_mostrar = response.data.data[0]['dinicial'];
+                    this.digito_fin_mostrar = response.data.data[0]['dfinal'];
+                    $('#boton_citados_del_dia_conserje').removeClass();
+                    $('#boton_citados_del_dia_conserje').addClass('btn');
+                    $('#boton_citados_del_dia_conserje').addClass('btn-warning');
+                }).catch(error => {
+                    // console.log();
+                    // prev(hol);
+                    // $.trim('string');
+                });
+                
             }
         }
     }

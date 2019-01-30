@@ -26,11 +26,11 @@
         <!-- Cuerpo del contenido -->
         <section class="content container-fluid">
         	<div class="box box-primary container-fluid" id="box_menu">
-        		<div class="row" style="height: 500px;">
-        			<div class="col-xs-4 col-xs-offset-4" style="padding: 5%;">
-        				<button class="btn btn-default btn-lg btn-block" v-on:click.prevent="seleccionar_modo('1')">ARCHIVERO</button><br><br>
-        				<button class="btn btn-default btn-lg btn-block" v-on:click.prevent="seleccionar_modo('2')">CONSERJE</button><br><br>
-        				<button class="btn btn-default btn-lg btn-block" v-on:click.prevent="seleccionar_modo('3')">ENRUTADO</button>
+        		<div class="row" style="margin-top:10%;height: 200px;">
+        			<div class="col-xs-6 col-xs-offset-3 text-center" style="">
+        				<button class="btn btn-default btn-app btn-lg text-center" v-on:click.prevent="seleccionar_modo('1')" style="width: 30%;height: 30%; padding: 5% 8% 5% 8%;"><i class="fa fa-user-o" aria-hidden="true"></i>ARCHIVERO</button>
+        				<button class="btn btn-default btn-app btn-lg text-center" v-on:click.prevent="seleccionar_modo('2')" style="width: 30%;height: 30%; padding: 5% 8% 5% 8%;"><i class="fa fa-user-o" aria-hidden="true"></i>CONSERJE</button>
+        				<button class="btn btn-default btn-app btn-lg text-center" v-on:click.prevent="seleccionar_modo('3')" style="width: 30%;height: 30%; padding: 5% 8% 5% 8%;"><i class="fa fa-retweet" aria-hidden="true"></i>ENRUTADO</button>
         			</div>
         		</div>
         	</div>
@@ -56,8 +56,8 @@
                 				</tr>
                 			</table>
                 		</div>
-                		<div class="col-xs-3" >
-                			
+                		<div class="col-xs-3 text-center" >
+                            <button class="btn btn-default" v-on:click.prevent=""><i class="fa fa-stethoscope"></i>&nbsp;CITADOS DEL DIA</button>
                 		</div>
                 		<div class="col-xs-4 text-right">
                 			<button class="btn btn-default" v-on:click.prevent="imprimir_listado"><i class="fa fa-print"></i>&nbsp;IMPRIMIR LISTADO</button>
@@ -175,7 +175,7 @@
 	            		</div>
 	            		<div class="col-xs-2"></div>
 	            		<div class="col-xs-4 text-right">
-	            			<button class="btn btn-default" v-on:click.prevent=""><i class="fa fa-file-excel-o"></i>&nbsp;EXPORTAR LISTADO</button>
+	            			<button class="btn btn-default" v-on:click.prevent="generar_lista_conserje"><i class="fa fa-file-excel-o"></i>&nbsp;EXPORTAR LISTADO</button>
 	            			<button class="btn btn-default" v-on:click.prevent="seleccionar_modo('4')"><i class="fa fa-bars"></i>&nbsp;MEN&Uacute; PRINCIPAL</button>
 	            		</div>
 	            	</div>
@@ -324,7 +324,6 @@
         		var url = 'MovimientoHistoria/noencontradohistoria/' + idhistoriasolicitada;
         		axios.get(url).then(response => {
         			toastr.clear();
-        			// toastr.success('')
         			this.traer_lista_historias_archivero();
         		}).catch(error => {
 
@@ -335,7 +334,6 @@
         		var url = 'MovimientoHistoria/encontradohistoria/' + idhistoriasolicitada;
         		axios.get(url).then(response => {
         			toastr.clear();
-        			// toastr.success('')
         			this.traer_lista_historias_archivero();
         		}).catch(error => {
 
@@ -361,7 +359,6 @@
         		axios.post(url, {
         			'idhistorias': idhistorias
         		}).then(response => {
-        			// console.log(response.data);
                     this.traer_lista_historias_conserjes();
         		}).catch(error => {
 
@@ -378,7 +375,6 @@
                 axios.post(url, {
                     'idhistorias': idhistorias
                 }).then(response => {
-                    // console.log(response.data);
                     this.traer_lista_historias_conserjes();
                 }).catch(error => {
 
@@ -387,7 +383,6 @@
             },
         	dar_salida_conserje: function(idhistoria)
         	{
-        		// console.log(idhistoria);return false;
         		var url = 'MovimientoHistoria/darsalidaconserje/' + idhistoria;
 
         		axios.get(url).then(response => {
@@ -398,7 +393,6 @@
         	},
             no_dar_salida_conserje: function(idhistoria)
             {
-                // console.log(idhistoria);return false;
                 var url = 'MovimientoHistoria/nosalidaconserje/' + idhistoria;
 
                 axios.get(url).then(response => {
@@ -409,7 +403,6 @@
             },
             dar_recepcion_conserje: function(idhistoria)
             {
-                // console.log(idhistoria);return false;
                 var url = 'MovimientoHistoria/darrecepcionconserje/' + idhistoria;
 
                 axios.get(url).then(response => {
@@ -421,7 +414,6 @@
 
             no_dar_recepcion_conserje: function(idhistoria)
             {
-                // console.log(idhistoria);return false;
                 var url = 'MovimientoHistoria/norecepciontodosconserje/' + idhistoria;
 
                 axios.get(url).then(response => {
@@ -429,6 +421,9 @@
                 }).catch(error => {
 
                 });
+            },
+            generar_lista_conserje: function() {
+                window.open('MovimientoHistoria/generarlistadosconserje','_blank');
             }
         }
     }

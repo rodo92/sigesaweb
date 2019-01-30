@@ -1,12 +1,12 @@
 <?php
 
 namespace WebSigesa\Http\Controllers;
-
+use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Http\Request;
 use WebSigesa\Archivo;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
-use Codedge\Fpdf\Fpdf\Fpdf;
+
 
 class MovimientoHistoriaController extends Controller
 {
@@ -315,7 +315,8 @@ class MovimientoHistoriaController extends Controller
         	$consultorios[] = array(
         		'idespecialidad'	=> $data[$i]['IdEspecialidad'],
         		'consultorio'		=> $data[$i]['Consultorio'],
-        		'idconsultorio'		=> $data[$i]['IdServicio']
+        		'idconsultorio'		=> $data[$i]['IdServicio'],
+        		// 'medico'			=> $data[$i]['Medico']
         	);
         }
 
@@ -324,34 +325,73 @@ class MovimientoHistoriaController extends Controller
 
 
 
-    	for ($i=0; $i < count($ruta); $i++) {
+    	
+    	header("Content-type:application/pdf");
+    	$this->fpdf = new Fpdf();
+       
+        for ($i=0; $i < count($ruta); $i++) {
     		
     		for ($j=0; $j < count($especialidades); $j++) { 
     			if ($ruta[$i]['idruta'] == $especialidades[$j]['idruta']) {
-    				echo '<table border=1>';
-    				echo '<tr><td colspan="2">' . $ruta[$i]['ruta'] . '</td></tr>';
-    				echo '<tr><td>Especialidad: </td><td>' . $especialidades[$j]['especialidad'] . '</td></tr>';
+    				$this->fpdf->AddPage();
+    				$this->fpdf->SetFont('Arial','b',10);
+    				$this->fpdf->Cell(190,5,utf8_decode('CITADOS DE "' . $ruta[$i]['ruta'] . '" PARA EL DÍA "' . date("d/m/Y",strtotime($fecha."+ 1 days")) . '"'),0,1,'C');
+    				
+    				$this->fpdf->Ln(3);
+    				$this->fpdf->SetFont('Arial','B',8);
+    				$this->fpdf->Cell(25,5,utf8_decode('ESPECIALIDAD: '),0,0,'L');
+    				$this->fpdf->Cell(100,5,utf8_decode(strtoupper($especialidades[$j]['especialidad'])),0,1,'L');
     				for ($k=0; $k < count($consultorios); $k++) { 
     					if ($especialidades[$j]['idespecialidad'] == $consultorios[$k]['idespecialidad']) {
-    						echo '<tr><td>Consultorio: </td><td>' . $consultorios[$k]['consultorio'] . '</td></tr>';
-    						// echo '<tr><td>Medico: </td><td>' . $consultorios[$k]['Medico'] . '</td></tr>';
-    						echo '<tr><td colspan="2">Historias Clínicas</td></tr>';
+    						$this->fpdf->Ln(5);
+    						$this->fpdf->setFillColor(230,230,230);
+    						$this->fpdf->SetFont('Arial','',8);
+    						$this->fpdf->Cell(25,5,utf8_decode('CONSULTORIO'),'TLR',0,'L', True);
+    						$this->fpdf->Cell(167,5,utf8_decode(strtoupper($consultorios[$k]['consultorio'])),'TR',1,'L');
+
+    						$this->fpdf->SetFont('Arial','b',7);
+    						$this->fpdf->setFillColor(230,230,230); 
+    						$this->fpdf->Cell(15,5,utf8_decode('HORA'),'TLB',0,'C',True);
+							$this->fpdf->Cell(15,5,utf8_decode('SALIDA'),'TLB',0,'C', True);
+					        $this->fpdf->Cell(20,5,utf8_decode('RECEPCION'),'TLB',0,'C', True);
+							$this->fpdf->Cell(22,5,utf8_decode('HISTORIA'),'TLB',0,'C', True);
+							$this->fpdf->Cell(50,5,utf8_decode('PACIENTE'),'TLB',0,'C', True);
+							$this->fpdf->Cell(70,5,utf8_decode('MEDICO'),1,1,'C', True);
+
     						for ($l=0; $l < count($data); $l++) { 
+    							$this->fpdf->SetFont('Arial','',7);
     							if ($consultorios[$k]['idconsultorio'] == $data[$l]['IdServicio']) {
-    								echo '<tr><td>' . $data[$l]['NroHistoriaClinica'] . '</td><td>' . $data[$l]['Paciente'] . '</td></tr>';
+
+    								$this->fpdf->Cell(15,5,utf8_decode($data[$l]['InicioCita']),'LB',0,'C');
+
+    								if ($data[$l]['SalidaConserje'] == '1') {
+    									$this->fpdf->Cell(15,5,utf8_decode('SI'),'LB',0,'C');
+    								} else if($data[$l]['SalidaConserje'] == '0') {
+    									$this->fpdf->Cell(15,5,utf8_decode('NO'),'LB',0,'C');
+    								}
+
+    								if ($data[$l]['RecepcionConserje'] == '1') {
+    									$this->fpdf->Cell(20,5,utf8_decode('SI'),'LB',0,'C');
+    								} else if($data[$l]['RecepcionConserje'] == '0') {
+    									$this->fpdf->Cell(20,5,utf8_decode('NO'),'LB',0,'C');
+    								}
+
+									
+									$this->fpdf->Cell(22,5,utf8_decode($data[$l]['NroHistoriaClinica']),'LB',0,'C');
+									$this->fpdf->Cell(50,5,utf8_decode(strtoupper($data[$l]['Paciente'])),'LB',0,'L');
+									$this->fpdf->Cell(70,5,utf8_decode(strtoupper($data[$l]['Medico'])),'LBR',1,'L');
 
     							}
     						}
     					}
     				}
     			}
-    			echo '</table>';
     		}
     		
     	}
 
-        // return response()->json($especialidades);
 
+        $this->fpdf->Output();
     }
 
     public function Dar_Salida_Historia_Conserje($IdHistoriaSolicitada)

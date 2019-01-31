@@ -260,11 +260,12 @@ class Archivo extends Model
             ->update($datos);
     }
 
-    public function No_Recepcion_Historias_Conserje($IdHistoriaSolicitada)
+    public function No_Recepcion_Historias_Conserje($IdHistoriaSolicitada,$motivo)
     {
         $datos = array(
             'RecepcionConserje'        => '0',
-            'FechaRecepcionConserje'   => null
+            'FechaRecepcionConserje'   => null,
+            'ObservacionNoRecepcion'   => $motivo
         );
 
         DB::table('SigesaGestionArchivo')

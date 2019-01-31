@@ -154,5 +154,5 @@ Route::get('MovimientoHistoria/darrecepcionconserje/{idhistoriasolicitada}', 'Mo
 Route::post('MovimientoHistoria/salidatodosconserje', 'MovimientoHistoriaController@Dar_Salida_Toddas_Historia_Conserje');
 Route::post('MovimientoHistoria/recepciontodosconserje', 'MovimientoHistoriaController@Dar_Recepcion_Toddas_Historia_Conserje');
 Route::get('MovimientoHistoria/nosalidaconserje/{idhistoriasolicitada}','MovimientoHistoriaController@No_Dar_Salida_Historia_Conserje');
-Route::get('MovimientoHistoria/norecepciontodosconserje/{idhistoriasolicitada}','MovimientoHistoriaController@No_Dar_Recepcion_Historia_Conserje');
+Route::get('MovimientoHistoria/norecepciontodosconserje/{idhistoriasolicitada}/{motivo}','MovimientoHistoriaController@No_Dar_Recepcion_Historia_Conserje');
 Route::get('MovimientoHistoria/listadoarchiverocitadosdia', 'MovimientoHistoriaController@citados_del_dia_archiver');

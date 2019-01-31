@@ -20,7 +20,7 @@ class MovimientoHistoriaController extends Controller
     public function listado_historias_archivero()
     {
     	$fecha = date('Y-m-d');
-    	$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
+    	//$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
 		$idempleado = session()->get('id_empleado');
 
 
@@ -193,7 +193,7 @@ class MovimientoHistoriaController extends Controller
     public function Listado_Historias_Conserje()
     {
     	$fecha = date('Y-m-d');
-    	$fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
+    	// $fecha = date("Y-m-d",strtotime($fecha."+ 1 days")); // habilitar antes de irte
 		$idempleado = session()->get('id_empleado');
 
     	$archivo = new Archivo();
@@ -503,7 +503,7 @@ class MovimientoHistoriaController extends Controller
     					$nuevo[$i]['salidaarchivo'] = $data[$j]['SalidaArchivo'];
     					$nuevo[$i]['seriehc'] = $data[$j]['Serie_HC'];
 	    			} else {
-	    				
+
 	    			}
     			}
 

@@ -219,10 +219,10 @@
 	            						<td class="bg-success" align="center" v-if="historia_conserje.RecepcionConserje == '1'" >Regreso</td>
 	            						<td class="bg-danger" align="center" v-else-if="historia_conserje.RecepcionConserje == '0'">No Regreso</td>
 
-	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '0'"><button class="btn btn-success btn-xs" v-on:click.prevent="dar_recepcion_conserje(historia_conserje.IdHistoriaSolicitada)"><i class="fa fa-check"></i></button></td>
-	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '1'"><button class="btn btn-danger btn-xs" v-on:click.prevent="no_dar_recepcion_conserje(historia_conserje.IdHistoriaSolicitada)"><i class="fa fa-times"></i></button></td>
-                                        <td>
-                                            
+	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '0'"><button class="btn btn-success btn-xs" v-on:click.prevent="dar_recepcion_conserje(historia_conserje.NroHistoriaClinica)"><i class="fa fa-check"></i></button></td>
+	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '1'"><button class="btn btn-danger btn-xs" v-on:click.prevent="no_dar_recepcion_conserje(index)"><i class="fa fa-times"></i></button></td>
+                                        <td align="left" style="padding: 0px;">
+                                            <input type="text" v-text="historia_conserje.ObservacionNoRecepcion" style="margin:0px; width: 100%; height: 100%; border: none;">
                                         </td>
 	            						
 	            					</tr>
@@ -425,6 +425,10 @@
 
             no_dar_recepcion_conserje: function(idhistoria)
             {
+                /*console.log(this.historias_conserje[index]['idhistoria']);
+                console.log(this.historias_conserje[index]['ObservacionNoRecepcion']);*/
+                // console.log(this.historias_conserje[index]['ObservacionNoRecepcion']);
+                // return false;
                 var url = 'MovimientoHistoria/norecepciontodosconserje/' + idhistoria;
 
                 axios.get(url).then(response => {

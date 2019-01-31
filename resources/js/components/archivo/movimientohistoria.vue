@@ -459,18 +459,8 @@
             },
             rgistrar_nodarrecepcion: function(idhistoriasolicitada,motivo)
             {
-<<<<<<< HEAD
-                /*console.log(this.historias_conserje[index]['idhistoria']);
-                console.log(this.historias_conserje[index]['ObservacionNoRecepcion']);*/
-                // console.log(this.historias_conserje[index]['ObservacionNoRecepcion']);
-                // return false;
-                var url = 'MovimientoHistoria/norecepciontodosconserje/' + idhistoria;
-=======
-                // console.log(idhistoriasolicitada);
-                // console.log(motivo);
-                var url = 'MovimientoHistoria/norecepciontodosconserje/' + idhistoriasolicitada + '/' + motivo;
->>>>>>> cafe720
 
+                var url = 'MovimientoHistoria/norecepciontodosconserje/' + idhistoriasolicitada + '/' + motivo;
                 axios.get(url).then(response => {
                     $('#modal_motivo_no_regreso').modal('hide');
                     this.traer_lista_historias_conserjes();

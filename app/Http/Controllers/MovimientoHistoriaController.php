@@ -413,10 +413,10 @@ class MovimientoHistoriaController extends Controller
         $data = $archivo->Recepcion_Historias_Conserje($IdHistoriaSolicitada, $fecha);
     }
 
-    public function No_Dar_Recepcion_Historia_Conserje($IdHistoriaSolicitada)
+    public function No_Dar_Recepcion_Historia_Conserje($IdHistoriaSolicitada,$motivo)
     {
     	$archivo = new Archivo();
-        $data = $archivo->No_Recepcion_Historias_Conserje($IdHistoriaSolicitada);
+        $data = $archivo->No_Recepcion_Historias_Conserje($IdHistoriaSolicitada,$motivo);
     }
 
     public function Dar_Salida_Toddas_Historia_Conserje(Request $request)

@@ -220,10 +220,8 @@
 	            						<td class="bg-danger" align="center" v-else-if="historia_conserje.RecepcionConserje == '0'">No Regreso</td>
 
 	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '0'"><button class="btn btn-success btn-xs" v-on:click.prevent="dar_recepcion_conserje(historia_conserje.IdHistoriaSolicitada)"><i class="fa fa-check"></i></button></td>
-	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '1'"><button class="btn btn-danger btn-xs" v-on:click.prevent="no_dar_recepcion_conserje(historia_conserje.IdHistoriaSolicitada)"><i class="fa fa-times"></i></button></td>
-                                        <td>
-                                            
-                                        </td>
+	            						<td align="center" v-if="historia_conserje.RecepcionConserje == '1'"><button class="btn btn-danger btn-xs" v-on:click.prevent="no_dar_recepcion_conserje(index)"><i class="fa fa-times"></i></button></td>
+                                        <td align="left" v-text="historia_conserje.ObservacionNoRecepcion"></td>
 	            						
 	            					</tr>
 	            				</tbody>
@@ -233,6 +231,26 @@
             	</div>
             </div>
         </section>
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="modal_motivo_no_regreso">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h5 class="modal-title">WEBSIGESA</h5>
+                    </div>
+                    <div class="modal-body" style="padding: 5%">
+                        <h4><b>¿Porque no regreso del consultorio {{ mnr_consultorio }}?</b></h4>
+                        <small>Historia: {{ mnr_historia }}
+                        <br>Paciente: {{ mnr_paciente }}</small>
+                        <textarea name="" id="" cols="15" rows="5" class="form-control" v-model="mnr_motivo"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>
+                        <button type="button" class="btn btn-danger" v-on:click.prevent="rgistrar_nodarrecepcion(mnr_idhistoriasolicitada,mnr_motivo)"><i class="fa fa-save"></i>&nbsp;REGISTRAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -255,6 +273,13 @@
                 // conserje
                 historias_conserje: [],
                 conserje_mostrar: '',
+
+                // motivo de no regreso
+                mnr_consultorio: '',
+                mnr_historia: '',
+                mnr_paciente: '',
+                mnr_motivo: '',
+                mnr_idhistoriasolicitada: '',
             }
         },
         created: function() {
@@ -423,11 +448,23 @@
                 });
             },
 
-            no_dar_recepcion_conserje: function(idhistoria)
+            no_dar_recepcion_conserje: function(index)
             {
-                var url = 'MovimientoHistoria/norecepciontodosconserje/' + idhistoria;
+                this.mnr_consultorio = this.historias_conserje[index]['Consultorio'];
+                this.mnr_historia = this.historias_conserje[index]['NroHistoriaClinica'];
+                this.mnr_paciente = this.historias_conserje[index]['Paciente'];
+                this.mnr_idhistoriasolicitada = this.historias_conserje[index]['IdHistoriaSolicitada'];
+                $('#modal_motivo_no_regreso').modal('show');
+                
+            },
+            rgistrar_nodarrecepcion: function(idhistoriasolicitada,motivo)
+            {
+                // console.log(idhistoriasolicitada);
+                // console.log(motivo);
+                var url = 'MovimientoHistoria/norecepciontodosconserje/' + idhistoriasolicitada + '/' + motivo;
 
                 axios.get(url).then(response => {
+                    $('#modal_motivo_no_regreso').modal('hide');
                     this.traer_lista_historias_conserjes();
                 }).catch(error => {
 

@@ -93,7 +93,7 @@ class Sistema extends Model
 
     public function Obtener_Tipo_Servicio()
     {
-        $result = DB::table('TipoServicio')
+        $result = DB::table('TiposServicio')
                 ->get();
 
         return json_decode(json_encode($result), true);

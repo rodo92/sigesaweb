@@ -633,4 +633,9 @@ class CajaController extends Controller
         $Caja = new Caja();
         $data = $Caja->Eliminar_Factura($IdCajero,$IdCajaFacturacion);
     }
+
+    public function reporte_caja()
+    {
+        return view('caja.reportecaja');
+    }
 }

@@ -25,7 +25,7 @@ Vue.component('notasalidaalmacen', require('./components/farmacia/notasalidaalma
 // Caja
 Vue.component('caja', require('./components/caja/cajas.vue'));
 Vue.component('cajacentral', require('./components/caja/cajasc.vue'));
-
+Vue.component('reportecaja',require('./components/caja/reportecaja.vue'));
 
 // Consulta externa
 Vue.component('admision', require('./components/consultaextena/admision.vue'));

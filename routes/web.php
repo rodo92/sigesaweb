@@ -96,6 +96,10 @@ Route::get('cajas/detalle_orden/{idorden}','CajaController@datos_orden_farmacia'
 // Cajeros
 Route::get('cajascajeros/orden/{idorder}','CajaController@datos_orden_caja');
 
+//Reporte Cajas
+Route::get('rcaja', 'CajaController@reporte_caja');
+Route::get('rcaja/ParteDiarioPDF/{fechainicio}/{fechafin}','PDFReportesCajaController@parte_diario');
+
 /*
 Consulta externa
 */

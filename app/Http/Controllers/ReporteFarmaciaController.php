@@ -471,4 +471,160 @@ class ReporteFarmaciaController extends Controller
         header('Cache-Control: max-age=0');
         return $Excel_writer->save("php://output");
     }
+
+    public function reportesaldosxalmacen()
+    {
+        $farmacia = new Farmacia();
+        $data = $farmacia->Reporte_Almacen_Saldos_Por_Almacen();
+
+        // print_r($data);exit();
+        $styleArray = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['argb' => 'FFE8E5E5'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'allborders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $styleArrayTitulo = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['argb' => 'FFE8E5E5'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'allborders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $styleCell = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $spreadsheet = new Spreadsheet();  /*----Spreadsheet object-----*/
+        $Excel_writer = new Xls($spreadsheet);  /*----- Excel (Xls) Object*/
+        $spreadsheet->setActiveSheetIndex(0);
+        $activeSheet = $spreadsheet->getActiveSheet();
+
+        $activeSheet->setTitle("Reporte Saldos Por Almacen");
+
+        $activeSheet->setCellValue('B2','SALDOS POR ALMACEN');        
+
+        $activeSheet->setCellValue('B4','FECHA Y HORA:    '. date("d-m-Y H:i:s"));
+
+        //Cabeceras de excel
+        $activeSheet->setCellValue('A6', 'CODIGOSISMED')->getStyle('A6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('B6', 'NOMBRE')->getStyle('B6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('C6', 'ALMACEN - SISMED')->getStyle('C6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('D6', 'Almacen - Estrategias')->getStyle('D6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E6', 'Almacen - Especiales')->getStyle('E6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F6', 'Almacen - Donaciones')->getStyle('F6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G6', 'Almacen - Galenicos')->getStyle('G6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('H6', 'Almacen -Bajas')->getStyle('H6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I6', 'Far. Ambulatoria')->getStyle('I6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('J6', 'Far. Emergencia')->getStyle('J6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('K6', 'Far. Hospi. Donaciones')->getStyle('K6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('L6', 'Far. Estrategias')->getStyle('L6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('M6', 'Far. Hospitalizacion')->getStyle('M6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('N6', 'Far. Donaciones')->getStyle('N6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('O6', 'Far. Materno')->getStyle('O6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('P6', 'Almacen Devoluciones')->getStyle('P6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('Q6', 'Far. Materno Donaciones')->getStyle('Q6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('R6', 'Far. Galénicos')->getStyle('R6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('S6', 'Far. Galénicos Estrategias')->getStyle('S6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('T6', 'Far. SOP6')->getStyle('T6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('U6', 'Far. SOP6 Donaciones')->getStyle('U6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('V6', 'Otros Servicios del Hospital')->getStyle('V6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('W6', 'Far. Casos Especiales')->getStyle('W6')->getFont()->setBold(true);
+
+        // Filtro
+        $activeSheet->setAutoFilter("A4:V4");
+
+        //Ingresando datos
+        $j = 7;
+        // $total = number_format(0,2,'.',' ');
+        for ($i = 0; $i < count($data); $i++) {
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['IDPRODUCTO']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$j, $data[$i]['NOMBRE']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$j, $data[$i]['ALMACEN - SISMED']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$j, $data[$i]['Almacen - Estrategias']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('E'.$j, $data[$i]['Almacen - Especiales']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$j, $data[$i]['Almacen - Donaciones']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$j, $data[$i]['Almacen - Galenicos']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, $data[$i]['Almacen -Bajas']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, $data[$i]['Far. Ambulatoria']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$j, $data[$i]['Far. Emergencia']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('K'.$j, $data[$i]['Far. Hospi. Donaciones']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('L'.$j, $data[$i]['Far. Estrategias']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('M'.$j, $data[$i]['Far. Hospitalizacion']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('N'.$j, $data[$i]['Far. Donaciones']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('O'.$j, $data[$i]['Far. Materno']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('P'.$j, $data[$i]['Almacen Devoluciones']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('Q'.$j, $data[$i]['Far. Materno Donaciones']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('R'.$j, $data[$i]['Far. Galénicos']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('S'.$j, $data[$i]['Far. Galénicos Estrategias']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('T'.$j, $data[$i]['Far. SOP6']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('U'.$j, $data[$i]['Far. SOP6 Donaciones']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('V'.$j, $data[$i]['Otros Servicios del Hospital']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('W'.$j, $data[$i]['Far. Casos Especiales']);
+
+            $activeSheet->getStyle("A".$j.":V".$j)->applyFromArray($styleCell);
+            // $activeSheet->getStyle("O".$j)->getNumberFormat()->setFormatCode('#,##0.00');
+            // $activeSheet->getStyle("Q".$j)->getNumberFormat()->setFormatCode('#,##0.00');
+            $j++;
+            // $total = $total + $data[$i]['TOTAL'];
+        }
+
+        /*$spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, 'TOTAL DE ACTIVOS');
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, 'MONTO TOTAL SIN ANULADOS');
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$j, '');
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('K'.$j, number_format($total,2,'.',' '));*/
+
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('A')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('B')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('C')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('D')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('E')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('F')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('G')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('H')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('I')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('J')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('M')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('N')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('O')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('P')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('Q')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('R')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('S')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('T')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('U')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('V')->setAutoSize(true);
+        $spreadsheet->setActiveSheetIndex(0)->getColumnDimension('W')->setAutoSize(true);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ReporteSaldoAlmacen.xls"'); /*-- $filename is  xsl filename ---*/
+        header('Cache-Control: max-age=0');
+        return $Excel_writer->save("php://output");
+    }
 }

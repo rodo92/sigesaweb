@@ -60,6 +60,7 @@ Route::get('farmacia/reporte_venta_producto/{inicio}/{fin}/{almacenid}/{insumome
 Route::get('farmacia/reporte_es_documentos_excel/{inicio}/{fin}/{almacenid}/{movtipo}', 'ReporteFarmaciaController@reporte_entradas_salidas_documentos_excel');
 Route::get('farmacia/reporte_por_usuario_excel/{inicio}/{fin}/{almacenid}', 'ReporteFarmaciaController@reporte_por_usuario_excel');
 Route::get('farmacia/reporte_venta_producto_excel/{inicio}/{fin}/{almacenid}/{insumomedicamento}/{movinicio?}/{movfin?}', 'ReporteFarmaciaController@reporte_venta_producto_resumen_excel');
+Route::get('/farmacia/reportesaldosxalmacen', 'ReporteFarmaciaController@reportesaldosxalmacen');
 
 
 /**

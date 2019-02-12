@@ -82,4 +82,17 @@ class Farmacia extends Model
         return json_decode(json_encode($result), true);
     }
 
+    public function Reporte_Almacen_Saldos_Por_Almacen()
+    {
+        $result = DB::select('SELECT * 
+FROM(
+SELECT FCBI.IDPRODUCTO, FCBI.NOMBRE, fa.descripcion , fs.cantidad FROM FACTCATALOGOBIENESINSUMOS FCBI
+inner join farmSaldo fs on fs.idproducto = FCBI.idproducto
+inner join farmalmacen fa on fa.idalmacen = fs.idalmacen
+) AS S
+PIVOT(SUM(cantidad) FOR descripcion in ([ALMACEN - SISMED],[Almacen - Estrategias],[Almacen - Especiales],[Almacen - Donaciones],[Almacen - Galenicos],[Almacen -Bajas],[Far. Ambulatoria],[Far. Emergencia],[Far. Hospi. Donaciones],[Far. Estrategias],[Far. Hospitalizacion],[Far. Donaciones],[Far. Materno],[Almacen Devoluciones],[Far. Materno Donaciones],[Far. Galénicos],[Far. Galénicos Estrategias],[Far. SOP6],[Far. SOP6 Donaciones],[Otros Servicios del Hospital],[Far. Casos Especiales])) AS P');
+
+        return json_decode(json_encode($result),true);
+    }
+
 }

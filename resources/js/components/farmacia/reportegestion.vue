@@ -120,15 +120,9 @@
                     <table style="width: 100%">
                         <tr>
                             <td width="15%" class="text-center">
-                                    <button class="btn btn-primary" v-on:click.prevent="postData">
-                                        <i class="fa fa-save"></i>
-                                    </button>&nbsp;
                                     <button class="btn btn-success" v-on:click.prevent="excelExport">
                                         <i class="fa fa-file-excel-o"></i>
                                     </button>&nbsp;
-                                    <a class="btn btn-danger" v-on:click.prevent="pdfExport">
-                                        <i class="fa fa-file-pdf-o"></i>
-                                    </a>
                             </td>
                         </tr>
                     </table>                        

@@ -221,14 +221,14 @@
                                         <td></td>
                                     </tr> -->
                                     <tr>
-                                        <td>
+                                        <td style="width: 200px;">
                                            <div class="form-group">
                                                 <label for="">Tipo de Servicio:</label>
                                                 <input id="id_tipo_especialidad_editar" class="form-control" type="text" placeholder="" v-on:keyup.13="buscar_especialidad_por_tipo_editar">
                                                 <typeahead v-model="modaltiposervicio_editar" target="#id_tipo_especialidad_editar" :data="tiposervicios_editar" item-key="name"/>
                                             </div> 
                                         </td>
-                                        <td style="padding-left: 5px;">
+                                        <td style="padding-left: 5px; width: 300px;">
                                             <div class="form-group">
                                                 <label for="">Especialidad:</label>
                                                 <input id="id_especialidad_editar" class="form-control" type="text" placeholder="" v-on:keyup.13="buscar_servicio_por_especialidad_editar">

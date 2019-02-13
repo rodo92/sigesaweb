@@ -484,7 +484,7 @@ class ReporteFarmaciaController extends Controller
                 'color' => ['argb' => 'FFE8E5E5'],
             ],
             'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
             ],
             'borders' => [
                 'allborders' => [
@@ -533,36 +533,58 @@ class ReporteFarmaciaController extends Controller
         //Cabeceras de excel
         $activeSheet->setCellValue('A6', 'CODIGOSISMED')->getStyle('A6')->getFont()->setBold(true);
         $activeSheet->setCellValue('B6', 'NOMBRE')->getStyle('B6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('C6', 'ALMACEN - SISMED')->getStyle('C6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('D6', 'Almacen - Estrategias')->getStyle('D6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('E6', 'Almacen - Especiales')->getStyle('E6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('F6', 'Almacen - Donaciones')->getStyle('F6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('G6', 'Almacen - Galenicos')->getStyle('G6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('H6', 'Almacen -Bajas')->getStyle('H6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('I6', 'Far. Ambulatoria')->getStyle('I6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('J6', 'Far. Emergencia')->getStyle('J6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('K6', 'Far. Hospi. Donaciones')->getStyle('K6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('L6', 'Far. Estrategias')->getStyle('L6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('M6', 'Far. Hospitalizacion')->getStyle('M6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('N6', 'Far. Donaciones')->getStyle('N6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('O6', 'Far. Materno')->getStyle('O6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('P6', 'Almacen Devoluciones')->getStyle('P6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('Q6', 'Far. Materno Donaciones')->getStyle('Q6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('R6', 'Far. Galénicos')->getStyle('R6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('S6', 'Far. Galénicos Estrategias')->getStyle('S6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('T6', 'Far. SOP6')->getStyle('T6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('U6', 'Far. SOP6 Donaciones')->getStyle('U6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('V6', 'Otros Servicios del Hospital')->getStyle('V6')->getFont()->setBold(true);
-        $activeSheet->setCellValue('W6', 'Far. Casos Especiales')->getStyle('W6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('C6', 'AL.SISMED')->getStyle('C6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('D6', 'Al. Estrategias')->getStyle('D6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E6', 'Al. Especiales')->getStyle('E6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F6', 'Al. Donaciones')->getStyle('F6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G6', 'Al. Galenicos')->getStyle('G6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('H6', 'Al. Bajas')->getStyle('H6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I6', 'F. Ambulatoria')->getStyle('I6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('J6', 'F. Emergencia')->getStyle('J6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('K6', 'F. Hospi. Donaciones')->getStyle('K6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('L6', 'F. Estrategias')->getStyle('L6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('M6', 'F. Hospitalizacion')->getStyle('M6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('N6', 'F. Donaciones')->getStyle('N6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('O6', 'F. Materno')->getStyle('O6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('P6', 'Al. Devoluciones')->getStyle('P6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('Q6', 'F. Materno Donaciones')->getStyle('Q6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('R6', 'F. Galénicos')->getStyle('R6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('S6', 'F. Galénicos Estrategias')->getStyle('S6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('T6', 'F. SOP6')->getStyle('T6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('U6', 'F. SOP6 Donaciones')->getStyle('U6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('V6', 'Otros Servicios')->getStyle('V6')->getFont()->setBold(true);
+        $activeSheet->setCellValue('W6', 'F. Casos Especiales')->getStyle('W6')->getFont()->setBold(true);
 
         // Filtro
-        $activeSheet->setAutoFilter("A4:V4");
+        $activeSheet->setAutoFilter("A4:W4");
 
         //Ingresando datos
         $j = 7;
         // $total = number_format(0,2,'.',' ');
-        for ($i = 0; $i < count($data); $i++) {
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['IDPRODUCTO']);
+        for ($i = 0; $i < count($data); $i++) { 
+            if ($data[$i]['ALMACEN - SISMED']===NULL) {$data[$i]['ALMACEN - SISMED']=0;}
+            if ($data[$i]['Almacen - Estrategias']===NULL) {$data[$i]['Almacen - Estrategias']=0;}
+            if ($data[$i]['Almacen - Especiales']===NULL) {$data[$i]['Almacen - Especiales']=0;}
+            if ($data[$i]['Almacen - Donaciones']===NULL) {$data[$i]['Almacen - Donaciones']=0;}
+            if ($data[$i]['Almacen - Galenicos']===NULL) {$data[$i]['Almacen - Galenicos']=0;}
+            if ($data[$i]['Almacen -Bajas']===NULL) {$data[$i]['Almacen -Bajas']=0;}
+            if ($data[$i]['Far. Ambulatoria']===NULL) {$data[$i]['Far. Ambulatoria']=0;}
+            if ($data[$i]['Far. Emergencia']===NULL) {$data[$i]['Far. Emergencia']=0;}
+            if ($data[$i]['Far. Hospi. Donaciones']===NULL) {$data[$i]['Far. Hospi. Donaciones']=0;}
+            if ($data[$i]['Far. Estrategias']===NULL) {$data[$i]['Far. Estrategias']=0;}
+            if ($data[$i]['Far. Hospitalizacion']===NULL) {$data[$i]['Far. Hospitalizacion']=0;}
+            if ($data[$i]['Far. Donaciones']===NULL) {$data[$i]['Far. Donaciones']=0;}
+            if ($data[$i]['Far. Materno']===NULL) {$data[$i]['Far. Materno']=0;}
+            if ($data[$i]['Almacen Devoluciones']===NULL) {$data[$i]['Almacen Devoluciones']=0;}
+            if ($data[$i]['Far. Materno Donaciones']===NULL) {$data[$i]['Far. Materno Donaciones']=0;}
+            if ($data[$i]['Far. Galénicos']===NULL) {$data[$i]['Far. Galénicos']=0;}
+            if ($data[$i]['Far. Galénicos Estrategias']===NULL) {$data[$i]['Far. Galénicos Estrategias']=0;}
+            if ($data[$i]['Far. SOP6']===NULL) {$data[$i]['Far. SOP6']=0;}
+            if ($data[$i]['Far. SOP6 Donaciones']===NULL) {$data[$i]['Far. SOP6 Donaciones']=0;}
+            if ($data[$i]['Otros Servicios del Hospital']===NULL) {$data[$i]['Otros Servicios del Hospital']=0;}
+            if ($data[$i]['Far. Casos Especiales']===NULL) {$data[$i]['Far. Casos Especiales']=0;}
+
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['CODIGO']);
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$j, $data[$i]['NOMBRE']);
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$j, $data[$i]['ALMACEN - SISMED']);
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$j, $data[$i]['Almacen - Estrategias']);
@@ -586,7 +608,7 @@ class ReporteFarmaciaController extends Controller
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('V'.$j, $data[$i]['Otros Servicios del Hospital']);
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('W'.$j, $data[$i]['Far. Casos Especiales']);
 
-            $activeSheet->getStyle("A".$j.":V".$j)->applyFromArray($styleCell);
+            $activeSheet->getStyle("A".$j.":W".$j)->applyFromArray($styleCell);
             // $activeSheet->getStyle("O".$j)->getNumberFormat()->setFormatCode('#,##0.00');
             // $activeSheet->getStyle("Q".$j)->getNumberFormat()->setFormatCode('#,##0.00');
             $j++;

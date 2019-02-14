@@ -73,10 +73,11 @@ class Sistema extends Model
         return json_decode(json_encode($result), true);
     }
 
-    public function Obtener_Servicio_Por_Especialidad($idespecialidad)
+    public function Obtener_Servicio_Por_Especialidad($idespecialidad, $idtiposervicio)
     {
         $result = DB::table('Servicios')
                 ->where('Servicios.IdEspecialidad','=',$idespecialidad)
+                ->where('Servicios.IdTipoServicio','=',$idtiposervicio)
                 ->select('Servicios.IdServicio','Servicios.Nombre')
                 ->get();
 

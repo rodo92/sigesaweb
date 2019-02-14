@@ -592,7 +592,6 @@
 
             buscar_especialidad_por_tipo_editar: function() {
                 this.idtiposervicio_editar = this.modaltiposervicio_editar.id;
-                
                 var url = 'sistema/especialidad_tipo_servicio/' + this.idtiposervicio_editar;
                 axios.get(url).then(response => {  
                     this.especialidades_editar = response.data; 
@@ -617,8 +616,7 @@
             },
             buscar_servicio_por_especialidad_editar: function() {
                 this.idespecialidad_editar = this.modalespecialidad_editar.id;
-
-                var url = 'sistema/servicios/' + this.idespecialidad_editar;
+                var url = 'sistema/servicios/' + this.idespecialidad_editar +'/'+this.idtiposervicio_editar;
                 axios.get(url).then(response => { 
                     console.log(response.data);
                     this.servicios_editar = response.data; 

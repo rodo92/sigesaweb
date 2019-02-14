@@ -142,11 +142,11 @@ class SistemaController extends Controller
         return response()->json($data);
     }
 
-    public function Servicio_Especialidad($idespecialidad)
+    public function Servicio_Especialidad($idespecialidad, $idtiposervicio)
     {
         // para consulta externa
         $Sistema = new Sistema();
-        $servicio = $Sistema->Obtener_Servicio_Por_Especialidad($idespecialidad);
+        $servicio = $Sistema->Obtener_Servicio_Por_Especialidad($idespecialidad, $idtiposervicio);
 
         for ($i=0; $i < count($servicio); $i++) { 
             $data[] = array(

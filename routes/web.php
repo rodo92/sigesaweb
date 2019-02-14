@@ -29,7 +29,7 @@ Route::get('sistema/proveedor/{ruc}', 'SistemaController@proveedor');
 Route::get('sistema/especialidad/{idespecialidad?}', 'SistemaController@especialidades');
 Route::get('sistema/especialidad_tipo_servicio/{idtiposervicio}', 'SistemaController@Especialidades_Tipo_Servicio');
 Route::get('sistema/tiposervicios/{idtiposervicios?}', 'SistemaController@tiposervicios');
-Route::get('sistema/servicios/{idespecialidad}', 'SistemaController@Servicio_Especialidad');
+Route::get('sistema/servicios/{idespecialidad}/{idtiposervicios}', 'SistemaController@Servicio_Especialidad');
 Route::get('sistema/qr_s/{cadena}', 'QRController@qr_simple')->name('qrsimple');
 				
 /**

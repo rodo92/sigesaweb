@@ -472,7 +472,7 @@ class ReporteFarmaciaController extends Controller
         return $Excel_writer->save("php://output");
     }
 
-    public function reportesaldosxalmacen()
+    public function reportesaldosxalmacen($idalmacen)
     {
         $farmacia = new Farmacia();
         $data = $farmacia->Reporte_Almacen_Saldos_Por_Almacen();

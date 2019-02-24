@@ -60,7 +60,7 @@ Route::get('farmacia/reporte_venta_producto/{inicio}/{fin}/{almacenid}/{insumome
 Route::get('farmacia/reporte_es_documentos_excel/{inicio}/{fin}/{almacenid}/{movtipo}', 'ReporteFarmaciaController@reporte_entradas_salidas_documentos_excel');
 Route::get('farmacia/reporte_por_usuario_excel/{inicio}/{fin}/{almacenid}', 'ReporteFarmaciaController@reporte_por_usuario_excel');
 Route::get('farmacia/reporte_venta_producto_excel/{inicio}/{fin}/{almacenid}/{insumomedicamento}/{movinicio?}/{movfin?}', 'ReporteFarmaciaController@reporte_venta_producto_resumen_excel');
-Route::get('/farmacia/reportesaldosxalmacen', 'ReporteFarmaciaController@reportesaldosxalmacen');
+Route::get('/farmacia/reportesaldosxalmacen/{idalmacen}', 'ReporteFarmaciaController@reportesaldosxalmacen');
 
 
 /**
@@ -79,6 +79,8 @@ Route::get('cajas/nuevo_correlativo/{idcaja}/{idtipocomprobante}','CajaControlle
 Route::get('cajas/nuevo_proveedor/{ruc}/{razonsocial}/{direccion}','CajaController@Crear_Nuevo_Proveedor');
 Route::get('cajas/reporte_facturas/{fechainicio}/{fechafin}','CajaController@Listar_Facturas_Reportes');
 Route::get('cajas/eliminar_factura/{idcajafacturacion}','CajaController@Eliminacion_Facturas_Reporte');
+Route::get('cajas/listar_cajeros','CajaController@listar_cajeros');
+Route::post('cajas/reporte_resumen_por_cajeros','ReporteCajaController@reporte_resumen_por_cajeros');
 
 // Facturación Electrónica
 Route::post('cajas/registro_factura','CajaController@registro_factura');

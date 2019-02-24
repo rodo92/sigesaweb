@@ -638,4 +638,12 @@ class CajaController extends Controller
     {
         return view('caja.reportecaja');
     }
+
+    public function listar_cajeros()
+    {
+        $Caja = new Caja();
+        $cajeros = $Caja->Listar_Cajeros();
+
+        return response()->json(['data' => $cajeros]);
+    }
 }

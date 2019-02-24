@@ -37,10 +37,19 @@ class Farmacia extends Model
 
     public function Mostrar_Farmacias($tipo)
     {
-        $result = DB::table('farmAlmacen')
-                ->where('farmAlmacen.idTipoLocales','=',$tipo)
+        if($tipo='X'){
+            $result = DB::table('farmAlmacen')
+                ->where('farmAlmacen.idTipoLocales','!=',$tipo)
+                ->where('farmAlmacen.idEstado','=',1)
                 ->select('farmAlmacen.*')
                 ->get();
+        }else{
+            $result = DB::table('farmAlmacen')
+                ->where('farmAlmacen.idTipoLocales','=',$tipo)
+                ->where('farmAlmacen.idEstado','=',1)
+                ->select('farmAlmacen.*')
+                ->get();
+        }
 
         return json_decode(json_encode($result), true);
     }

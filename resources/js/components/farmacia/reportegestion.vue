@@ -119,6 +119,15 @@
                 <div class="box-body">  
                     <table style="width: 100%">
                         <tr>
+                            <td width="25%">
+                                <select name="" id="id_farmacia" class="form-control" v-model="farmaciaid">
+                                            <option value="0" selected>TODOS</option>
+                                            option
+                                            <option v-for="farmacia in farmacias" :value="farmacia.idAlmacen">
+                                                {{ farmacia.descripcion }}
+                                            </option>
+                                        </select>
+                            </td>   
                             <td width="15%" class="text-center">
                                     <button class="btn btn-success" v-on:click.prevent="excelExport">
                                         <i class="fa fa-file-excel-o"></i>
@@ -144,11 +153,25 @@
                 inicio: '',
                 fin: '',
                 errores: '',
+                farmacias: [],
             }
         },
         created: function() {
+            this.loadData();
         },
         methods: {
+
+            // carga de datos
+            loadData: function() {
+                var url = 'farmacia/farmacias/X';                
+                // cargando almacenes
+                axios.get(url).then(response => {                    
+                    this.farmacias = response.data.data;
+                }).catch(error => {
+                    console.log('no hay datos de almacenes');
+                });                
+            },
+
             postData: function()
             {
                 var alerta_espera = toastr.info('Espere un momento por favor','WebSigesa', { 
@@ -186,6 +209,11 @@
                     timeOut: 0,
                     extendedTimeOut: 0
                 });
+
+                if (this.farmaciaid == null) {
+                    toastr.info('Ingrese un Almacen');
+                }
+
                 var url = '/farmacia/reportesaldosxalmacen';
                 window.open(url);
                 toastr.clear();

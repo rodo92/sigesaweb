@@ -220,4 +220,18 @@ class Caja extends Model
             ->where('IdCajaFacturacion', $IdCajaFacturacion)
             ->update($datos);
     }
+
+    public function Listar_Cajeros()
+    {
+        $result = DB::select('exec CajerosSeleccionarTodos');
+
+        return json_decode(json_encode($result),true);
+    }
+
+    public function reporte_resumen_por_cajeros($fechainicio,$fechafin,$idcajero)
+    {
+        $result = DB::select('exec Hnal_resumen_cajero ?,?,?', [$fechainicio,$fechafin,$idcajero]);
+
+        return json_decode(json_encode($result),true);
+    }
 }

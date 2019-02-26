@@ -41,7 +41,6 @@
                                     <label for="">Cajeros:</label>
                                     <div class="input-group">
                                         <select name="" id="id_cajero" class="form-control" v-model="cajeroid">
-                                            <option value="0">TODOS</option>
                                             <option v-for="cajero in cajeros" :value="cajero.IdEmpleado">
                                                 {{ cajero.dCajero }}
                                             </option>
@@ -52,7 +51,6 @@
                                     <label for="">Cajas:</label>
                                     <div class="input-group">
                                         <select name="" id="id_caja" class="form-control" v-model="cajaid">
-                                            <option value="0">TODOS</option>
                                             <option v-for="caja in cajas" :value="caja.IdCaja" >
                                                 {{ caja.Descripcion }}
                                             </option>
@@ -108,6 +106,31 @@
                             <thead>
                             <tr class="bg-gray">
                                 <th>CAJERO</th>
+                                <th>FECHACOBRANZA</th>
+                                <th>NROFACTURAINCIAL</th>
+                                <th>NROFACTURAFINAL</th>
+                                <th>CONTADO</th>
+                                <th>REBAJA</th>
+                                <th>EXONERADO</th>
+                                <th>ANULADO</th>
+                                <th>TOTAL</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>    
+                        <table class="table table-bordered table-striped" id="table_reporte_caja" style="display: none;width: 100%;">
+                            <thead>
+                            <tr class="bg-gray">
+                                <th>CAJERO</th>
+                                <th>TURNO</th>
+                                <th>FECHACOBRANZA</th>
+                                <th>CONTADO</th>
+                                <th>REBAJA</th>
+                                <th>EXONERADO</th>
+                                <th>TOTALDEV</th>
+                                <th>DEVOLUCION</th>
+                                <th>ANULADO</th>
+                                <th>TOTAL</th>
                             </tr>
                             </thead>
                             <tbody></tbody>
@@ -141,9 +164,7 @@
                 habilitado: false,
                 consultaid: '',
                 cajeroid: '',
-                cajaid: '',
-                inicio: '',
-                fin: ''
+                cajaid: ''
             }
         },
         created: function() {
@@ -194,73 +215,132 @@
                     timeOut: 0,
                     extendedTimeOut: 0
                 });
-                alert(this.cajeroid);
-                var url = '/cajas/reporte_resumen_por_cajeros/'+this.inicio+'/'+this.fin+'/'+this.cajeroid;
+                
+                if (this.consultaid==1) {
+                    this.porCajero();
+                }else if(this.consultaid==2){
+                    this.porCaja();
+                }
+               
+            },
+
+            porCajero: function(){
+
+                 var url = '/cajas/reporte_resumen_por_cajeros/'+this.inicio+'/'+this.fin+'/'+this.cajeroid;
 
                 // console.log(url);return false;
                 axios.get(url).then(reponse => {
                     console.log(reponse.data.data);
-                    $('#table_reporte_cajero').dataTable().fnDestroy();
-                    $('#table_reporte_cajero').DataTable({
-                        language: {
-                            search: 'Buscar:',
-                            paginate: {
-                                first: "Primero",
-                                previous: "Atr&aacute;s",
-                                next: "Adelante",
-                                last: "&Uacute;ltimo"
+                    if (reponse.data.data != 'sindatos') {
+                        $('#table_reporte_cajero').dataTable().fnDestroy();
+                        $('#table_reporte_cajero').DataTable({
+                            language: {
+                                search: 'Buscar:',
+                                paginate: {
+                                    first: "Primero",
+                                    previous: "Atr&aacute;s",
+                                    next: "Adelante",
+                                    last: "&Uacute;ltimo"
+                                },
+                                "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
+                                "lengthMenu": "Mostrar _MENU_ entradas",
+                                "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
                             },
-                            "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
-                            "lengthMenu": "Mostrar _MENU_ entradas",
-                            "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
-                        },
-                        "lengthMenu": [5, 10, 25, 50, 75, 100],
-                        data: reponse.data.data,
-                        columns: [
-                            {data:'CAJERO'}
-                        ]
-                    });
+                            "lengthMenu": [5, 10, 25, 50, 75, 100],
+                            data: reponse.data.data,
+                            columns: [
+                                {data:'CAJERO'},
+                                {data: 'FECHACOBRANZA'},
+                                {data: 'NROFACTURAINCIAL'},
+                                {data: 'NROFACTURAFINAL'},
+                                {data: 'CONTADO'},
+                                {data: 'REBAJA'},
+                                {data: 'EXONERADO'},
+                                {data: 'ANULADO'},
+                                {data: 'TOTAL'}
+                            ]
+                        });
+                    }
+                    else{
+                        toastr.warning('NO HAY DATOS PARA EL CAJERO ELEGIDO','WebSigesa'); 
+                    }
                     toastr.clear();
-                    $('#tabla_es_documentos').show();
+                    $('#table_reporte_caja').dataTable().fnDestroy();
+                    $('#table_reporte_caja').hide();
+                    $('#table_reporte_cajero').show();
                 }).catch(error => {
                     toastr.clear();
                     this.errores = error.response.data.errors;
                 }); 
             },
+
+            porCaja: function(){
+                 var url = '/cajas/reporte_resumen_por_cajas/'+this.inicio+'/'+this.fin+'/'+this.cajaid;
+
+                // console.log(url);return false;
+                axios.get(url).then(reponse => {
+                    console.log(reponse.data.data);
+                    if (reponse.data.data != 'sindatos') {
+                        $('#table_reporte_caja').dataTable().fnDestroy();
+                        $('#table_reporte_caja').DataTable({
+                            language: {
+                                search: 'Buscar:',
+                                paginate: {
+                                    first: "Primero",
+                                    previous: "Atr&aacute;s",
+                                    next: "Adelante",
+                                    last: "&Uacute;ltimo"
+                                },
+                                "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
+                                "lengthMenu": "Mostrar _MENU_ entradas",
+                                "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
+                            },
+                            "lengthMenu": [5, 10, 25, 50, 75, 100],
+                            data: reponse.data.data,
+                            columns: [
+                                {data:'CAJERO'},
+                                {data:'TURNO'},
+                                {data:'FECHACOBRANZA'},
+                                {data:'CONTADO'},
+                                {data:'REBAJA'},
+                                {data:'EXONERADO'},
+                                {data:'TOTALDEV'},
+                                {data:'DEVOLUCION'},
+                                {data:'ANULADO'},
+                                {data:'TOTAL'}
+                            ]
+                        });
+                    }
+                    else{
+                        toastr.warning('NO HAY DATOS PARA LA CAJA ELEGIDA','WebSigesa'); 
+                    }
+                    toastr.clear();
+                    $('#table_reporte_cajero').dataTable().fnDestroy();
+                    $('#table_reporte_cajero').hide();
+                    $('#table_reporte_caja').show();
+                }).catch(error => {
+                    toastr.clear();
+                    this.errores = error.response.data.errors;
+                }); 
+            }
         },
         mounted() {
             $('#fecha_inicio').datepicker({
                 autoclose: true,
-                format: 'dd/mm/yyyy',
-                language: 'es'             
+                format: 'yyyy-mm-dd',
+                language: 'es',
+                orientation: 'bottom'           
             }).on(
             "changeDate", () => {this.inicio = $('#fecha_inicio').val()}
             );
 
             $('#fecha_fin').datepicker({
                 autoclose: true,
-                format: 'dd/mm/yyyy',
-                language: 'es'             
+                format: 'yyyy-mm-dd',
+                language: 'es',
+                orientation: 'bottom'               
             }).on(
             "changeDate", () => {this.fin = $('#fecha_fin').val()}
-            );
-
-            $('#ia_fecha_inicio').datepicker({
-                autoclose: true,
-                format: 'dd/mm/yyyy',
-                language: 'es',
-                orientation: 'bottom'             
-            }).on(
-            "changeDate", () => {this.ia_inicio = $('#ia_fecha_inicio').val()}
-            );
-
-            $('#ia_fecha_fin').datepicker({
-                autoclose: true,
-                format: 'dd/mm/yyyy',
-                language: 'es',
-                orientation: 'bottom'             
-            }).on(
-            "changeDate", () => {this.ia_fin = $('#ia_fecha_fin').val()}
             );
         }
     }    

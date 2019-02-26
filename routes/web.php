@@ -80,7 +80,8 @@ Route::get('cajas/nuevo_proveedor/{ruc}/{razonsocial}/{direccion}','CajaControll
 Route::get('cajas/reporte_facturas/{fechainicio}/{fechafin}','CajaController@Listar_Facturas_Reportes');
 Route::get('cajas/eliminar_factura/{idcajafacturacion}','CajaController@Eliminacion_Facturas_Reporte');
 Route::get('cajas/listar_cajeros','CajaController@listar_cajeros');
-Route::post('cajas/reporte_resumen_por_cajeros','ReporteCajaController@reporte_resumen_por_cajeros');
+Route::get('cajas/reporte_resumen_por_cajeros/{fechainicio}/{fechafin}/{idcajero}','ReporteCajaController@reporte_resumen_por_cajeros');
+Route::get('cajas/reporte_resumen_por_cajas/{fechainicio}/{fechafin}/{idcaja}','ReporteCajaController@reporte_resumen_por_cajas');
 
 // Facturación Electrónica
 Route::post('cajas/registro_factura','CajaController@registro_factura');

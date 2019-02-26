@@ -228,9 +228,16 @@ class Caja extends Model
         return json_decode(json_encode($result),true);
     }
 
-    public function reporte_resumen_por_cajeros($fechainicio,$fechafin,$idcajero)
+    public function Reporte_resumen_por_cajeros($fechainicio,$fechafin,$idcajero)
     {
-        $result = DB::select('exec Hnal_resumen_cajero ?,?,?', [$fechainicio,$fechafin,$idcajero]);
+        $result = DB::select('exec Hnal_resumen_cajero ?,?,?', [$idcajero,$fechainicio,$fechafin]); 
+
+        return json_decode(json_encode($result),true);
+    }
+
+    public function Reporte_resumen_por_cajas($fechainicio,$fechafin,$idcaja)
+    {
+        $result = DB::select('exec Hnal_resumen_caja ?,?,?', [$idcaja,$fechainicio,$fechafin]);
 
         return json_decode(json_encode($result),true);
     }

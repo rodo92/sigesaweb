@@ -63,4 +63,83 @@ class ReporteCajaController extends Controller
                 ]); 
         } else { return response()->json(['data' => 'sindatos']); }
     }
+
+    public function reporte_resumen_por_cajeros_excel($fechainicio, $fechafin, $idcajero)
+    {
+    	$Caja = new Caja();
+        $data = $Caja->Reporte_resumen_por_cajeros($fechainicio, $fechafin, $idcajero);
+
+        $styleArray = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['argb' => 'FFE8E5E5'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'allborders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $styleCell = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $spreadsheet = new Spreadsheet();  /*----Spreadsheet object-----*/
+        $Excel_writer = new Xls($spreadsheet);  /*----- Excel (Xls) Object*/
+        $spreadsheet->setActiveSheetIndex(0);
+        $activeSheet = $spreadsheet->getActiveSheet();
+
+        $activeSheet->setTitle("Resumen Por Cajero");
+
+        $activeSheet->getStyle('A1:L1')->applyFromArray($styleArray);
+
+        //Cabeceras de excel
+        $activeSheet->setCellValue('A1', 'CAJERO')->getStyle('A1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('B1', 'FECHA COBRANZA')->getStyle('B1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('C1', 'NRO FACTURA INICIAL')->getStyle('C1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('D1', 'NRO FACTURA FINAL')->getStyle('D1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E1', 'CONTADO')->getStyle('F1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F1', 'REBAJA')->getStyle('G1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G1', 'EXONERADO')->getStyle('H1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('H1', 'ANULADO')->getStyle('I1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I1', 'DEVUELTO')->getStyle('I1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('J1', 'TOTAL')->getStyle('J1')->getFont()->setBold(true);
+
+        //Filtro
+        $activeSheet->setAutoFilter("A1:J1");
+
+        //Ingresando datos
+        for ($i = 0; $i < count($data); $i++) {
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['Cajero']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$j, $data[$i]['FechaCobranza']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$j, $data[$i]['NroFacturaInicial']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$j, $data[$i]['NroFacturaFinal']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('E'.$j, $data[$i]['Contado']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$j, $data[$i]['Rebaja']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$j, $data[$i]['Exonerado']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, $data[$i]['Anulado']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, $data[$i]['Devuelto']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$j, $data[$i]['Total']);
+
+            $activeSheet->getStyle("A".$j.":L".$j)->applyFromArray($styleCell);
+            $j++;
+        }
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ResumenPorCajero.xls"'); /*-- $filename is  xls filename ---*/
+        header('Cache-Control: max-age=0');
+        return $Excel_writer->save("php://output");
+
+    }
 }

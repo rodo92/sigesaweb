@@ -322,6 +322,25 @@
                     toastr.clear();
                     this.errores = error.response.data.errors;
                 }); 
+            },
+
+            excelExport: function(){
+                if (this.inicio == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
+                if (this.fin == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
+                if (this.consultaid == '') { toastr.error('Debe seleccionar un tipo´de consulta','WebSigesa');return false; }
+
+                if (this.consultaid == '1') {if (this.cajeroid == '') { toastr.error('Debe seleccionar un cajero','WebSigesa');return false; }}
+                if (this.consultaid == '2') {if (this.cajaid == '') { toastr.error('Debe seleccionar una caja','WebSigesa');return false; }}
+
+                var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
+
+                var url = '/cajas/reporte_resumen_por_cajeros_excel'+this.inicio+'/'+this.fin+'/'+this.cajeroid;
+                //var url = '/farmacia/reporte_por_usuario_excel/'+this.inicio_ru+'/'+this.fin_ru+'/'+this.farmaciaid_ru;
+                window.open(url);
+                toastr.clear();
             }
         },
         mounted() {

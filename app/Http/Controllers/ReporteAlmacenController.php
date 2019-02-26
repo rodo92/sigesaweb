@@ -22,7 +22,7 @@ class ReporteAlmacenController extends Controller
             'inicio' 	=> 'required',
             'fin'		=> 'required',
             'almacenid'	=> 'required'
-        ];
+        ];  
 
         $this->validate($request,$rules,$messages);
         

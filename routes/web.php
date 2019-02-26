@@ -82,6 +82,7 @@ Route::get('cajas/eliminar_factura/{idcajafacturacion}','CajaController@Eliminac
 Route::get('cajas/listar_cajeros','CajaController@listar_cajeros');
 Route::get('cajas/reporte_resumen_por_cajeros/{fechainicio}/{fechafin}/{idcajero}','ReporteCajaController@reporte_resumen_por_cajeros');
 Route::get('cajas/reporte_resumen_por_cajas/{fechainicio}/{fechafin}/{idcaja}','ReporteCajaController@reporte_resumen_por_cajas');
+Route::get('cajas/reporte_resumen_por_cajeros_excel/{fechainicio}/{fechafin}/{idcajero}','ReporteCajaController@reporte_resumen_por_cajeros_excel');
 
 // Facturación Electrónica
 Route::post('cajas/registro_factura','CajaController@registro_factura');

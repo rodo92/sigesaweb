@@ -82,7 +82,7 @@
                                     <button class="btn btn-primary" v-on:click.prevent="postData">
                                         <i class="fa fa-save"></i>
                                     </button>&nbsp;
-                                    <button class="btn btn-success" v-on:click.prevent="excelExport">
+                                    <button class="btn btn-success" v-on:click.prevent="excelExport" style="display: none;">
                                         <i class="fa fa-file-excel-o"></i>
                                     </button>&nbsp;
                                     <a class="btn btn-danger" v-on:click.prevent="pdfExport">
@@ -113,6 +113,7 @@
                                 <th>REBAJA</th>
                                 <th>EXONERADO</th>
                                 <th>ANULADO</th>
+                                <th>DEVUELTO</th>
                                 <th>TOTAL</th>
                             </tr>
                             </thead>
@@ -257,6 +258,7 @@
                                 {data: 'REBAJA'},
                                 {data: 'EXONERADO'},
                                 {data: 'ANULADO'},
+                                {data: 'DEVUELTO'},
                                 {data: 'TOTAL'}
                             ]
                         });
@@ -337,10 +339,46 @@
                     extendedTimeOut: 0
                 });
 
-                var url = '/cajas/reporte_resumen_por_cajeros_excel'+this.inicio+'/'+this.fin+'/'+this.cajeroid;
+                if (this.consultaid==1) {
+                    var url = '/cajas/reporte_resumen_por_cajeros_excel/'+this.inicio+'/'+this.fin+'/'+this.cajeroid;
+                }else if(this.consultaid==2){
+                    var url = '/cajas/reporte_resumen_por_cajas_excel/'+this.inicio+'/'+this.fin+'/'+this.cajaid;
+                }
+                
                 //var url = '/farmacia/reporte_por_usuario_excel/'+this.inicio_ru+'/'+this.fin_ru+'/'+this.farmaciaid_ru;
                 window.open(url);
                 toastr.clear();
+            },
+
+            pdfExport: function(){
+                
+                this.validacion();
+
+                var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
+
+                if (this.consultaid==1) {
+                    var url = '/cajas/reporte_resumen_por_cajeros_pdf/'+this.inicio+'/'+this.fin+'/'+this.cajeroid;
+                }else if(this.consultaid==2){
+                    var url = '/cajas/reporte_resumen_por_cajas_pdf/'+this.inicio+'/'+this.fin+'/'+this.cajaid;
+                }
+
+                window.open(url);
+                toastr.clear();
+
+
+            },
+
+            validacion: function(){
+                if (this.inicio == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
+                if (this.fin == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
+                if (this.consultaid == '') { toastr.error('Debe seleccionar un tipo´de consulta','WebSigesa');return false; }
+
+                if (this.consultaid == '1') {if (this.cajeroid == '') { toastr.error('Debe seleccionar un cajero','WebSigesa');return false; }}
+                if (this.consultaid == '2') {if (this.cajaid == '') { toastr.error('Debe seleccionar una caja','WebSigesa');return false; }}
+
             }
         },
         mounted() {

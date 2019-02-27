@@ -203,6 +203,120 @@
                 </div>
             </div>
 
+            <!-- ENTRADAS Y SALIDAS DE DOCUMENTOS -->
+            <div id="ventas_producto_resumen">
+                <div class="box box-primary color-palette-box collapsed-box"><!-- collapsed-box -->
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Reporte de Ventas y Productos Resumen</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td width="15%" style="padding-right: 5px;">
+                                    <label for="">Fecha Inicio:</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="fecha_inicio_vpr" :value="inicio_vpr">
+                                    </div>
+                                </td>
+                                <td width="15%" style="padding-right: 5px;">
+                                    <label for="">Fecha Fin:</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="fecha_fin_vpr" :value="fin_vpr">
+                                    </div>
+                                </td>
+                                <td width="25%" style="padding-right: 5px;">
+                                    <label for="">Farmacia:</label>
+                                    <div class="input-group">
+                                        <select name="" id="id_farmacia_vpr" class="form-control" v-model="farmaciaid_vpr">
+                                            <option value="0">TODOS</option>
+                                            <option v-for="farmacia in farmacias" :value="farmacia.idAlmacen">
+                                                {{ farmacia.descripcion }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td width="30%" style="padding-right: 5px;">
+                                    <label for="">Tipo Movimiento:</label>
+                                    <div class="input-group">
+                                        <select name="" id="id_movtipo_vpr" class="form-control" v-model="movtipo_vpr">
+                                            <option value="0">MEDICAMENTOS</option>
+                                            <option value="1">INSUMOS</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td width="15%" class="text-center">
+                                    <button class="btn btn-primary" v-on:click.prevent="postData_vpr">
+                                        <i class="fa fa-save"></i>
+                                    </button>&nbsp;
+                                    <button class="btn btn-success" v-on:click.prevent="excelExport_vpr">
+                                        <i class="fa fa-file-excel-o"></i>
+                                    </button>&nbsp;
+                                    <a class="btn btn-danger" v-on:click.prevent="pdfExport_vpr">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width: 40%;">
+                            <tr>   
+                                <td width="15%" style="padding-right: 2%;">
+                                    <div class="form-group">
+                                        <label for="">N&uacute;mero de Movimiento Inicio</label>
+                                        <input type="text" class="form-control" v-model="nummovini">
+                                    </div>
+                                </td>
+                                <td width="15%" style="padding-right: 2%;">
+                                    <div class="form-group">
+                                        <label for="">N&uacute;mero de Movimiento Fin</label>
+                                        <input type="text" class="form-control" v-model="nummovfin">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr>
+                        <table class="table table-bordered table-striped" id="tabla_es_ventas_productos" style="display: none;width: 100%;">
+                            <thead>
+                            <tr class="bg-gray">
+                                <th>CODIGO<br>SISMED</th>
+                                <th>PRODUCTO</th>
+                                <th>CANT. VENT.</th>
+                                <th>CX.</th>
+                                <th>HOSP.</th>
+                                <th>EMER.</th>
+                                <th>PAC.EXT.</th>
+                                <th>PAC.PAR.</th>
+                                <th>SIS</th>
+                                <th>SOAT</th>
+                                <th>PEND.</th>
+                                <th>EXON.</th>
+                                <th>DONA.</th>
+                                <th>INTER.<br>SANI.</th>
+                                <th>STOCK</th>
+                                <th>CANT.<br>FACT.</th>
+                                <th>TOTAL</th>
+                                <th>DEVOL</th>
+                                <th>CX_DEV</th>
+                                <th>HO_DEV</th>
+                                <th>EME_DEV</th>
+                                <th>CANT.VENT.<br>-<br>DEVOL</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </section>
     </div>
 </template>
@@ -228,6 +342,13 @@
                 habilitado: false,
                 nombre_proveedor: '',
                 id_proveedores: {},
+                inicio_vpr: '',
+                fin_vpr: '',
+                farmaciaid_vpr: '',
+                movtipo_vpr: '',
+                errores: '',
+                nummovini: '',
+                nummovfin: '',
             }
         },
         created: function() {
@@ -239,9 +360,17 @@
             // carga de datos
             loadData: function() {
                 var url = 'farmacia/almacenes';                
+                var url2 = 'farmacia/farmacias/F';                
                 // cargando almacenes
                 axios.get(url).then(response => {                    
                     this.almacenes = response.data.data;
+                }).catch(error => {
+                    console.log('no hay datos de almacenes');
+                });               
+
+                // cargando almacenes
+                axios.get(url2).then(response => {                    
+                    this.farmacias = response.data.data;
                 }).catch(error => {
                     console.log('no hay datos de almacenes');
                 });                
@@ -412,6 +541,96 @@
                 var url = 'farmacia/reporte_ingresos_almacen_excel/' + fechainicio + '/' + fechafin + '/' + ruc;
                 window.open(url);
                 toastr.clear();
+            },
+            // envio de Datos para resumen ventas productos
+            postData_vpr: function() {
+
+                if (this.inicio_vpr == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
+                if (this.fin_vpr == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
+                if (this.farmaciaid_vpr == '') { toastr.error('Debe seleccionar una farmacia','WebSigesa');return false; }
+                if (this.movtipo_vpr == '') { toastr.error('Debe seleccionar un tipo de movimiento','WebSigesa');return false; }
+
+                var alerta_espera = toastr.info('Espere un momento por favor','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
+                
+                var url = '/farmacia/reporte_venta_producto/'+this.inicio_vpr+'/'+this.fin_vpr+'/'+this.farmaciaid_vpr+'/'+this.movtipo_vpr+'/'+this.nummovini+'/'+this.nummovfin;
+                // console.log(url);return false;
+                axios.get(url).then(reponse => {
+                    console.log(reponse.data.data);
+
+                    if (reponse.data.data == 'sindatos') {
+                        $('#tabla_es_ventas_productos').hide();
+                        toastr.success('No hay datos encontrados', 'WebSigesa');
+                        return false;
+                    }
+
+                    $('#tabla_es_ventas_productos').dataTable().fnDestroy();
+                    $('#tabla_es_ventas_productos').DataTable({
+                        language: {
+                            search: 'Buscar:',
+                            paginate: {
+                                first: "Primero",
+                                previous: "Atr&aacute;s",
+                                next: "Adelante",
+                                last: "&Uacute;ltimo"
+                            },
+                            "infoEmpty": "Mostrando 0 al 0 de 0 entradas",
+                            "lengthMenu": "Mostrar _MENU_ entradas",
+                            "info": "Mostrando _START_ al _END_ de _TOTAL_ entradas"
+                        },
+                        "lengthMenu": [5, 10, 25, 50, 75, 100],
+                        data: reponse.data.data,
+                        columns: [
+                            {data:'CODIGOSISMED'},
+                            {data:'PRODUCTO'},
+                            {data:'CANTIDADVENTAS'},
+                            {data:'CONSULTAEXTERNA'},
+                            {data:'HOSPITALIZACION'},
+                            {data:'EMERGENCIA'},
+                            {data:'PACIENTEEXTERNO'},
+                            {data:'PARTICULAR'},
+                            {data:'SIS'},
+                            {data:'SOAT'},
+                            {data:'PENDIENTE'},
+                            {data:'EXONERADO'},
+                            {data:'DONACION'},
+                            {data:'INTERVENCIONSANITARIA'},
+                            {data:'STOCK'},
+                            {data:'CANTIDADFACTURADA'},
+                            {data:'TOTAL'},
+                            {data:'DEVOLUCIONES'},
+                            {data:'CONSULTAEXTERNADEVOLUCIONES'},
+                            {data:'HOSPITALIZACIONDEVOLUCIONES'},
+                            {data:'EMERGENCIADEVOLUCIONES'},
+                            {data:'CANTVENTASMENOSDEVOLUCIONES'}
+                        ]
+                    });
+                    toastr.clear();
+                    $('#tabla_es_ventas_productos').show();
+                }).catch(error => {
+                    toastr.clear();
+                    this.errores = error.response.data.errors;
+                }); 
+            },
+             excelExport_vpr: function() {
+                if (this.inicio_vpr == '') { toastr.error('Debe seleccionar una fecha de inicio','WebSigesa');return false; }
+                if (this.fin_vpr == '') { toastr.error('Debe seleccionar una fecha de fin','WebSigesa');return false; }
+                if (this.farmaciaid_vpr == '') { toastr.error('Debe seleccionar una farmacia','WebSigesa');return false; }
+                if (this.movtipo_vpr == '') { toastr.error('Debe seleccionar un tipo de movimiento','WebSigesa');return false; }
+                var alerta_espera = toastr.info('Espere un momento mientras se genera el archivo','WebSigesa', { 
+                    timeOut: 0,
+                    extendedTimeOut: 0
+                });
+                var url = '/farmacia/reporte_venta_producto_excel/'+this.inicio_vpr+'/'+this.fin_vpr+'/'+this.farmaciaid_vpr+'/'+this.movtipo_vpr+'/'+this.nummovini+'/'+this.nummovfin;
+                window.open(url);
+                toastr.clear();
+            },
+             pdfExport_vpr: function()
+            {
+                toastr.clear();
+                toastr.info('Funcionalidad en fase de desarrollo. Gracias por la comprensión.', 'WebSigesa');
             }
         },
         mounted() {
@@ -447,6 +666,24 @@
                 orientation: 'bottom'             
             }).on(
             "changeDate", () => {this.ia_fin = $('#ia_fecha_fin').val()}
+            );
+
+            $('#fecha_inicio_vpr').datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                language: 'es',
+                orientation: 'bottom'             
+            }).on(
+            "changeDate", () => {this.inicio_vpr = $('#fecha_inicio_vpr').val()}
+            );
+
+            $('#fecha_fin_vpr').datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                language: 'es',
+                orientation: 'bottom'             
+            }).on(
+            "changeDate", () => {this.fin_vpr = $('#fecha_fin_vpr').val()}
             );
         }
     }    

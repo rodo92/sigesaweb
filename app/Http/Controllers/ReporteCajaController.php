@@ -111,10 +111,10 @@ class ReporteCajaController extends Controller
         $activeSheet->setCellValue('B1', 'FECHA COBRANZA')->getStyle('B1')->getFont()->setBold(true);
         $activeSheet->setCellValue('C1', 'NRO FACTURA INICIAL')->getStyle('C1')->getFont()->setBold(true);
         $activeSheet->setCellValue('D1', 'NRO FACTURA FINAL')->getStyle('D1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('E1', 'CONTADO')->getStyle('F1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('F1', 'REBAJA')->getStyle('G1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('G1', 'EXONERADO')->getStyle('H1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('H1', 'ANULADO')->getStyle('I1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E1', 'CONTADO')->getStyle('E1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F1', 'REBAJA')->getStyle('F1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G1', 'EXONERADO')->getStyle('G1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('H1', 'ANULADO')->getStyle('H1')->getFont()->setBold(true);
         $activeSheet->setCellValue('I1', 'DEVUELTO')->getStyle('I1')->getFont()->setBold(true);
         $activeSheet->setCellValue('J1', 'TOTAL')->getStyle('J1')->getFont()->setBold(true);
 
@@ -188,12 +188,12 @@ class ReporteCajaController extends Controller
 
         //Cabeceras de excel
         $activeSheet->setCellValue('A1', 'CAJERO')->getStyle('A1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('B1', 'TURNO')->getStyle('A1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('C1', 'FECHA COBRANZA')->getStyle('B1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('D1', 'CONTADO')->getStyle('F1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('E1', 'REBAJA')->getStyle('G1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('F1', 'EXONERADO')->getStyle('H1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('G1', 'TOTAL DEV')->getStyle('H1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('B1', 'TURNO')->getStyle('B1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('C1', 'FECHA COBRANZA')->getStyle('C1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('D1', 'CONTADO')->getStyle('D1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E1', 'REBAJA')->getStyle('E1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F1', 'EXONERADO')->getStyle('F1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G1', 'TOTAL DEV')->getStyle('G1')->getFont()->setBold(true);
         $activeSheet->setCellValue('H1', 'DEVOLUCION')->getStyle('H1')->getFont()->setBold(true);
         $activeSheet->setCellValue('I1', 'ANULADO')->getStyle('I1')->getFont()->setBold(true);
         $activeSheet->setCellValue('J1', 'TOTAL')->getStyle('J1')->getFont()->setBold(true);
@@ -250,7 +250,7 @@ class ReporteCajaController extends Controller
         $data = $Caja->Reporte_resumen_por_cajas($fechainicio, $fechafin, $idcaja);
 
     	$this->fpdf = new Fpdf();
-        $this->fpdf->SetAutoPageBreak(true, 10);
+        $this->fpdf->SetAutoPageBreak(true, 10	);
         $this->fpdf->AddPage('L','A4');
         	
         $this->cabecera("RESUMEN POR CAJA");

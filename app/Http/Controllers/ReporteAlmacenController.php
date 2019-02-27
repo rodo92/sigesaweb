@@ -144,32 +144,34 @@ class ReporteAlmacenController extends Controller
 
         //Cabeceras de excel
         $activeSheet->setCellValue('A1', 'FECHA')->getStyle('A1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('B1', 'ORDEN DE COMPRA')->getStyle('B1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('C1', 'LABORATORIO')->getStyle('C1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('D1', 'N°ENTREGA')->getStyle('D1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('E1', 'LICITACION')->getStyle('E1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('F1', 'CODIGO SISMED')->getStyle('F1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('G1', 'DESCRIPCION')->getStyle('G1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('H1', 'CANTIDAD')->getStyle('H1')->getFont()->setBold(true);
-        $activeSheet->setCellValue('I1', 'OBSERVACIONES')->getStyle('I1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('B1', 'MOV. NUMERO')->getStyle('B1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('C1', 'ORDEN DE COMPRA')->getStyle('C1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('D1', 'LABORATORIO')->getStyle('D1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('E1', 'N°ENTREGA')->getStyle('E1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('F1', 'LICITACION')->getStyle('F1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('G1', 'CODIGO SISMED')->getStyle('G1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('H1', 'DESCRIPCION')->getStyle('H1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('I1', 'CANTIDAD')->getStyle('I1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('J1', 'OBSERVACIONES')->getStyle('J1')->getFont()->setBold(true);
 
         // Filtro
-        $activeSheet->setAutoFilter("A1:I1");
+        $activeSheet->setAutoFilter("A1:J1");
 
         //Ingresando datos
         $j = 2;
         for ($i = 0; $i < count($data); $i++) {
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$j, $data[$i]['FECHA']);
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$j, $data[$i]['ORDEN DE COMPRA']);
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$j, $data[$i]['LABORATORIO']);
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$j, $data[$i]['NRO DE ENTREGA']);
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('E'.$j, $data[$i]['LICITACION']);
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$j, $data[$i]['CODIGO SISMED']);
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$j, $data[$i]['DESCRIPCIÓN DE PRODUCTO']);
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, $data[$i]['CANTIDAD']);
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, $data[$i]['OBSERVACIONES']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$j, $data[$i]['MOVNUMERO']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$j, $data[$i]['ORDEN DE COMPRA']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$j, $data[$i]['LABORATORIO']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('E'.$j, $data[$i]['NRO DE ENTREGA']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$j, $data[$i]['LICITACION']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$j, $data[$i]['CODIGO SISMED']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$j, $data[$i]['DESCRIPCIÓN DE PRODUCTO']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$j, $data[$i]['CANTIDAD']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$j, $data[$i]['OBSERVACIONES']);
 
-            $activeSheet->getStyle("A".$j.":I".$j)->applyFromArray($styleCell);
+            $activeSheet->getStyle("A".$j.":J".$j)->applyFromArray($styleCell);
             $j++;
         }
 
@@ -244,9 +246,10 @@ class ReporteAlmacenController extends Controller
         $activeSheet->setCellValue('J1', 'LOTE')->getStyle('I1')->getFont()->setBold(true);
         $activeSheet->setCellValue('K1', 'FV')->getStyle('J1')->getFont()->setBold(true);
         $activeSheet->setCellValue('L1', 'RS')->getStyle('K1')->getFont()->setBold(true);
+        $activeSheet->setCellValue('L1', 'OBSERVACIONES')->getStyle('L1')->getFont()->setBold(true);
 
         // Filtro
-        $activeSheet->setAutoFilter("A1:K1");
+        $activeSheet->setAutoFilter("A1:L1");
 
         //Ingresando datos
         $j = 2;
@@ -263,6 +266,7 @@ class ReporteAlmacenController extends Controller
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$j, $data[$i]['LOTE']);
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('K'.$j, $data[$i]['FV']);
             $spreadsheet->setActiveSheetIndex(0)->setCellValue('L'.$j, $data[$i]['RS']);
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue('L'.$j, $data[$i]['OBSERVACIONES']);
 
             $activeSheet->getStyle("A".$j.":L".$j)->applyFromArray($styleCell);
             $j++;

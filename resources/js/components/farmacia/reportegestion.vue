@@ -119,7 +119,7 @@
                 <div class="box-body">  
                     <table style="width: 100%">
                         <tr>
-                            <td width="25%">
+                            <td width="25%" style="display: none;">
                                 <select name="" id="id_farmacia" class="form-control" v-model="farmaciaid">
                                             <option value="0" selected>TODOS</option>
                                             option

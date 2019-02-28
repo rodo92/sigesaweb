@@ -1,6 +1,6 @@
 @extends('layouts/app')
 @section('contenido')
 	<div class="content-wrapper">
-		<notasalidaalmacen></notasalidaalmacen>
+		<!--<notasalidaalmacen></notasalidaalmacen>-->
 	</div>
 @stop

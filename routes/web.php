@@ -168,3 +168,7 @@ Route::post('MovimientoHistoria/recepciontodosconserje', 'MovimientoHistoriaCont
 Route::get('MovimientoHistoria/nosalidaconserje/{idhistoriasolicitada}','MovimientoHistoriaController@No_Dar_Salida_Historia_Conserje');
 Route::get('MovimientoHistoria/norecepciontodosconserje/{idhistoriasolicitada}/{motivo}','MovimientoHistoriaController@No_Dar_Recepcion_Historia_Conserje');
 Route::get('MovimientoHistoria/listadoarchiverocitadosdia', 'MovimientoHistoriaController@citados_del_dia_archiver');
+
+//Sunat
+Route::get('senvio','SunatController@index');
+Route::get('/senvio/envio_informacion/{fecha}','SunatController@envio_informacion');

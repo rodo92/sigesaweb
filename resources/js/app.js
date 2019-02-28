@@ -36,6 +36,9 @@ Vue.component('archivero', require('./components/archivo/archivero.vue'));
 Vue.component('ruta', require('./components/archivo/ruta.vue'));
 Vue.component('movimientohistoria', require('./components/archivo/movimientohistoria.vue'));
 
+// Sunat
+Vue.component('sunatenvio', require('./components/sunat/sunatenvio.vue'))
+
 const app = new Vue({
     el: '#app'
 });

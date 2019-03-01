@@ -43,6 +43,10 @@ Route::get('farmacia/farmacias/{tipo}', 'FarmaciaController@farmacias');
 Route::get('NI', 'FarmaciaController@notaingresoalmacen');
 Route::get('NS', 'FarmaciaController@notasalidaalmacen');
 
+//Inventario
+Route::get('Inventario','InventarioController@index');
+Route::get('inventario/tipos_inventarios','InventarioController@farmTipoInventarioSeleccionarTodos');
+
 // Reportes Gestion
 Route::get('reporteici/generar_dbf', 'ReporteICIController@generar_dbf');
 Route::get('descargar_dbf_ici/{nombre}', 'ReporteICIController@descargar_dbf');

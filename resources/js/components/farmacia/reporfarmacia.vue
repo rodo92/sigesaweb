@@ -509,6 +509,7 @@
         data() {
             return {
                 farmacias: [],
+                almacenes: [],
                 inicio: '',
                 fin: '',
                 farmaciaid: '',
@@ -528,6 +529,8 @@
                 almacenid: '',
                 ia_inicio: '',
                 ia_fin: '',
+                habilitado: '',
+                nombre_proveedor: ''
             }
         },
         created: function() {

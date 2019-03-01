@@ -19,8 +19,11 @@ Vue.component('inicioindex', require('./components/Inicio.Index.vue'));
 Vue.component('reportegestion', require('./components/farmacia/reportegestion.vue'));
 Vue.component('reporalmacen', require('./components/farmacia/reporalmacen.vue'));
 Vue.component('reporfarmacia', require('./components/farmacia/reporfarmacia.vue'));
-Vue.component('notaingresoalmacen', require('./components/farmacia/notaingresoalmacen.vue'))
-Vue.component('notasalidaalmacen', require('./components/farmacia/notasalidaalmacen.vue'))
+Vue.component('notaingresoalmacen', require('./components/farmacia/notaingresoalmacen.vue'));
+Vue.component('notasalidaalmacen', require('./components/farmacia/notasalidaalmacen.vue'));
+
+//Inventario
+Vue.component('inventario', require('./components/farmacia/inventario.vue'));
 
 // Caja
 Vue.component('caja', require('./components/caja/cajas.vue'));

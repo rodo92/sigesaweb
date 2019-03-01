@@ -93,8 +93,15 @@ class Farmacia extends Model
 
     public function Reporte_Almacen_Saldos_Por_Almacen()
     {
-        $result = DB::select('SIGESA_Saldos_x_Almacen');
+        $result = DB::select('exec SIGESA_Saldos_x_Almacen');
 
+        return json_decode(json_encode($result),true);
+    }
+
+    public function farmTipoInventarioSeleccionarTodos()
+    {
+        $result = DB::select('exec farmTipoInventarioSeleccionarTodos');
+    
         return json_decode(json_encode($result),true);
     }
 

@@ -56,4 +56,4 @@ $ git config --global core.safecrlf false
 
 ### License
 
-Copyright © JJ INGENIEROS
+MIT
